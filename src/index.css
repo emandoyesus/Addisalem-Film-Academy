@@ -1,0 +1,172 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------
+   Addisalem Film Training Center — design tokens
+   Strict brand palette: BLACK · WHITE · GOLD-ORANGE (#FFBA21),
+   matching the center's official logo.
+   Grays are mixes of black + white; one gold hue for every accent.
+---------------------------------------------------------------- */
+
+:root {
+  color-scheme: dark;
+
+  /* surfaces (mixes of black + white only) */
+  --canvas: #000000;
+  --canvas-soft: #0b0b0b;
+  --surface: #111111;
+  --surface-2: #1a1a1a;
+
+  /* ink */
+  --ink: #ffffff;
+  --ash: rgba(255, 255, 255, 0.76);
+  --faint: rgba(255, 255, 255, 0.55);
+
+  /* lines */
+  --line: rgba(255, 255, 255, 0.14);
+  --line-strong: rgba(255, 255, 255, 0.26);
+
+  /* brand gold-orange */
+  --gold: #ffba21;
+  --gold-deep: #e6a200;
+  --gold-ink: #000000;
+  --gold-soft: rgba(255, 186, 33, 0.12);
+  --gold-glow: rgba(255, 186, 33, 0.14);
+}
+
+/* Light mode stays strictly inside the brand trio: white canvas,
+   black ink, one gold-orange hue (deepened only for WCAG text). */
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+
+    --canvas: #ffffff;
+    --canvas-soft: #f4f4f4;
+    --surface: #f7f7f7;
+    --surface-2: #ededed;
+
+    --ink: #000000;
+    --ash: rgba(0, 0, 0, 0.72);
+    --faint: rgba(0, 0, 0, 0.55);
+
+    --line: rgba(0, 0, 0, 0.15);
+    --line-strong: rgba(0, 0, 0, 0.28);
+
+    --gold: #9a5c00;
+    --gold-deep: #7c4800;
+    --gold-ink: #ffffff;
+    --gold-soft: rgba(154, 92, 0, 0.1);
+    --gold-glow: rgba(154, 92, 0, 0.1);
+  }
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-canvas-soft: var(--canvas-soft);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ash: var(--ash);
+  --color-faint: var(--faint);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-gold: var(--gold);
+  --color-gold-deep: var(--gold-deep);
+  --color-gold-ink: var(--gold-ink);
+  --color-gold-soft: var(--gold-soft);
+  --color-gold-glow: var(--gold-glow);
+
+  --font-display: "Space Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Work Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background-color: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+::selection {
+  background: var(--gold);
+  color: var(--gold-ink);
+}
+
+/* Film grain — a single fixed, pointer-events-none pseudo layer so it never
+   causes repaints on scroll (below-the-fold cost of animated grain is zero). */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .grain::after {
+    opacity: 0.015;
+  }
+}
+
+/* Marquee */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: marquee 36s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
+
+/* Horizontal film-strip scrollbar */
+.film-strip {
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold) transparent;
+}
+.film-strip::-webkit-scrollbar {
+  height: 4px;
+}
+.film-strip::-webkit-scrollbar-track {
+  background: transparent;
+}
+.film-strip::-webkit-scrollbar-thumb {
+  background: var(--gold);
+  border-radius: 2px;
+}
+
+/* Focus visibility for keyboard users */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
