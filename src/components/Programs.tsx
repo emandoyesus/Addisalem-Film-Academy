@@ -23,15 +23,17 @@ function ImageCard({
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/45 to-transparent opacity-95 transition-opacity duration-500 group-hover:opacity-100" />
       <div className="relative p-6 md:p-7">
-        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-gold">
-          {program.duration}
-        </p>
-        <h3 className="mt-2 font-display text-2xl font-bold tracking-tight text-white">
+        <h3 className="font-display text-2xl font-bold tracking-tight text-gold">
           {program.title}
         </h3>
-        <p className="mt-2 max-w-[44ch] text-sm leading-relaxed text-white/80">
+        <p className="mt-2 max-w-[44ch] text-sm leading-relaxed text-white/85">
           {program.tagline}
         </p>
+        {program.note && (
+          <p className="mt-4 border-l-2 border-gold pl-4 font-mono text-[11px] leading-relaxed text-white/70">
+            {program.note}
+          </p>
+        )}
         <div className="mt-4 flex flex-wrap items-center gap-4">
           <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/60">
             {program.level}
@@ -40,43 +42,6 @@ function ImageCard({
             Enquire <Arrow className="h-3 w-3" />
           </span>
         </div>
-      </div>
-    </a>
-  )
-}
-
-function TextCard({
-  program,
-  className = '',
-}: {
-  program: Program
-  className?: string
-}) {
-  return (
-    <a
-      href="#contact"
-      aria-label={`Enquire about ${program.title}`}
-      className={`group relative flex min-h-[380px] flex-col justify-between overflow-hidden rounded-2xl border border-line bg-surface-2 p-6 md:p-7 transition-colors duration-300 hover:border-gold/40 ${className}`}
-    >
-      <div className="flex items-start justify-between">
-        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-gold">
-          {program.duration} · {program.level}
-        </p>
-        <Arrow className="h-3.5 w-3.5 -translate-x-1 translate-y-1 text-faint opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:text-gold group-hover:opacity-100" />
-      </div>
-      <div>
-        <div className="mb-5 h-px w-full bg-line" />
-        <h3 className="font-display text-2xl font-bold tracking-tight text-ink">
-          {program.title}
-        </h3>
-        <p className="mt-3 max-w-[44ch] text-sm leading-relaxed text-ash">
-          {program.tagline}
-        </p>
-        {program.note && (
-          <p className="mt-5 border-l-2 border-gold pl-4 font-mono text-[11px] leading-relaxed text-faint">
-            {program.note}
-          </p>
-        )}
       </div>
     </a>
   )
@@ -131,7 +96,7 @@ export function Programs() {
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.6, delay: 0.16, ease: [0.16, 1, 0.3, 1] }}
           >
-            <TextCard program={screenwriting} className="h-full" />
+            <ImageCard program={screenwriting} className="h-full" />
           </motion.div>
           <motion.div
             className="md:col-span-1 lg:col-span-2"
@@ -149,7 +114,7 @@ export function Programs() {
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.6, delay: 0.32, ease: [0.16, 1, 0.3, 1] }}
           >
-            <TextCard program={sound} className="h-full" />
+            <ImageCard program={sound} className="h-full" />
           </motion.div>
           <motion.div
             className="md:col-span-2 lg:col-span-6"

@@ -9,10 +9,9 @@ export type HoursEntry = { day: string; time: string }
 export type Program = {
   title: string
   tagline: string
-  duration: string
   level: string
-  image?: string
-  alt?: string
+  image: string
+  alt: string
   note?: string
 }
 
@@ -198,7 +197,6 @@ export const programs: Program[] = [
   {
     title: 'Directing',
     tagline: 'Scene work, blocking and leading actors, from first read of the script to final cut.',
-    duration: '6 months',
     level: 'Foundation + advanced',
     image: img('photo-1503095396549-807759245b35', 1000, 78),
     alt: 'Stage light racks above a directing session',
@@ -206,7 +204,6 @@ export const programs: Program[] = [
   {
     title: 'Cinematography',
     tagline: 'Camera language, exposure, lenses and light. Learn to shoot on real production cameras.',
-    duration: '6 months',
     level: 'Foundation + advanced',
     image: img('photo-1524678606370-a47ad25cb82a', 1000, 78),
     alt: 'High-end camera body being prepared for a shoot',
@@ -214,14 +211,14 @@ export const programs: Program[] = [
   {
     title: 'Screenwriting',
     tagline: 'Structure, character and dialogue. Write the Ethiopian stories only you can tell.',
-    duration: '3 months',
     level: 'All levels',
     note: 'Workshops run Saturday mornings, and in the evening twice a week.',
+    image: img('photo-1483058712412-4245e9b90334', 1000, 78),
+    alt: 'A writer at a typewriter turning pages into script',
   },
   {
     title: 'Editing & Post',
     tagline: 'Timeline craft, sound and colour. Finish projects students polish into release-ready films.',
-    duration: '4 months',
     level: 'Foundation + advanced',
     image: img('photo-1512316609839-ce289d3eba0a', 1000, 78),
     alt: 'Colour grading session in the edit suite',
@@ -229,14 +226,14 @@ export const programs: Program[] = [
   {
     title: 'Sound Design',
     tagline: 'Record, design and mix. Build a soundtrack that carries a film on its own.',
-    duration: '3 months',
     level: 'All levels',
     note: 'Recording kit available on loan to enrolled students.',
+    image: img('photo-1524368535928-5b5e00ddc76b', 1000, 78),
+    alt: 'Studio condenser microphone in a recording booth',
   },
   {
     title: 'Producing & Management',
     tagline: 'Budgets, schedules, permits, crews. Learn what it takes to get a film made and released.',
-    duration: '8 weeks',
     level: 'Foundation',
     image: img('photo-1521737604893-d14cc237f11d', 1000, 78),
     alt: 'A small film crew reviewing a scene between takes',
