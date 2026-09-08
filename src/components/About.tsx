@@ -1,6 +1,6 @@
 import { Check } from '@phosphor-icons/react'
-import { images, site } from '../data/content'
-import { Eyebrow, Reveal } from './ui'
+import { images } from '../data/content'
+import { Reveal } from './ui'
 
 const values = [
   'Hands-on from week one, cameras in hand',
@@ -13,7 +13,6 @@ export function About() {
     <section id="about" className="mx-auto w-full max-w-[1400px] scroll-mt-24 px-5 py-20 md:px-8 md:py-32">
       <div className="grid items-center gap-14 lg:grid-cols-[1.05fr_1fr] lg:gap-20">
         <div>
-          <Eyebrow>Founded {site.founded}</Eyebrow>
           <Reveal delay={0.05}>
             <h2 className="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-tight text-ink md:text-5xl">
               The craft school of Northern Ethiopia.

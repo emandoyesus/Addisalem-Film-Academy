@@ -1,3 +1,5 @@
+import { lazy, Suspense } from 'react'
+import { Route, Routes } from 'react-router-dom'
 import { Navbar } from './components/Navbar'
 import { Hero } from './components/Hero'
 import { MarqueeStrip } from './components/MarqueeStrip'
@@ -8,11 +10,14 @@ import { LearningPath } from './components/LearningPath'
 import { Facilities } from './components/Facilities'
 import { Instructors } from './components/Instructors'
 import { Stories } from './components/Stories'
+import { Announcements } from './components/Announcements'
 import { Gallery } from './components/Gallery'
 import { Contact } from './components/Contact'
 import { Footer } from './components/Footer'
 
-export default function App() {
+const Admin = lazy(() => import('./pages/Admin.tsx'))
+
+function Landing() {
   return (
     <div className="grain min-h-[100dvh] bg-canvas text-ink">
       <a
@@ -34,11 +39,28 @@ export default function App() {
         <Facilities />
         <Instructors />
         <Stories />
+        <Announcements />
         <Gallery />
         <Contact />
       </main>
 
       <Footer />
     </div>
+  )
+}
+
+export default function App() {
+  return (
+    <Routes>
+      <Route
+        path="/admin/*"
+        element={
+          <Suspense fallback={null}>
+            <Admin />
+          </Suspense>
+        }
+      />
+      <Route path="*" element={<Landing />} />
+    </Routes>
   )
 }

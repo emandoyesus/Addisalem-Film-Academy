@@ -46,6 +46,22 @@ export type Stat = { value: string; label: string }
 
 export type Social = { label: string; href: string; icon: string }
 
+export type AnnouncementTag = 'Sitcom' | 'Edit' | 'News'
+
+export type Announcement = {
+  id: string
+  title: string
+  /** Display date shown on the card, e.g. "1 Sep 2026". */
+  date: string
+  tag: AnnouncementTag
+  description: string
+  /** Paste a YouTube video ID to embed it (thumbnail + in-page player).
+      Leave empty for text-only announcements. */
+  videoId?: string
+  /** Any external link, e.g. the channel video URL. */
+  href?: string
+}
+
 export type SiteInfo = {
   name: string
   label: string
@@ -112,11 +128,69 @@ export const marqueeWords: string[] = [
   'Animation',
 ]
 
+/* TODO(owner): point this at the real channel URL */
+export const youtubeChannel = 'https://www.youtube.com/@AddisalemFilmAcademy'
+
+/** Convert any YouTube link into a watchable ID, or return null. */
+export function toVideoId(value: string): string | null {
+  const trimmed = value.trim()
+  if (/^[A-Za-z0-9_-]{11}$/.test(trimmed)) return trimmed
+  const match =
+    trimmed.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/) ??
+    trimmed.match(/[\w-]{11}/)
+  return match ? match[1] : null
+}
+
+export function youtubeThumb(videoId: string, hq = false): string {
+  return hq
+    ? `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`
+    : `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`
+}
+
+export function youtubeEmbed(videoId: string): string {
+  return `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`
+}
+
+/* Sample announcements. To publish a new sitcom episode or edit:
+   1. Copy an entry below, paste at the TOP of this array (it becomes the featured card).
+   2. Set `videoId` to your YouTube video's ID, or `href` to the channel link.
+   Leave `videoId` empty for a text-only announcement. */
+export const announcements: Announcement[] = [
+  {
+    id: 'sitcom-teaser',
+    title: 'Sitcom teaser: our first episode is cutting',
+    date: '7 Sep 2026',
+    tag: 'Sitcom',
+    description:
+      'A two-minute taste of the first episode, shot on the studio set and cut by our editing students. The full episode lands on the channel on Friday.',
+    videoId: '',
+    href: 'https://www.youtube.com/@AddisalemFilmAcademy',
+  },
+  {
+    id: 'student-edit',
+    title: 'Student edit of the day: dawn over Tossa',
+    date: '1 Sep 2026',
+    tag: 'Edit',
+    description:
+      'A weekend-shot short, graded in the post-lab by a second-year colour trainee.',
+    videoId: '',
+    href: 'https://www.youtube.com/@AddisalemFilmAcademy',
+  },
+  {
+    id: 'november-intake',
+    title: 'Admissions open for the November intake',
+    date: '22 Aug 2026',
+    tag: 'News',
+    description:
+      'Early-bird applications for foundation courses close on 15 October. Campus tours run every Saturday morning.',
+  },
+]
+
 /* TODO(owner): replace these figures with real numbers */
 export const stats: Stat[] = [
   { value: '850+', label: 'Graduates since 2014' },
   { value: '120+', label: 'Short films produced by students' },
-  { value: '18', label: 'Professionals on the teaching bench' },
+  { value: '2', label: 'Instructors, teaching full-time' },
   { value: '40+', label: 'Alumni working in film today' },
 ]
 
@@ -223,33 +297,20 @@ export const facilities: Facility[] = [
 
 export const instructors: Instructor[] = [
   {
-    name: 'Selam Tesfaye',
-    role: 'Head of School · Directing',
-    bio: 'Theatre director turned filmmaker with two features and a decade of workshop teaching across the Amhara region.',
-    // TODO(owner): replace with staff portrait
-    image: img('photo-1573496359142-b8d87734a5a2', 800, 80),
-    alt: 'Portrait of Selam Tesfaye',
-  },
-  {
-    name: 'Yonas Abera',
-    role: 'Cinematography',
-    bio: 'DP with advertising, documentary and festival work. Teaches lighting the way he lights: by hand, on set.',
+    name: 'Addisalem',
+    role: 'Instructor',
+    // TODO(owner): replace with staff portrait and a real bio
+    bio: 'Instructor at Addisalem. Teaches hands-on, set-side.',
     image: img('photo-1507003211169-0a1dd7228f2d', 800, 80),
-    alt: 'Portrait of Yonas Abera',
+    alt: 'Portrait of Addisalem',
   },
   {
-    name: 'Ruth Mekonnen',
-    role: 'Editing & Post',
-    bio: 'Editor and colourist whose credits span music videos and features. Runs the post-lab and its apprenticeships.',
+    name: 'Selam',
+    role: 'Instructor',
+    // TODO(owner): replace with staff portrait and a real bio
+    bio: 'Instructor at Addisalem. Teaches hands-on, set-side.',
     image: img('photo-1544005313-94ddf0286df2', 800, 80),
-    alt: 'Portrait of Ruth Mekonnen',
-  },
-  {
-    name: 'Daniel Girma',
-    role: 'Screenwriting',
-    bio: 'Scriptwriter, novelist and radio drama veteran. Believes every good Ethiopian feature starts with honest dialogue.',
-    image: img('photo-1500648767791-00dcc994a43e', 800, 80),
-    alt: 'Portrait of Daniel Girma',
+    alt: 'Portrait of Selam',
   },
 ]
 

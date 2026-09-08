@@ -19,7 +19,7 @@ export function Instructors() {
         </p>
       </div>
 
-      <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mx-auto mt-12 grid max-w-3xl gap-5 sm:grid-cols-2">
         {instructors.map((person, i) => (
           <motion.article
             key={person.name}
