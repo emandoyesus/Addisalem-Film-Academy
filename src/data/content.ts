@@ -93,15 +93,14 @@ export const site: SiteInfo = {
   label: 'ADDISALEM',
   city: 'Dessie',
   region: 'Amhara, Ethiopia',
-  // TODO(owner): replace with the real registered address
-  address: 'Ras Abebe Aregay Avenue, Dessie, Amhara, Ethiopia',
+  address: 'Seid Yasin mall, Piyassa, Dessie, Amhara, Ethiopia',
   // TODO(owner): replace with real contact numbers
   phone: '+251 91 100 0000',
   phoneAlt: '+251 33 200 0000',
   email: 'admissions@addisalemfilm.com',
   hours: [
     { day: 'Monday to Friday', time: '9:00 – 17:00' },
-    { day: 'Saturday', time: '9:00 – 13:00 (workshops)' },
+    { day: 'Saturday', time: '9:00 – 13:00' },
     { day: 'Sunday', time: 'Closed' },
   ],
   founded: 2014,
@@ -212,7 +211,6 @@ export const programs: Program[] = [
     title: 'Screenwriting',
     tagline: 'Structure, character and dialogue. Write the Ethiopian stories only you can tell.',
     level: 'All levels',
-    note: 'Workshops run Saturday mornings, and in the evening twice a week.',
     image: img('photo-1483058712412-4245e9b90334', 1000, 78),
     alt: 'A writer at a typewriter turning pages into script',
   },
@@ -267,28 +265,18 @@ export const path: PathStage[] = [
 export const facilities: Facility[] = [
   {
     icon: 'stageset',
-    title: 'Studio & sets',
-    copy: 'A lighting studio that re-dresses as interior sets, plus practical locations across Dessie.',
-  },
-  {
-    icon: 'screen',
-    title: 'Screening room',
-    copy: 'A 120-seat theatre where weekly film nights and graduation premieres happen in real dark.',
+    title: 'One classroom',
+    copy: 'The whole school happens in a single room. Lectures, reviews, colour checks and wall screenings all share the same four walls.',
   },
   {
     icon: 'edit',
-    title: 'Edit & colour suites',
-    copy: 'Twelve 4K workstations running professional editing, grading and sound software.',
+    title: 'Editing computers',
+    copy: 'Dedicated computers loaded with professional editing, grading and sound software, ready for practice after class and on off-hours.',
   },
   {
     icon: 'camera',
-    title: 'Camera & sound kits',
-    copy: 'Cinema cameras, lenses, microphones and lighting loaned to enrolled students for shoots.',
-  },
-  {
-    icon: 'library',
-    title: 'Film library',
-    copy: 'Ethiopian cinema history, reference docs and a growing shelf of scripts and theory.',
+    title: 'Cameras, drone & kits',
+    copy: 'A fleet of cameras across formats, a drone for the aerial shots, plus lenses, microphones and lighting loaned for student shoots.',
   },
 ]
 

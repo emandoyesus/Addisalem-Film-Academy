@@ -27,22 +27,22 @@ export function Facilities() {
             />
             <div className="absolute bottom-5 left-5 right-5 rounded-xl border border-white/10 bg-black/70 p-5 backdrop-blur-md">
               <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-gold">
-                Set day · every week
+                One room, full kit
               </p>
               <p className="mt-1 text-sm text-white">
-                Theory gets a foot on the floor. Crew roles rotate so everyone directs,
-                shoots and grips.
+                The camera you learn on is the one you shoot your graduation film with.
               </p>
             </div>
           </Reveal>
 
           <div className="order-1 lg:order-2">
-            <h2 className="max-w-[16ch] font-display text-4xl font-bold leading-[1.06] tracking-tight text-ink md:text-5xl">
-              A working studio, not just a classroom.
+            <h2 className="max-w-[20ch] font-display text-4xl font-bold leading-[1.06] tracking-tight text-ink md:text-5xl">
+              One classroom, and the gear to shoot any scene in it.
             </h2>
             <p className="mt-6 max-w-[56ch] text-base leading-relaxed text-ash md:text-lg">
-              Everything students need to make real films is under one roof in Dessie,
-              from the sound stage to the screening room.
+              Everything needed to make real films sits in a single room in Seid Yasin
+              mall: computers for editing, cameras for shooting, and a drone for the
+              shots the others can&rsquo;t reach.
             </p>
 
             <ul className="mt-10 space-y-0 border-t border-line">
