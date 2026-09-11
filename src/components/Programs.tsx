@@ -47,9 +47,22 @@ function ImageCard({
   )
 }
 
+/* Bento spans per program index (lg = 6-col grid). */
+const spans = [
+  'lg:col-span-3',
+  'lg:col-span-3',
+  'lg:col-span-2',
+  'lg:col-span-2',
+  'lg:col-span-2',
+  'lg:col-span-2',
+  'lg:col-span-2',
+  'lg:col-span-2',
+  'lg:col-span-3',
+  'lg:col-span-3',
+]
+
 export function Programs() {
   const reduce = useReducedMotion()
-  const [directing, cinematography, screenwriting, editing, sound, producing] = programs
 
   return (
     <section id="programs" className="scroll-mt-24 bg-canvas-soft py-20 md:py-32">
@@ -62,69 +75,32 @@ export function Programs() {
           transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
         >
           <h2 className="mt-5 max-w-[18ch] font-display text-4xl font-bold leading-[1.06] tracking-tight text-ink md:text-5xl">
-            Six crafts. One finished film.
+            Ten crafts. One finished film.
           </h2>
           <p className="mt-6 max-w-[60ch] text-base leading-relaxed text-ash md:text-lg">
             Every program ends in screen time. Start from zero in any discipline, or
-            sharpen a craft you already practice.
+            sharpen a craft you already practice. Camera, drone and digital-marketing
+            training are included.
           </p>
         </motion.div>
 
         <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-6">
-          <motion.div
-            className="md:col-span-2 lg:col-span-3"
-            initial={reduce ? false : { opacity: 0, y: 24 }}
-            whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.6, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <ImageCard program={directing} className="h-full" />
-          </motion.div>
-          <motion.div
-            className="md:col-span-2 lg:col-span-3"
-            initial={reduce ? false : { opacity: 0, y: 24 }}
-            whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.6, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <ImageCard program={cinematography} className="h-full" />
-          </motion.div>
-          <motion.div
-            className="md:col-span-1 lg:col-span-2"
-            initial={reduce ? false : { opacity: 0, y: 24 }}
-            whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.6, delay: 0.16, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <ImageCard program={screenwriting} className="h-full" />
-          </motion.div>
-          <motion.div
-            className="md:col-span-1 lg:col-span-2"
-            initial={reduce ? false : { opacity: 0, y: 24 }}
-            whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.6, delay: 0.24, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <ImageCard program={editing} className="h-full" />
-          </motion.div>
-          <motion.div
-            className="md:col-span-2 lg:col-span-2"
-            initial={reduce ? false : { opacity: 0, y: 24 }}
-            whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.6, delay: 0.32, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <ImageCard program={sound} className="h-full" />
-          </motion.div>
-          <motion.div
-            className="md:col-span-2 lg:col-span-6"
-            initial={reduce ? false : { opacity: 0, y: 24 }}
-            whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.6, delay: 0.38, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <ImageCard program={producing} className="min-h-[300px]" />
-          </motion.div>
+          {programs.map((program, i) => (
+            <motion.div
+              key={program.title}
+              className={`md:col-span-1 ${spans[i] ?? 'lg:col-span-2'}`}
+              initial={reduce ? false : { opacity: 0, y: 24 }}
+              whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{
+                duration: 0.6,
+                delay: 0.06 * (i % 6),
+                ease: [0.16, 1, 0.3, 1],
+              }}
+            >
+              <ImageCard program={program} className="h-full" />
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>

@@ -40,8 +40,8 @@ export function Facilities() {
               One classroom, and the gear to shoot any scene in it.
             </h2>
             <p className="mt-6 max-w-[56ch] text-base leading-relaxed text-ash md:text-lg">
-              Everything needed to make real films sits in a single room in Seid Yasin
-              mall: computers for editing, cameras for shooting, and a drone for the
+              Everything needed to make real films sits in a single room in the Seid Yasin
+              building: computers for editing, cameras for shooting, and a drone for the
               shots the others can&rsquo;t reach.
             </p>
 

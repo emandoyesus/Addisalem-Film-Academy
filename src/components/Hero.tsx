@@ -67,8 +67,8 @@ export function Hero() {
           transition={{ duration: 0.9, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
           className="mt-6 max-w-[58ch] text-base leading-relaxed text-ash md:text-lg"
         >
-          Hands-on training in directing, cinematography, writing, editing and sound,
-          taught in Dessie by working filmmakers.
+          Hands-on training in photography, videography, directing, cinematography, writing, editing, sound, graphic design and more,
+          taught in Dessie.
         </motion.p>
 
         <motion.div

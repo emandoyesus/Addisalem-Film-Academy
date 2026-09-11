@@ -5,7 +5,7 @@ import { Reveal } from './ui'
 const values = [
   'Hands-on from week one, cameras in hand',
   'Taught in Amharic and English',
-  'Mentored by working filmmakers',
+  'Crew-based learning, on sets and under deadlines',
 ]
 
 export function About() {

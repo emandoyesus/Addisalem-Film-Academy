@@ -93,10 +93,9 @@ export const site: SiteInfo = {
   label: 'ADDISALEM',
   city: 'Dessie',
   region: 'Amhara, Ethiopia',
-  address: 'Seid Yasin mall, Piyassa, Dessie, Amhara, Ethiopia',
-  // TODO(owner): replace with real contact numbers
-  phone: '+251 91 100 0000',
-  phoneAlt: '+251 33 200 0000',
+  address: 'Seid Yasin building, 5th floor, Piyassa, Dessie, Amhara, Ethiopia',
+  phone: '09 89 81 84 79',
+  phoneAlt: '09 21 25 88 15',
   email: 'admissions@addisalemfilm.com',
   hours: [
     { day: 'Monday to Friday', time: '9:00 – 17:00' },
@@ -110,20 +109,21 @@ export const navLinks: { label: string; href: string }[] = [
   { label: 'About', href: '#about' },
   { label: 'Programs', href: '#programs' },
   { label: 'Facilities', href: '#facilities' },
-  { label: 'Instructors', href: '#instructors' },
   { label: 'Stories', href: '#stories' },
   { label: 'Contact', href: '#contact' },
 ]
 
 export const marqueeWords: string[] = [
+  'Photography',
+  'Videography',
   'Directing',
   'Cinematography',
   'Screenwriting',
-  'Editing',
+  'Film Editing',
   'Sound Design',
-  'Producing',
-  'Documentary',
-  'Animation',
+  'Film Production',
+  'Graphic Design',
+  'Motion Design',
 ]
 
 /* TODO(owner): point this at the real channel URL */
@@ -188,11 +188,25 @@ export const announcements: Announcement[] = [
 export const stats: Stat[] = [
   { value: '850+', label: 'Graduates since 2014' },
   { value: '120+', label: 'Short films produced by students' },
-  { value: '2', label: 'Instructors, teaching full-time' },
+  { value: '10', label: 'Disciplines taught' },
   { value: '40+', label: 'Alumni working in film today' },
 ]
 
 export const programs: Program[] = [
+  {
+    title: 'Photography',
+    tagline: 'Framing, exposure, light and composition. Capture images that tell a story before a single word is spoken.',
+    level: 'All levels',
+    image: img('photo-1502920917128-1aa500764cbd', 1000, 78),
+    alt: 'Photographer composing a shot through the viewfinder',
+  },
+  {
+    title: 'Videography',
+    tagline: 'From phone shoots to production cameras. Master movement, framing and storytelling in motion.',
+    level: 'Foundation + advanced',
+    image: img('photo-1574717024653-61fd2cf4d44d', 1000, 78),
+    alt: 'Videographer filming with a stabilised camera rig',
+  },
   {
     title: 'Directing',
     tagline: 'Scene work, blocking and leading actors, from first read of the script to final cut.',
@@ -215,8 +229,8 @@ export const programs: Program[] = [
     alt: 'A writer at a typewriter turning pages into script',
   },
   {
-    title: 'Editing & Post',
-    tagline: 'Timeline craft, sound and colour. Finish projects students polish into release-ready films.',
+    title: 'Film Editing',
+    tagline: 'Timeline craft, sound and colour. Shape raw footage into release-ready films.',
     level: 'Foundation + advanced',
     image: img('photo-1512316609839-ce289d3eba0a', 1000, 78),
     alt: 'Colour grading session in the edit suite',
@@ -230,11 +244,25 @@ export const programs: Program[] = [
     alt: 'Studio condenser microphone in a recording booth',
   },
   {
-    title: 'Producing & Management',
+    title: 'Film Production',
     tagline: 'Budgets, schedules, permits, crews. Learn what it takes to get a film made and released.',
     level: 'Foundation',
     image: img('photo-1521737604893-d14cc237f11d', 1000, 78),
     alt: 'A small film crew reviewing a scene between takes',
+  },
+  {
+    title: 'Graphic Design',
+    tagline: 'Posters, title cards, social assets and brand systems. Visual storytelling beyond the frame.',
+    level: 'All levels',
+    image: img('photo-1626785774573-4b799315345d', 1000, 78),
+    alt: 'Designer working on a poster layout on screen',
+  },
+  {
+    title: 'Motion Design',
+    tagline: 'Animate titles, transitions and visual effects. Bring static designs to life with movement.',
+    level: 'All levels',
+    image: img('photo-1550745165-9bc0b252726f', 1000, 78),
+    alt: 'Motion graphics workspace with keyframes on screen',
   },
 ]
 
@@ -280,24 +308,7 @@ export const facilities: Facility[] = [
   },
 ]
 
-export const instructors: Instructor[] = [
-  {
-    name: 'Addisalem',
-    role: 'Instructor',
-    // TODO(owner): replace with staff portrait and a real bio
-    bio: 'Instructor at Addisalem. Teaches hands-on, set-side.',
-    image: img('photo-1507003211169-0a1dd7228f2d', 800, 80),
-    alt: 'Portrait of Addisalem',
-  },
-  {
-    name: 'Selam',
-    role: 'Instructor',
-    // TODO(owner): replace with staff portrait and a real bio
-    bio: 'Instructor at Addisalem. Teaches hands-on, set-side.',
-    image: img('photo-1544005313-94ddf0286df2', 800, 80),
-    alt: 'Portrait of Selam',
-  },
-]
+export const instructors: Instructor[] = []
 
 export const stories: Story[] = [
   {
