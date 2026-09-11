@@ -70,8 +70,9 @@ export function Programs() {
             Three ways to learn film.
           </h2>
           <p className="mt-6 max-w-[60ch] text-base leading-relaxed text-ash md:text-lg">
-            Pick a program by the time you can give it, not by experience. Duration
-            decides how fast you go — every program uses the same full set of tools.
+            The two-month program covers photography, videography, photo & video editing
+            and design. The five- and ten-month programs cover the full curriculum —
+            the same courses, at different weekly schedules.
           </p>
         </motion.div>
 

@@ -16,8 +16,9 @@ export function LearningPath() {
           Pick the pace that fits your week.
         </h2>
         <p className="mt-6 text-base leading-relaxed text-ash md:text-lg">
-          All three programs teach the same full curriculum. What changes is how much
-          time you give it each week.
+          The two-month program is a focused stretch in photography, video, editing and
+          design. The five- and ten-month programs carry the full curriculum — the
+          difference between them is the weekly schedule.
         </p>
       </motion.div>
 
