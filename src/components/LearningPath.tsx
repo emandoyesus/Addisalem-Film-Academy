@@ -13,11 +13,11 @@ export function LearningPath() {
         className="max-w-[60ch]"
       >
         <h2 className="font-display text-4xl font-bold leading-[1.06] tracking-tight text-ink md:text-5xl">
-          Your path, frame by frame.
+          Pick the pace that fits your week.
         </h2>
         <p className="mt-6 text-base leading-relaxed text-ash md:text-lg">
-          Three stages, from a first exposure to a finished film. Each stage ends with
-          something you can screen.
+          All three programs teach the same full curriculum. What changes is how much
+          time you give it each week.
         </p>
       </motion.div>
 

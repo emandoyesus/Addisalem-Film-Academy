@@ -9,10 +9,11 @@ export type HoursEntry = { day: string; time: string }
 export type Program = {
   title: string
   tagline: string
-  level: string
+  duration: string
+  schedule: string
+  courses: string[]
   image: string
   alt: string
-  note?: string
 }
 
 export type PathStage = {
@@ -194,99 +195,83 @@ export const stats: Stat[] = [
 
 export const programs: Program[] = [
   {
-    title: 'Photography',
-    tagline: 'Framing, exposure, light and composition. Capture images that tell a story before a single word is spoken.',
-    level: 'All levels',
-    image: img('photo-1502920917128-1aa500764cbd', 1000, 78),
-    alt: 'Photographer composing a shot through the viewfinder',
-  },
-  {
-    title: 'Videography',
-    tagline: 'From phone shoots to production cameras. Master movement, framing and storytelling in motion.',
-    level: 'Foundation + advanced',
-    image: img('photo-1574717024653-61fd2cf4d44d', 1000, 78),
-    alt: 'Videographer filming with a stabilised camera rig',
-  },
-  {
-    title: 'Directing',
-    tagline: 'Scene work, blocking and leading actors, from first read of the script to final cut.',
-    level: 'Foundation + advanced',
-    image: img('photo-1503095396549-807759245b35', 1000, 78),
-    alt: 'Stage light racks above a directing session',
-  },
-  {
-    title: 'Cinematography',
-    tagline: 'Camera language, exposure, lenses and light. Learn to shoot on real production cameras.',
-    level: 'Foundation + advanced',
-    image: img('photo-1524678606370-a47ad25cb82a', 1000, 78),
-    alt: 'High-end camera body being prepared for a shoot',
-  },
-  {
-    title: 'Screenwriting',
-    tagline: 'Structure, character and dialogue. Write the Ethiopian stories only you can tell.',
-    level: 'All levels',
-    image: img('photo-1483058712412-4245e9b90334', 1000, 78),
-    alt: 'A writer at a typewriter turning pages into script',
-  },
-  {
-    title: 'Film Editing',
-    tagline: 'Timeline craft, sound and colour. Shape raw footage into release-ready films.',
-    level: 'Foundation + advanced',
-    image: img('photo-1512316609839-ce289d3eba0a', 1000, 78),
-    alt: 'Colour grading session in the edit suite',
-  },
-  {
-    title: 'Sound Design',
-    tagline: 'Record, design and mix. Build a soundtrack that carries a film on its own.',
-    level: 'All levels',
-    note: 'Recording kit available on loan to enrolled students.',
-    image: img('photo-1524368535928-5b5e00ddc76b', 1000, 78),
-    alt: 'Studio condenser microphone in a recording booth',
-  },
-  {
-    title: 'Film Production',
-    tagline: 'Budgets, schedules, permits, crews. Learn what it takes to get a film made and released.',
-    level: 'Foundation',
-    image: img('photo-1521737604893-d14cc237f11d', 1000, 78),
-    alt: 'A small film crew reviewing a scene between takes',
-  },
-  {
-    title: 'Graphic Design',
-    tagline: 'Posters, title cards, social assets and brand systems. Visual storytelling beyond the frame.',
-    level: 'All levels',
+    title: 'Two-Month Program',
+    tagline: 'A fast, practical start in the crafts that feed every modern film and video.',
+    duration: '2 months',
+    schedule: 'Hands-on from week one, cameras and Adobe tools in hand.',
+    courses: [
+      'Photography',
+      'Videography',
+      'Photo & Video Editing (Ps, Ai, Pr, Ae)',
+      'Graphic Design',
+      'Motion Design',
+    ],
     image: img('photo-1626785774573-4b799315345d', 1000, 78),
     alt: 'Designer working on a poster layout on screen',
   },
   {
-    title: 'Motion Design',
-    tagline: 'Animate titles, transitions and visual effects. Bring static designs to life with movement.',
-    level: 'All levels',
-    image: img('photo-1550745165-9bc0b252726f', 1000, 78),
-    alt: 'Motion graphics workspace with keyframes on screen',
+    title: 'Five-Month Program',
+    tagline: 'The full curriculum, at a faster pace. Everything below every course category.',
+    duration: '5 months',
+    schedule: 'Morning & afternoon classes, 3 days a week.',
+    courses: [
+      'Photography',
+      'Videography',
+      'Directing',
+      'Cinematography',
+      'Screenwriting',
+      'Film Editing',
+      'Sound Design',
+      'Film Production',
+      'Graphic Design',
+      'Motion Design',
+    ],
+    image: img('photo-1503095396549-807759245b35', 1000, 78),
+    alt: 'Stage light racks above a film set',
+  },
+  {
+    title: 'Ten-Month Program',
+    tagline: 'The full curriculum, with room to practise between classes. Perfect for steady progress.',
+    duration: '10 months',
+    schedule: 'Morning-only classes, 3 days a week.',
+    courses: [
+      'Photography',
+      'Videography',
+      'Directing',
+      'Cinematography',
+      'Screenwriting',
+      'Film Editing',
+      'Sound Design',
+      'Film Production',
+      'Graphic Design',
+      'Motion Design',
+    ],
+    image: img('photo-1524678606370-a47ad25cb82a', 1000, 78),
+    alt: 'High-end camera body being prepared for a shoot',
   },
 ]
 
 export const path: PathStage[] = [
   {
     step: '01',
-    title: 'Foundation',
-    length: '12 weeks',
-    copy: 'Camera vocabulary, framing, exposure, story structure. Your first exercises are on a phone camera, your first graded work on a real set.',
-    tags: ['Camera language', 'Story basics', 'Set etiquette'],
+    title: 'Two-Month Program',
+    length: '2 months',
+    copy: 'Photography, videography, photo & video editing (Ps, Ai, Pr, Ae), graphic design and motion design in one focused stretch.',
+    tags: ['Editing-focused', 'Graphic & motion', 'Hands-on'],
   },
   {
     step: '02',
-    title: 'Craft',
-    length: '6 months',
-    copy: 'Pick a discipline: directing, camera, editing or sound. Teach it through weekly set days, feedback screenings and supervised crew roles.',
-    tags: ['Discipline focus', 'Weekly set days', 'Feedback screenings'],
+    title: 'Five-Month Program',
+    length: '5 months',
+    copy: 'The full curriculum with morning and afternoon classes three days a week. Faster progress, half-day pace.',
+    tags: ['All courses', 'Morning + afternoon', '3 days a week'],
   },
   {
     step: '03',
-    title: 'Studio',
-    length: '6 months',
-    copy: 'A graduation film made crew-first, with a working crew of current students. Portfolios, festival submissions and industry introductions.',
-    tags: ['Graduation film', 'Portfolio', 'Industry placement'],
+    title: 'Ten-Month Program',
+    length: '10 months',
+    copy: 'The full curriculum with morning-only classes three days a week. More time between sessions to practise.',
+    tags: ['All courses', 'Morning only', '3 days a week'],
   },
 ]
 
