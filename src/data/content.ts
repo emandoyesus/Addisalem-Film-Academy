@@ -233,7 +233,7 @@ export const programs: Program[] = [
     title: 'Ten-Month Program',
     tagline: 'The full curriculum, with room to practise between classes. Perfect for steady progress.',
     duration: '10 months',
-    schedule: 'Morning-only classes, 3 days a week.',
+    schedule: 'Afternoon-only classes, 3 days a week.',
     courses: [
       'Photography',
       'Videography',
@@ -270,8 +270,8 @@ export const path: PathStage[] = [
     step: '03',
     title: 'Ten-Month Program',
     length: '10 months',
-    copy: 'The full curriculum with morning-only classes three days a week. More time between sessions to practise.',
-    tags: ['All courses', 'Morning only', '3 days a week'],
+    copy: 'The full curriculum with afternoon-only classes three days a week. More time between sessions to practise.',
+    tags: ['All courses', 'Afternoon only', '3 days a week'],
   },
 ]
 
