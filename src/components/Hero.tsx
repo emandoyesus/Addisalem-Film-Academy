@@ -1,12 +1,23 @@
+import { useEffect, useState } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import { images, site } from '../data/content'
 import { Arrow } from './ui'
+import { isMobileViewport } from '../lib/viewport'
 
 export function Hero() {
   const { scrollY } = useScroll()
   const reduce = useReducedMotion()
   const bgY = useTransform(scrollY, [0, 900], [0, 160])
   const shade = useTransform(scrollY, [0, 900], [0, 0.35])
+  const [isMobile, setIsMobile] = useState(isMobileViewport)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)')
+    const update = () => setIsMobile(mq.matches)
+    update()
+    mq.addEventListener('change', update)
+    return () => mq.removeEventListener('change', update)
+  }, [])
 
   return (
     <section id="top" className="relative isolate flex min-h-[100dvh] flex-col">
@@ -19,7 +30,7 @@ export function Hero() {
           animate={{ scale: 1 }}
           transition={{ duration: 2.2, ease: [0.16, 1, 0.3, 1] }}
         />
-        {!reduce && (
+        {!reduce && !isMobile && (
           <video
             autoPlay
             muted
@@ -28,10 +39,19 @@ export function Hero() {
             preload="metadata"
             poster="/media/hero-poster.jpg"
             aria-hidden="true"
-            className="absolute inset-y-0 left-0 right-[-10%] h-full w-full translate-x-0 object-cover"
+            className="absolute inset-0 h-full w-full object-cover"
           >
             <source src="/media/hero.mp4" type="video/mp4" />
           </video>
+        )}
+        {!reduce && isMobile && (
+          <motion.div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: 'url(/media/hero-mobile.jpg)' }}
+            initial={reduce ? false : { scale: 1.08 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 2.2, ease: [0.16, 1, 0.3, 1] }}
+          />
         )}
         {/* Cinematic scrim stack: darker bottom-left to carry floating text, centre kept clear */}
         <motion.div
@@ -53,7 +73,7 @@ export function Hero() {
       </div>
 
       {/* Hero content — compact floating text, bottom-left, everything else left open for the video */}
-      <div className="mx-auto flex w-full max-w-[1400px] flex-1 flex-col justify-end px-5 pb-10 pt-28 md:px-8 md:pt-32">
+      <div className="mx-auto flex w-full max-w-[1400px] flex-1 flex-col justify-end px-5 pb-12 pt-28 md:px-8 md:pt-32">
         <div className="max-w-[480px]">
           <motion.p
             initial={reduce ? false : { opacity: 0, y: 18 }}
@@ -71,7 +91,7 @@ export function Hero() {
             initial={reduce ? false : { opacity: 0, y: 26 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-4 font-display text-3xl font-bold leading-[1.04] tracking-tight text-ink sm:text-4xl md:text-5xl"
+            className="mt-3 font-display text-[1.65rem] font-bold leading-[1.05] tracking-tight text-ink sm:mt-4 sm:text-4xl md:text-5xl"
           >
             Turn your story into cinema.
           </motion.h1>
@@ -80,7 +100,7 @@ export function Hero() {
             initial={reduce ? false : { opacity: 0, y: 26 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-4 max-w-[52ch] text-[13px] leading-relaxed text-ash md:text-sm"
+            className="mt-4 hidden max-w-[52ch] text-[13px] leading-relaxed text-ash sm:block md:text-sm"
           >
             Photography, video, directing, editing, design and more — taught hands-on in
             Dessie.
@@ -90,17 +110,17 @@ export function Hero() {
             initial={reduce ? false : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.68, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-3"
+            className="mt-5 flex w-full flex-col gap-2.5 sm:w-auto sm:flex-row sm:items-center sm:gap-3"
           >
             <a
               href="#programs"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-gold px-5 py-2.5 font-mono text-[10px] uppercase tracking-[0.15em] text-gold-ink transition-all duration-300 hover:bg-gold-deep active:translate-y-[-1px] active:scale-[0.98]"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-gold px-5 py-3 font-mono text-[10px] uppercase tracking-[0.15em] text-gold-ink transition-all duration-300 hover:bg-gold-deep active:translate-y-[-1px] active:scale-[0.98] sm:w-auto sm:py-2.5"
             >
               Explore programs <Arrow />
             </a>
             <a
               href="#contact"
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-line-strong bg-canvas/20 px-5 py-2.5 font-mono text-[10px] uppercase tracking-[0.15em] text-ink backdrop-blur-sm transition-all duration-300 hover:border-gold/60 hover:text-gold active:translate-y-[-1px] active:scale-[0.98]"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-line-strong bg-canvas/20 px-5 py-3 font-mono text-[10px] uppercase tracking-[0.15em] text-ink backdrop-blur-sm transition-all duration-300 hover:border-gold/60 hover:text-gold active:translate-y-[-1px] active:scale-[0.98] sm:w-auto sm:py-2.5"
             >
               Talk to admissions
             </a>
