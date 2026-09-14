@@ -1,58 +1,23 @@
-import { useEffect, useState } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
-import { images, site } from '../data/content'
+import { site } from '../data/content'
 import { Arrow } from './ui'
-import { isMobileViewport } from '../lib/viewport'
 
 export function Hero() {
   const { scrollY } = useScroll()
   const reduce = useReducedMotion()
   const bgY = useTransform(scrollY, [0, 900], [0, 160])
   const shade = useTransform(scrollY, [0, 900], [0, 0.35])
-  const [isMobile, setIsMobile] = useState(isMobileViewport)
-
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 767px)')
-    const update = () => setIsMobile(mq.matches)
-    update()
-    mq.addEventListener('change', update)
-    return () => mq.removeEventListener('change', update)
-  }, [])
-
   return (
     <section id="top" className="relative isolate flex min-h-[100dvh] flex-col">
-      {/* Background plate with video + subtle parallax + Ken Burns entrance */}
+      {/* Background plate with image + subtle parallax + Ken Burns entrance */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <motion.div
-          className="absolute inset-[-12%] bg-cover bg-center"
-          style={{ backgroundImage: `url(${images.hero})`, y: reduce ? 0 : bgY }}
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: 'url(/media/hero.jpg)', y: reduce ? 0 : bgY }}
           initial={reduce ? false : { scale: 1.08 }}
           animate={{ scale: 1 }}
           transition={{ duration: 2.2, ease: [0.16, 1, 0.3, 1] }}
         />
-        {!reduce && !isMobile && (
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            poster="/media/hero-poster.jpg"
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full object-cover"
-          >
-            <source src="/media/hero.mp4" type="video/mp4" />
-          </video>
-        )}
-        {!reduce && isMobile && (
-          <motion.div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: 'url(/media/hero-mobile.jpg)' }}
-            initial={reduce ? false : { scale: 1.08 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 2.2, ease: [0.16, 1, 0.3, 1] }}
-          />
-        )}
         {/* Cinematic scrim stack: darker bottom-left to carry floating text, centre kept clear */}
         <motion.div
           className="absolute inset-0"
@@ -72,7 +37,7 @@ export function Hero() {
         />
       </div>
 
-      {/* Hero content — compact floating text, bottom-left, everything else left open for the video */}
+      {/* Hero content — compact floating text, bottom-left, everything else left open for the image */}
       <div className="mx-auto flex w-full max-w-[1400px] flex-1 flex-col justify-end px-5 pb-12 pt-28 md:px-8 md:pt-32">
         <div className="max-w-[480px]">
           <motion.p
