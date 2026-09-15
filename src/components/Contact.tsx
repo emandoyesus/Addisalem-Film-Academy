@@ -65,7 +65,7 @@ const focusField = (key: keyof FormValues) => {
 const bringFormIntoView = () => {
   formRef.current?.scrollIntoView({
     behavior: reduce ? 'auto' : 'smooth',
-    block: 'center',
+    block: 'start',
     inline: 'nearest',
   })
 }
@@ -186,7 +186,7 @@ const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
   ref={formRef}
   onSubmit={onSubmit}
   noValidate
-  className="rounded-2xl border border-line bg-surface p-7 md:p-9"
+  className="scroll-mt-6 rounded-2xl border border-line bg-surface p-7 md:p-9"
 >
 {status === 'error' && (
   <p
