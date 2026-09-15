@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   AnimatePresence,
   motion,
@@ -20,6 +20,14 @@ export function Navbar() {
   })
 
   const reduce = useReducedMotion()
+
+  useEffect(() => {
+    if (!open) return
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [open])
 
   return (
     <>
