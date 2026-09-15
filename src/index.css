@@ -31,6 +31,16 @@
   --gold-ink: #000000;
   --gold-soft: rgba(255, 186, 33, 0.12);
   --gold-glow: rgba(255, 186, 33, 0.14);
+
+  /* status feedback — success & failure */
+  --ok: #34d399;
+  --ok-deep: #10b981;
+  --ok-ink: #000000;
+  --ok-soft: rgba(52, 211, 153, 0.14);
+  --err: #f87171;
+  --err-deep: #ef4444;
+  --err-ink: #ffffff;
+  --err-soft: rgba(248, 113, 113, 0.14);
 }
 
 /* Light mode stays strictly inside the brand trio: white canvas,
@@ -56,6 +66,16 @@
     --gold-ink: #ffffff;
     --gold-soft: rgba(154, 92, 0, 0.1);
     --gold-glow: rgba(154, 92, 0, 0.1);
+
+    /* status feedback — success & failure */
+    --ok: #047857;
+    --ok-deep: #065f46;
+    --ok-ink: #ffffff;
+    --ok-soft: rgba(4, 120, 87, 0.1);
+    --err: #b91c1c;
+    --err-deep: #991b1b;
+    --err-ink: #ffffff;
+    --err-soft: rgba(185, 28, 28, 0.1);
   }
 }
 
@@ -74,6 +94,15 @@
   --color-gold-ink: var(--gold-ink);
   --color-gold-soft: var(--gold-soft);
   --color-gold-glow: var(--gold-glow);
+
+  --color-ok: var(--ok);
+  --color-ok-deep: var(--ok-deep);
+  --color-ok-ink: var(--ok-ink);
+  --color-ok-soft: var(--ok-soft);
+  --color-err: var(--err);
+  --color-err-deep: var(--err-deep);
+  --color-err-ink: var(--err-ink);
+  --color-err-soft: var(--err-soft);
 
   --font-display: "Space Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Work Sans Variable", ui-sans-serif, system-ui, sans-serif;
