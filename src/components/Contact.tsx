@@ -42,28 +42,41 @@ export function Contact() {
       setErrors((er) => ({ ...er, [key]: undefined }))
     }
 
-  const validate = (): boolean => {
-    const next: FormErrors = {}
-    if (!values.name.trim()) next.name = 'Please tell us your name.'
-    if (!values.phone.trim()) next.phone = 'Phone or Telegram number is required.'
-    if (!values.program) next.program = 'Choose the program you are interested in.'
-    if (values.message.trim().length > 0 && values.message.trim().length < 10)
-      next.message = 'A sentence or two helps us prepare your visit.'
-    setErrors(next)
-    return Object.keys(next).length === 0
-  }
+const VALIDATION_ORDER: (keyof FormValues)[] = ['name', 'phone', 'program', 'message']
 
-  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (!validate()) return
-    setStatus('sending')
-    try {
-      await createLead(values)
-      setStatus('sent')
-    } catch {
-      setStatus('error')
-    }
+const validate = (): FormErrors => {
+  const next: FormErrors = {}
+  if (!values.name.trim()) next.name = 'Please tell us your name.'
+  if (!values.phone.trim()) next.phone = 'Phone or Telegram number is required.'
+  if (!values.program) next.program = 'Choose the program you are interested in.'
+  if (values.message.trim().length > 0 && values.message.trim().length < 10)
+    next.message = 'A sentence or two helps us prepare your visit.'
+  setErrors(next)
+  return next
+}
+
+const focusField = (key: keyof FormValues) => {
+  const el = document.getElementById(key)
+  el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  el?.focus({ preventScroll: true })
+}
+
+const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  e.preventDefault()
+  const next = validate()
+  if (Object.keys(next).length > 0) {
+    const first = VALIDATION_ORDER.find((k) => next[k])
+    if (first) focusField(first)
+    return
   }
+  setStatus('sending')
+  try {
+    await createLead(values)
+    setStatus('sent')
+  } catch {
+    setStatus('error')
+  }
+}
 
   const inputBase =
     'w-full rounded-xl border bg-canvas px-4 py-3 text-sm text-ink placeholder:text-faint transition-colors focus:outline-none focus:ring-2 focus:ring-gold/60'
