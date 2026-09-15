@@ -123,3 +123,23 @@ export async function deleteAnnouncement(id: string): Promise<void> {
   const { doc, deleteDoc } = await import('firebase/firestore')
   await deleteDoc(doc(db, 'announcements', id))
 }
+
+export type LeadInput = {
+  name: string
+  phone: string
+  program: string
+  message: string
+}
+
+export async function createLead(input: LeadInput): Promise<void> {
+  assertConfig()
+  const { db } = await loadFirebase()
+  const { addDoc, collection, serverTimestamp } = await import('firebase/firestore')
+  await addDoc(collection(db, 'leads'), {
+    name: input.name.trim(),
+    phone: input.phone.trim(),
+    program: input.program,
+    message: input.message.trim(),
+    createdAt: serverTimestamp(),
+  })
+}

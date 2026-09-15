@@ -30,14 +30,6 @@ export type Facility = {
   copy: string
 }
 
-export type Instructor = {
-  name: string
-  role: string
-  bio: string
-  image: string
-  alt: string
-}
-
 export type Story = { quote: string; name: string; role: string }
 
 export type GalleryItem = { id: string; caption: string; w: number }
@@ -291,8 +283,6 @@ export const facilities: Facility[] = [
     copy: 'A fleet of cameras across formats, a drone for the aerial shots, plus lenses, microphones and lighting loaned for student shoots.',
   },
 ]
-
-export const instructors: Instructor[] = []
 
 export const stories: Story[] = [
   {

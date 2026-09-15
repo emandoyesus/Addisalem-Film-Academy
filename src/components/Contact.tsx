@@ -9,6 +9,7 @@ import {
 } from '@phosphor-icons/react'
 import { motion, useReducedMotion } from 'motion/react'
 import { site, programs } from '../data/content'
+import { createLead } from '../lib/firebase'
 
 type FormValues = {
   name: string
@@ -19,7 +20,7 @@ type FormValues = {
 
 type FormErrors = Partial<Record<keyof FormValues, string>>
 
-type Status = 'idle' | 'sending' | 'sent'
+type Status = 'idle' | 'sending' | 'sent' | 'error'
 
 const initialValues: FormValues = {
   name: '',
@@ -52,12 +53,16 @@ export function Contact() {
     return Object.keys(next).length === 0
   }
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!validate()) return
-    /* TODO(owner): connect to your form backend / email service here */
     setStatus('sending')
-    window.setTimeout(() => setStatus('sent'), 900)
+    try {
+      await createLead(values)
+      setStatus('sent')
+    } catch {
+      setStatus('error')
+    }
   }
 
   const inputBase =
@@ -157,6 +162,15 @@ export function Contact() {
                 noValidate
                 className="rounded-2xl border border-line bg-surface p-7 md:p-9"
               >
+                {status === 'error' && (
+                  <p
+                    role="alert"
+                    className="mb-6 rounded-xl border border-gold/40 bg-gold/10 px-4 py-3 text-sm text-gold-ink"
+                  >
+                    Something went wrong sending your inquiry. Please call {site.phone}{' '}
+                    or try again in a moment.
+                  </p>
+                )}
                 <div className="grid gap-5 sm:grid-cols-2">
                   <div>
                     <label htmlFor="name" className="mb-2 block text-sm font-medium text-ink">
