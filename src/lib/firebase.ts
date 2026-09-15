@@ -143,3 +143,45 @@ export async function createLead(input: LeadInput): Promise<void> {
     createdAt: serverTimestamp(),
   })
 }
+
+export type Lead = {
+  id: string
+  name: string
+  phone: string
+  program: string
+  message: string
+  createdAt: string
+}
+
+const leadFromDoc = (
+  doc: QueryDocumentSnapshot<Record<string, unknown>>,
+): Lead => {
+  const d = doc.data()
+  const raw = d.createdAt as { toDate?: () => Date } | undefined
+  return {
+    id: doc.id,
+    name: String(d.name ?? ''),
+    phone: String(d.phone ?? ''),
+    program: String(d.program ?? ''),
+    message: String(d.message ?? ''),
+    createdAt:
+      raw && typeof raw.toDate === 'function' ? raw.toDate().toISOString() : '',
+  }
+}
+
+export async function fetchLeads(): Promise<Lead[]> {
+  assertConfig()
+  const { db } = await loadFirebase()
+  const { collection, query, orderBy, getDocs } = await import('firebase/firestore')
+  const snap = await getDocs(
+    query(collection(db, 'leads'), orderBy('createdAt', 'desc')),
+  )
+  return snap.docs.map(leadFromDoc)
+}
+
+export async function deleteLead(id: string): Promise<void> {
+  assertConfig()
+  const { db } = await loadFirebase()
+  const { doc, deleteDoc } = await import('firebase/firestore')
+  await deleteDoc(doc(db, 'leads', id))
+}

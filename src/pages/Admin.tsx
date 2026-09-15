@@ -1,14 +1,24 @@
 import { useEffect, useState, type FormEvent, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowLeft, LinkSimple, Trash, YoutubeLogo } from '@phosphor-icons/react'
+import {
+  ArrowLeft,
+  ArrowsClockwise,
+  LinkSimple,
+  Phone,
+  Trash,
+  YoutubeLogo,
+} from '@phosphor-icons/react'
 import {
   createAnnouncement,
   deleteAnnouncement,
+  deleteLead,
   fetchAnnouncements,
+  fetchLeads,
   firebaseConfigured,
   signIn,
   signOut,
   subscribeAuth,
+  type Lead,
 } from '../lib/firebase'
 import {
   toVideoId,
@@ -361,6 +371,8 @@ function Manager() {
         </button>
       </form>
 
+      <LeadsPanel />
+
       <section className="mt-10">
         <h2 className="font-display text-lg font-semibold text-ink">
           Published ({items.length})
@@ -398,5 +410,121 @@ function Manager() {
         </ul>
       </section>
     </div>
+  )
+}
+
+function LeadsPanel() {
+  const [leads, setLeads] = useState<Lead[]>([])
+  const [busyId, setBusyId] = useState<string | null>(null)
+  const [notice, setNotice] = useState('')
+
+  const load = () => {
+    fetchLeads()
+      .then(setLeads)
+      .catch(() => setNotice('Could not load applications'))
+  }
+
+  useEffect(() => {
+    load()
+  }, [])
+
+  const remove = async (id: string) => {
+    setBusyId(id)
+    try {
+      await deleteLead(id)
+      setLeads((ls) => ls.filter((l) => l.id !== id))
+      setNotice('Application deleted.')
+    } catch {
+      setNotice('Delete failed.')
+    } finally {
+      setBusyId(null)
+    }
+  }
+
+  const formatDate = (iso: string) =>
+    iso
+      ? new Date(iso).toLocaleString('en-GB', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric',
+          hour: 'numeric',
+          minute: '2-digit',
+        })
+      : ''
+
+  return (
+    <section className="mt-10">
+      <div className="flex items-end justify-between gap-4">
+        <div>
+          <h2 className="font-display text-lg font-semibold text-ink">
+            Applications ({leads.length})
+          </h2>
+          <p className="mt-2 text-sm text-ash">
+            Inquiries submitted through the contact form. Newest first — aim to
+            call each one within two working days.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={load}
+          className="inline-flex shrink-0 items-center gap-2 rounded-full border border-line-strong px-4 py-2 font-mono text-[11px] uppercase tracking-[0.14em] text-ash transition-colors hover:border-gold/60 hover:text-gold"
+        >
+          <ArrowsClockwise size={14} />
+          Refresh
+        </button>
+      </div>
+
+      {notice && (
+        <p className="mt-4 rounded-xl border border-line-strong bg-surface px-4 py-3 text-sm text-gold">
+          {notice}
+        </p>
+      )}
+
+      <ul className="mt-4 divide-y divide-line-strong rounded-2xl border border-line-strong bg-surface">
+        {leads.length === 0 && (
+          <li className="px-5 py-4 text-sm text-ash">
+            No applications yet. They will appear here as visitors submit the
+            contact form.
+          </li>
+        )}
+        {leads.map((l) => (
+          <li key={l.id} className="px-5 py-4">
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0">
+                <p className="font-display text-sm font-semibold text-ink">
+                  {l.name || 'Unnamed'}
+                </p>
+                <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
+                  {l.program} &middot; {formatDate(l.createdAt)}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => remove(l.id)}
+                disabled={busyId === l.id}
+                aria-label={`Delete application from ${l.name}`}
+                className="shrink-0 rounded-full border border-line-strong p-2.5 text-ash transition-colors hover:border-gold/60 hover:text-gold disabled:opacity-50"
+              >
+                <Trash size={15} />
+              </button>
+            </div>
+            {l.phone && (
+              <p className="mt-3 flex items-center gap-2 text-sm text-ink">
+                <Phone size={14} className="text-gold" />
+                <a
+                  href={`tel:${l.phone}`}
+                  className="text-gold underline-offset-4 hover:underline"
+                >
+                  {l.phone}
+                </a>
+              </p>
+            )}
+            {l.message && (
+              <p className="mt-2 text-sm leading-relaxed text-ash">{l.message}</p>
+            )}
+          </li>
+        ))}
+      </ul>
+    </section>
   )
 }
