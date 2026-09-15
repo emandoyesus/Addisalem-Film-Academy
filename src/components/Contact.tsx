@@ -41,6 +41,7 @@ export function Contact() {
     (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
       setValues((v) => ({ ...v, [key]: e.target.value }))
       setErrors((er) => ({ ...er, [key]: undefined }))
+      setStatus((s) => (s === 'error' ? 'idle' : s))
     }
 
 const VALIDATION_ORDER: (keyof FormValues)[] = ['name', 'phone', 'program', 'message']
@@ -58,7 +59,6 @@ const validate = (): FormErrors => {
 
 const focusField = (key: keyof FormValues) => {
   const el = document.getElementById(key)
-  el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
   el?.focus({ preventScroll: true })
 }
 
@@ -74,6 +74,8 @@ const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
   e.preventDefault()
   const next = validate()
   if (Object.keys(next).length > 0) {
+    setStatus('error')
+    bringFormIntoView()
     const first = VALIDATION_ORDER.find((k) => next[k])
     if (first) focusField(first)
     return
@@ -92,7 +94,7 @@ const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     'w-full rounded-xl border bg-canvas px-4 py-3 text-sm text-ink placeholder:text-faint transition-colors focus:outline-none focus:ring-2 focus:ring-gold/60'
 
   const fieldClass = (hasError: boolean) =>
-    `${inputBase} ${hasError ? 'border-gold' : 'border-line-strong focus:border-gold/50'}`
+    `${inputBase} ${hasError ? 'border-err' : 'border-line-strong focus:border-gold/50'}`
 
   const infoItems = [
     { icon: MapPin, label: 'Visit', lines: [site.address] },
@@ -191,8 +193,8 @@ const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     role="alert"
     className="mb-6 rounded-xl border border-err/40 bg-err-soft px-4 py-3 text-sm text-err"
   >
-    Something went wrong sending your inquiry. Please call {site.phone}{' '}
-    or try again in a moment.
+    Your application couldn't be sent. Check the highlighted fields — or call{' '}
+    {site.phone} during office hours if you'd rather enroll by phone.
   </p>
 )}
                 <div className="grid gap-5 sm:grid-cols-2">
@@ -210,7 +212,7 @@ const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
                       className={fieldClass(Boolean(errors.name))}
                     />
                     {errors.name && (
-                      <p className="mt-2 text-xs text-gold">{errors.name}</p>
+                      <p className="mt-2 text-xs text-err">{errors.name}</p>
                     )}
                   </div>
                   <div>
@@ -227,7 +229,7 @@ const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
                       className={fieldClass(Boolean(errors.phone))}
                     />
                     {errors.phone && (
-                      <p className="mt-2 text-xs text-gold">{errors.phone}</p>
+                      <p className="mt-2 text-xs text-err">{errors.phone}</p>
                     )}
                   </div>
                 </div>
@@ -252,7 +254,7 @@ const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
                     <option value="Not sure yet">Not sure yet, advise me</option>
                   </select>
                   {errors.program && (
-                    <p className="mt-2 text-xs text-gold">{errors.program}</p>
+                    <p className="mt-2 text-xs text-err">{errors.program}</p>
                   )}
                 </div>
 
@@ -273,7 +275,7 @@ const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
                     className={`${fieldClass(Boolean(errors.message))} resize-none`}
                   />
                   {errors.message && (
-                    <p className="mt-2 text-xs text-gold">{errors.message}</p>
+                    <p className="mt-2 text-xs text-err">{errors.message}</p>
                   )}
                 </div>
 
