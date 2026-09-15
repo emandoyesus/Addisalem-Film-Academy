@@ -66,7 +66,7 @@ export function Navbar() {
               {site.phone}
             </a>
             <a
-              href="#contact"
+              href="#enroll"
               className="rounded-full bg-gold px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.16em] text-gold-ink transition-all duration-300 hover:bg-gold-deep active:translate-y-[-1px] active:scale-[0.98]"
             >
               Enroll
@@ -127,7 +127,7 @@ export function Navbar() {
               ))}
             </ul>
             <a
-              href="#contact"
+              href="#enroll"
               onClick={() => setOpen(false)}
               className="mt-auto block rounded-full bg-gold px-6 py-4 text-center font-mono text-[11px] uppercase tracking-[0.16em] text-gold-ink"
             >

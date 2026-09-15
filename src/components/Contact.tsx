@@ -161,42 +161,48 @@ const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
             transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
           >
             {status === 'sent' ? (
-<div className="flex h-full flex-col items-start justify-center rounded-2xl border border-ok/50 bg-ok-soft p-8 md:p-10">
-  <CheckCircle size={40} weight="duotone" className="text-ok" />
-  <h3 className="mt-5 font-display text-2xl font-bold tracking-tight text-ink">
-    Application received.
-  </h3>
-  <p className="mt-3 max-w-[46ch] text-sm leading-relaxed text-ash">
-    The admissions office will call you on {values.phone} within two
-    working days to arrange a visit.
-  </p>
-  <button
-    type="button"
-    onClick={() => {
-      setValues(initialValues)
-      setStatus('idle')
-    }}
-    className="mt-6 font-mono text-[11px] uppercase tracking-[0.18em] text-ok underline-offset-4 hover:underline"
-  >
-    Submit another inquiry
-  </button>
-</div>
+              <div
+                id="enroll"
+                tabIndex={-1}
+                className="scroll-mt-24 flex h-full flex-col items-start justify-center rounded-2xl border border-ok/50 bg-ok-soft p-8 md:p-10 focus:outline-none"
+              >
+                <CheckCircle size={40} weight="duotone" className="text-ok" />
+                <h3 className="mt-5 font-display text-2xl font-bold tracking-tight text-ink">
+                  Application received.
+                </h3>
+                <p className="mt-3 max-w-[46ch] text-sm leading-relaxed text-ash">
+                  The admissions office will call you on {values.phone} within two
+                  working days to arrange a visit.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setValues(initialValues)
+                    setStatus('idle')
+                  }}
+                  className="mt-6 font-mono text-[11px] uppercase tracking-[0.18em] text-ok underline-offset-4 hover:underline"
+                >
+                  Submit another inquiry
+                </button>
+              </div>
             ) : (
-<form
-  ref={formRef}
-  onSubmit={onSubmit}
-  noValidate
-  className="scroll-mt-6 rounded-2xl border border-line bg-surface p-7 md:p-9"
->
-{status === 'error' && (
-  <p
-    role="alert"
-    className="mb-6 rounded-xl border border-err/40 bg-err-soft px-4 py-3 text-sm text-err"
-  >
-    Your application couldn't be sent. Check the highlighted fields — or call{' '}
-    {site.phone} during office hours if you'd rather enroll by phone.
-  </p>
-)}
+              <form
+                id="enroll"
+                ref={formRef}
+                onSubmit={onSubmit}
+                noValidate
+                tabIndex={-1}
+                className="scroll-mt-24 rounded-2xl border border-line bg-surface p-7 md:p-9 focus:outline-none"
+              >
+                {status === 'error' && (
+                  <p
+                    role="alert"
+                    className="mb-6 rounded-xl border border-err/40 bg-err-soft px-4 py-3 text-sm text-err"
+                  >
+                    Your application couldn't be sent. Check the highlighted fields — or call{' '}
+                    {site.phone} during office hours if you'd rather enroll by phone.
+                  </p>
+                )}
                 <div className="grid gap-5 sm:grid-cols-2">
                   <div>
                     <label htmlFor="name" className="mb-2 block text-sm font-medium text-ink">
