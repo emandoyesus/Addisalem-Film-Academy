@@ -10,8 +10,8 @@ export function Gallery() {
   }
 
   return (
-    <section id="gallery" className="scroll-mt-24 py-20 md:py-32">
-      <div className="mx-auto w-full max-w-[1400px] px-5 md:px-8">
+    <section className="py-20 md:py-32">
+      <div id="gallery" className="mx-auto w-full max-w-[1400px] scroll-mt-24 px-5 md:px-8">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="max-w-[60ch]">
             <h2 className="font-display text-4xl font-bold leading-[1.06] tracking-tight text-ink md:text-5xl">

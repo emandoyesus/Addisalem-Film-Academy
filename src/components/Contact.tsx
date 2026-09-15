@@ -104,8 +104,8 @@ const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
   ]
 
   return (
-    <section id="contact" className="scroll-mt-24 bg-canvas-soft py-20 md:py-32">
-      <div className="mx-auto w-full max-w-[1400px] px-5 md:px-8">
+    <section className="bg-canvas-soft py-20 md:py-32">
+      <div id="contact" className="mx-auto w-full max-w-[1400px] scroll-mt-24 px-5 md:px-8">
         <div className="max-w-[60ch]">
           <h2 className="font-display text-4xl font-bold leading-[1.06] tracking-tight text-ink md:text-5xl">
             Admissions are open for the next intake.

@@ -12,8 +12,8 @@ const iconMap: Record<string, Icon> = {
 
 export function Facilities() {
   return (
-    <section id="facilities" className="scroll-mt-24 bg-canvas-soft py-20 md:py-32">
-      <div className="mx-auto w-full max-w-[1400px] px-5 md:px-8">
+    <section className="bg-canvas-soft py-20 md:py-32">
+      <div id="facilities" className="mx-auto w-full max-w-[1400px] scroll-mt-24 px-5 md:px-8">
         <div className="grid items-center gap-14 lg:grid-cols-[1fr_1.05fr] lg:gap-20">
           <Reveal className="relative order-2 lg:order-1">
             <div className="absolute -left-3 -top-3 h-full w-full rounded-2xl border border-gold/40 md:-left-5 md:-top-5" />

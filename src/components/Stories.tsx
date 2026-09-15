@@ -40,8 +40,8 @@ export function Stories() {
   const reduce = useReducedMotion()
   const [first, second, third] = stories
   return (
-    <section id="stories" className="scroll-mt-24 bg-canvas-soft py-20 md:py-32">
-      <div className="mx-auto w-full max-w-[1400px] px-5 md:px-8">
+    <section className="bg-canvas-soft py-20 md:py-32">
+      <div id="stories" className="mx-auto w-full max-w-[1400px] scroll-mt-24 px-5 md:px-8">
         <div className="max-w-[60ch]">
           <h2 className="font-display text-4xl font-bold leading-[1.06] tracking-tight text-ink md:text-5xl">
             Graduates, in their own words.

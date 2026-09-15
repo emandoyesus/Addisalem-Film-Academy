@@ -57,8 +57,8 @@ export function Programs() {
   const reduce = useReducedMotion()
 
   return (
-    <section id="programs" className="scroll-mt-24 bg-canvas-soft py-20 md:py-32">
-      <div className="mx-auto w-full max-w-[1400px] px-5 md:px-8">
+    <section className="bg-canvas-soft py-20 md:py-32">
+      <div id="programs" className="mx-auto w-full max-w-[1400px] scroll-mt-24 px-5 md:px-8">
         <Eyebrow>Programs</Eyebrow>
         <motion.div
           initial={reduce ? false : { opacity: 0, y: 24 }}

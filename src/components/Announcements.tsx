@@ -200,8 +200,8 @@ export function Announcements() {
   const [featured, ...rest] = items
 
   return (
-    <section id="announcements" className="scroll-mt-24 py-20 md:py-32">
-      <div className="mx-auto w-full max-w-[1400px] px-5 md:px-8">
+    <section className="py-20 md:py-32">
+      <div id="announcements" className="mx-auto w-full max-w-[1400px] scroll-mt-24 px-5 md:px-8">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="max-w-[60ch]">
             <Eyebrow>What&rsquo;s new</Eyebrow>
