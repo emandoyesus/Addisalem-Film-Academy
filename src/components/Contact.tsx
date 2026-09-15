@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type FormEvent } from 'react'
+import { useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 import {
   MapPin,
   Phone,
@@ -31,6 +31,7 @@ const initialValues: FormValues = {
 
 export function Contact() {
   const reduce = useReducedMotion()
+  const formRef = useRef<HTMLFormElement>(null)
   const [values, setValues] = useState<FormValues>(initialValues)
   const [errors, setErrors] = useState<FormErrors>({})
   const [status, setStatus] = useState<Status>('idle')
@@ -61,6 +62,14 @@ const focusField = (key: keyof FormValues) => {
   el?.focus({ preventScroll: true })
 }
 
+const bringFormIntoView = () => {
+  formRef.current?.scrollIntoView({
+    behavior: reduce ? 'auto' : 'smooth',
+    block: 'center',
+    inline: 'nearest',
+  })
+}
+
 const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
   e.preventDefault()
   const next = validate()
@@ -69,6 +78,7 @@ const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     if (first) focusField(first)
     return
   }
+  bringFormIntoView()
   setStatus('sending')
   try {
     await createLead(values)
@@ -170,11 +180,12 @@ const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
   </button>
 </div>
             ) : (
-              <form
-                onSubmit={onSubmit}
-                noValidate
-                className="rounded-2xl border border-line bg-surface p-7 md:p-9"
-              >
+<form
+  ref={formRef}
+  onSubmit={onSubmit}
+  noValidate
+  className="rounded-2xl border border-line bg-surface p-7 md:p-9"
+>
 {status === 'error' && (
   <p
     role="alert"
