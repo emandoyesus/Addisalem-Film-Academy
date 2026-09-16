@@ -71,7 +71,7 @@ export function Navbar() {
             {isAdmin && (
               <Link
                 to="/admin"
-                className="inline-flex items-center rounded-full border border-gold/70 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-gold transition-colors duration-200 hover:bg-gold hover:text-gold-ink"
+                className="inline-flex items-center rounded-full border border-gold/70 bg-gold-soft px-4 py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-gold transition-colors duration-200 hover:bg-gold hover:text-gold-ink"
               >
                 Admin Portal
               </Link>
