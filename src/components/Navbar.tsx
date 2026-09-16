@@ -15,7 +15,7 @@ import { Logo } from './Logo'
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
-  const { isAdmin } = useAuthStatus()
+  const { isAdmin } = useAuthStatus({ lazy: true })
   const { scrollY } = useScroll()
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
