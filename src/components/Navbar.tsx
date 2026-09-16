@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import {
   AnimatePresence,
   motion,
@@ -8,11 +9,13 @@ import {
 } from 'motion/react'
 import { Phone } from '@phosphor-icons/react'
 import { navLinks, site } from '../data/content'
+import { useAuthStatus } from '../lib/useAdmin'
 import { Logo } from './Logo'
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const { isAdmin } = useAuthStatus()
   const { scrollY } = useScroll()
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
@@ -65,6 +68,14 @@ export function Navbar() {
               <Phone size={15} weight="regular" />
               {site.phone}
             </a>
+            {isAdmin && (
+              <Link
+                to="/admin"
+                className="font-mono text-[11px] uppercase tracking-[0.16em] text-ash transition-colors hover:text-gold"
+              >
+                Admin Portal
+              </Link>
+            )}
             <a
               href="#enroll"
               className="rounded-full bg-gold px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.16em] text-gold-ink transition-all duration-300 hover:bg-gold-deep active:translate-y-[-1px] active:scale-[0.98]"
@@ -125,6 +136,28 @@ export function Navbar() {
                   </a>
                 </motion.li>
               ))}
+              {isAdmin && (
+                <motion.li
+                  initial={reduce ? false : { opacity: 0, x: -16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{
+                    delay: 0.06 * navLinks.length,
+                    duration: 0.4,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                >
+                  <Link
+                    to="/admin"
+                    onClick={() => setOpen(false)}
+                    className="flex items-center justify-between py-4 font-display text-2xl font-semibold text-gold"
+                  >
+                    Admin Portal
+                    <span className="font-mono text-[10px] tracking-[0.2em] text-faint">
+                      A
+                    </span>
+                  </Link>
+                </motion.li>
+              )}
             </ul>
             <a
               href="#enroll"

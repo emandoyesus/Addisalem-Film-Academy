@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
+import { useAuthStatus } from './lib/useAdmin'
 import { Navbar } from './components/Navbar'
 import { Hero } from './components/Hero'
 import { MarqueeStrip } from './components/MarqueeStrip'
@@ -15,6 +16,20 @@ import { Contact } from './components/Contact'
 import { Footer } from './components/Footer'
 
 const Admin = lazy(() => import('./pages/Admin.tsx'))
+
+/* Route guard for /admin — the console is only reachable for a signed-in,
+   role-confirmed admin. A signed-in regular user is bounced to the home page;
+   an anonymous visitor is let through so the console can show its login form. */
+function AdminRoute() {
+  const { pending, signedIn, isAdmin } = useAuthStatus()
+  if (pending) return null
+  if (signedIn && !isAdmin) return <Navigate to="/" replace />
+  return (
+    <Suspense fallback={null}>
+      <Admin />
+    </Suspense>
+  )
+}
 
 function Landing() {
   return (
@@ -50,14 +65,7 @@ function Landing() {
 export default function App() {
   return (
     <Routes>
-      <Route
-        path="/admin/*"
-        element={
-          <Suspense fallback={null}>
-            <Admin />
-          </Suspense>
-        }
-      />
+      <Route path="/admin/*" element={<AdminRoute />} />
       <Route path="*" element={<Landing />} />
     </Routes>
   )

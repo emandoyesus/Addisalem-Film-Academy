@@ -17,9 +17,9 @@ import {
   firebaseConfigured,
   signIn,
   signOut,
-  subscribeAuth,
   type Lead,
 } from '../lib/firebase'
+import { useAuthStatus } from '../lib/useAdmin'
 import {
   toVideoId,
   youtubeThumb,
@@ -83,33 +83,28 @@ export default function AdminPage() {
 
 function LoginGate({ children }: { children: ReactNode }) {
   const [configured, setConfigured] = useState<boolean | null>(null)
-  const [authed, setAuthed] = useState(false)
+  const { pending, signedIn, isAdmin } = useAuthStatus()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
 
   useEffect(() => {
-    let unsub: (() => void) | undefined
     let cancelled = false
-    void (async () => {
-      const ok = await firebaseConfigured()
-      if (cancelled) return
-      setConfigured(ok)
-      if (ok) {
-        unsub = await subscribeAuth((user) => {
-          if (!cancelled) setAuthed(Boolean(user))
-        })
-      }
-    })()
+    void firebaseConfigured().then((ok) => {
+      if (!cancelled) setConfigured(ok)
+    })
     return () => {
       cancelled = true
-      unsub?.()
     }
   }, [])
 
-  if (configured === null) {
-    return <p className="text-sm text-ash">Checking configuration...</p>
+  if (configured === null || pending) {
+    return (
+      <p className="text-sm text-ash">
+        {configured === null ? 'Checking configuration...' : 'Checking access...'}
+      </p>
+    )
   }
 
   if (configured === false) {
@@ -127,7 +122,40 @@ function LoginGate({ children }: { children: ReactNode }) {
     )
   }
 
-  if (authed) return <>{children}</>
+  if (signedIn && !isAdmin) {
+    return (
+      <div className="rounded-2xl border border-line-strong bg-surface p-6">
+        <h2 className="font-display text-xl font-semibold text-ink">No admin access</h2>
+        <p className="mt-3 max-w-[56ch] text-sm leading-relaxed text-ash">
+          This account is signed in but does not have admin privileges, so the
+          console stays locked. If you should have access, add{' '}
+          <code>users/&#123;uid&#125;</code> with <code>role: 'admin'</code> in
+          Firestore or add the email to <code>VITE_ADMIN_EMAILS</code>.
+        </p>
+        <div className="mt-5 flex flex-wrap gap-3">
+          <Link
+            to="/"
+            className="rounded-full border border-line-strong px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ash transition-colors hover:border-gold/60 hover:text-gold"
+          >
+            Back to site
+          </Link>
+          <button
+            type="button"
+            onClick={() => {
+              void signOut()
+              setEmail('')
+              setPassword('')
+            }}
+            className="rounded-full border border-line-strong px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ash transition-colors hover:border-gold/60 hover:text-gold"
+          >
+            Sign out
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  if (signedIn && isAdmin) return <>{children}</>
 
   return (
     <form
@@ -137,7 +165,6 @@ function LoginGate({ children }: { children: ReactNode }) {
         setBusy(true)
         setError('')
         signIn(email, password)
-          .then(() => setAuthed(true))
           .catch(() => setError('Wrong email or password'))
           .finally(() => setBusy(false))
       }}
