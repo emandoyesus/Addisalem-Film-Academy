@@ -10,6 +10,7 @@ import {
 import { motion, useReducedMotion } from 'motion/react'
 import { site, programs } from '../data/content'
 import { createLead } from '../lib/firebase'
+import { notifyEnrollment } from '../lib/notify'
 
 type FormValues = {
   name: string
@@ -85,6 +86,7 @@ const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
   try {
     await createLead(values)
     setStatus('sent')
+    void notifyEnrollment(values).catch(() => {})
   } catch {
     setStatus('error')
   }
