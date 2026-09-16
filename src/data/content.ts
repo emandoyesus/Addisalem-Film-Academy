@@ -60,6 +60,7 @@ export type SiteInfo = {
   city: string
   region: string
   address: string
+  mapUrl: string
   phone: string
   phoneAlt: string
   email: string
@@ -86,6 +87,8 @@ export const site: SiteInfo = {
   city: 'Dessie',
   region: 'Dessie, Ethiopia',
   address: 'Seid Yasin building, Piyassa, Dessie, Ethiopia',
+  mapUrl:
+    'https://www.google.com/maps/search/?api=1&query=Seid+Yasin+building%2C+Piyassa%2C+Dessie%2C+Ethiopia',
   phone: '09 89 81 84 79',
   phoneAlt: '09 21 25 88 15',
   email: 'admissions@addisalemfilm.com',

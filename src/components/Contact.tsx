@@ -6,6 +6,7 @@ import {
   Clock,
   CheckCircle,
   PaperPlaneTilt,
+  ArrowUpRight,
 } from '@phosphor-icons/react'
 import { motion, useReducedMotion } from 'motion/react'
 import { site, programs } from '../data/content'
@@ -99,10 +100,30 @@ const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     `${inputBase} ${hasError ? 'border-err' : 'border-line-strong focus:border-gold/50'}`
 
   const infoItems = [
-    { icon: MapPin, label: 'Visit', lines: [site.address] },
-    { icon: Phone, label: 'Call us', lines: [site.phone, site.phoneAlt] },
-    { icon: Envelope, label: 'Email', lines: [site.email] },
-    { icon: Clock, label: 'Hours', lines: site.hours.map((h) => `${h.day}, ${h.time}`) },
+    {
+      icon: MapPin,
+      label: 'Visit',
+      lines: [site.address],
+      href: site.mapUrl,
+      external: true,
+    },
+    {
+      icon: Phone,
+      label: 'Call us',
+      lines: [site.phone, site.phoneAlt],
+      getHref: (line: string) => `tel:${line.replace(/\s/g, '')}`,
+    },
+    {
+      icon: Envelope,
+      label: 'Email',
+      lines: [site.email],
+      getHref: (line: string) => `mailto:${line}`,
+    },
+    {
+      icon: Clock,
+      label: 'Hours',
+      lines: site.hours.map((h) => `${h.day}, ${h.time}`),
+    },
   ]
 
   return (
@@ -134,14 +155,39 @@ const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
                   <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-gold">
                     {item.label}
                   </p>
-                  {item.lines.map((line) => (
-                    <p
-                      key={line}
-                      className="mt-2 text-sm leading-relaxed text-ash first:mt-3 first:text-ink"
-                    >
-                      {line}
-                    </p>
-                  ))}
+                  {item.lines.map((line) => {
+                    const href = item.href ?? item.getHref?.(line)
+                    if (href) {
+                      return (
+                        <a
+                          key={line}
+                          href={href}
+                          {...(item.external
+                            ? { target: '_blank', rel: 'noopener noreferrer' }
+                            : {})}
+                          className="group/link mt-2 inline-flex items-center gap-1.5 text-sm leading-relaxed text-ash transition-colors hover:text-ink first:mt-3 first:text-ink"
+                        >
+                          <span className="transition-colors group-hover/link:text-gold">
+                            {line}
+                          </span>
+                          {item.external && (
+                            <ArrowUpRight
+                              size={13}
+                              className="shrink-0 text-faint transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5 group-hover/link:text-gold"
+                            />
+                          )}
+                        </a>
+                      )
+                    }
+                    return (
+                      <p
+                        key={line}
+                        className="mt-2 text-sm leading-relaxed text-ash first:mt-3 first:text-ink"
+                      >
+                        {line}
+                      </p>
+                    )
+                  })}
                 </li>
               ))}
             </ul>
