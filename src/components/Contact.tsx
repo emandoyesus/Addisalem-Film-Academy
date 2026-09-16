@@ -46,15 +46,13 @@ export function Contact() {
       setStatus((s) => (s === 'error' ? 'idle' : s))
     }
 
-const VALIDATION_ORDER: (keyof FormValues)[] = ['name', 'phone', 'program', 'message']
+const VALIDATION_ORDER: (keyof FormValues)[] = ['name', 'phone', 'program']
 
 const validate = (): FormErrors => {
   const next: FormErrors = {}
   if (!values.name.trim()) next.name = 'Please tell us your name.'
   if (!values.phone.trim()) next.phone = 'Phone or Telegram number is required.'
   if (!values.program) next.program = 'Choose the program you are interested in.'
-  if (values.message.trim().length > 0 && values.message.trim().length < 10)
-    next.message = 'A sentence or two helps us prepare your visit.'
   setErrors(next)
   return next
 }
