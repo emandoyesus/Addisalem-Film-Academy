@@ -71,7 +71,7 @@ export function Navbar() {
             {isAdmin && (
               <Link
                 to="/admin"
-                className="font-mono text-[11px] uppercase tracking-[0.16em] text-ash transition-colors hover:text-gold"
+                className="inline-flex items-center rounded-full border border-gold/70 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-gold transition-colors duration-200 hover:bg-gold hover:text-gold-ink"
               >
                 Admin Portal
               </Link>
@@ -149,12 +149,9 @@ export function Navbar() {
                   <Link
                     to="/admin"
                     onClick={() => setOpen(false)}
-                    className="flex items-center justify-between py-4 font-display text-2xl font-semibold text-gold"
+                    className="mt-2 flex rounded-xl border border-gold/70 bg-gold-soft px-4 py-3 font-display text-2xl font-semibold text-gold"
                   >
                     Admin Portal
-                    <span className="font-mono text-[10px] tracking-[0.2em] text-faint">
-                      A
-                    </span>
                   </Link>
                 </motion.li>
               )}
