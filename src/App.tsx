@@ -7,6 +7,7 @@ import { MarqueeStrip } from './components/MarqueeStrip'
 import { StatsBand } from './components/StatsBand'
 import { About } from './components/About'
 import { Purpose } from './components/Purpose'
+import { HowWeWork } from './components/HowWeWork'
 import { Programs } from './components/Programs'
 import { LearningPath } from './components/LearningPath'
 import { Facilities } from './components/Facilities'
@@ -50,6 +51,7 @@ function Landing() {
         <StatsBand />
         <About />
         <Purpose />
+        <HowWeWork />
         <Programs />
         <LearningPath />
         <Facilities />
