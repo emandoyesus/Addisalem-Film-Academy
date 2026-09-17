@@ -163,7 +163,7 @@ const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
                           {...(item.external
                             ? { target: '_blank', rel: 'noopener noreferrer' }
                             : {})}
-                          className="group/link mt-2 inline-flex items-center gap-1.5 text-sm leading-relaxed text-ash transition-colors hover:text-ink first:mt-3 first:text-ink"
+                          className="group/link mt-2 flex items-center gap-1.5 text-sm leading-relaxed text-ash transition-colors hover:text-ink first:mt-3 first:text-ink"
                         >
                           <span className="transition-colors group-hover/link:text-gold">
                             {line}

@@ -111,14 +111,17 @@ export const navLinks: { label: string; href: string }[] = [
 export const marqueeWords: string[] = [
   'Photography',
   'Videography',
-  'Directing',
+  'Screen Writing',
+  'Film Acting',
   'Cinematography',
-  'Screenwriting',
-  'Film Editing',
+  'Film Lighting',
   'Sound Design',
+  'Directing',
   'Film Production',
-  'Graphic Design',
+  'Video Editing',
+  'Graphics Design',
   'Motion Design',
+  'Digital Marketing',
 ]
 
 /* TODO(owner): point this at the real channel URL */
