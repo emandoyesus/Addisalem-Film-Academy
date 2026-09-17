@@ -22,9 +22,9 @@ export function Logo({ compact = false }: { compact?: boolean }) {
       {!compact && (
         <span className="flex flex-col leading-none">
           <span className="font-display text-sm font-bold tracking-tight text-ink">ADDISALEM</span>
-          <span className="mt-1 font-mono text-[9px] uppercase tracking-[0.24em] text-faint">
-            Film Academy
-          </span>
+<span className="mt-1 font-mono text-[9px] uppercase tracking-[0.1em] text-faint">
+  Film Academy
+</span>
         </span>
       )}
     </a>
