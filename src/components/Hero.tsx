@@ -58,7 +58,7 @@ export function Hero() {
             transition={{ duration: 0.9, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
             className="mt-3 font-display text-[1.65rem] font-bold leading-[1.05] tracking-tight text-ink sm:mt-4 sm:text-4xl md:text-5xl"
           >
-            Turn your story into cinema.
+            Learn Filmmaking from the Source.
           </motion.h1>
 
           <motion.p

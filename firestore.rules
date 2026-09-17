@@ -1,6 +1,6 @@
 rules_version = '2';
 
-// Firestore security rules for Adddisalem Film Training Center.
+// Firestore security rules for Adddisalem Film Academy.
 // Keep these in sync with the rules deployed in the Firebase console
 // (Firebase Console -> Firestore Database -> Rules tab).
 

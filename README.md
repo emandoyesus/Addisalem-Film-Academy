@@ -1,6 +1,6 @@
-# Addisalem Film Training Center — website
+# Addisalem Film Academy — website
 
-Public landing page + a private admin console for the Addisalem Film Training Center (Dessie, Ethiopia). Visitors can read programs and announcements and apply to enroll; applications are saved to Firestore and trigger an email notification to the owner.
+Public landing page + a private admin console for the Addisalem Film Academy (Dessie, Ethiopia). Visitors can read programs and announcements and apply to enroll; applications are saved to Firestore and trigger an email notification to the owner.
 
 ## Stack
 

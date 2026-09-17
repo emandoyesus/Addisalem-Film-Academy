@@ -82,7 +82,7 @@ export const images = {
 }
 
 export const site: SiteInfo = {
-  name: 'Addisalem Film Training Center',
+  name: 'Addisalem Film Academy',
   label: 'ADDISALEM',
   city: 'Dessie',
   region: 'Dessie, Ethiopia',
