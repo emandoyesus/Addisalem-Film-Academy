@@ -24,7 +24,7 @@ export async function notifyEnrollment(input: EnrollmentNotice): Promise<void> {
   if (!emailConfigured()) return
   const match = programs.find((p) => p.title === input.program)
   const programDetail = match
-    ? `${match.title} — ${match.duration} · ${match.schedule}`
+    ? `${match.title} — ${match.duration} · ${match.focus}`
     : input.program
   const date = new Date().toLocaleString('en-GB', {
     day: 'numeric',

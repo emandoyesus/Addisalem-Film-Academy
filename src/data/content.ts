@@ -8,26 +8,21 @@ export type HoursEntry = { day: string; time: string }
 
 export type Program = {
   title: string
-  tagline: string
   duration: string
-  schedule: string
+  focus: string
+  tagline: string
   courses: string[]
+  toolkit?: string
+  bestFor: string
   image: string
   alt: string
 }
 
-export type PathStage = {
-  step: string
-  title: string
-  length: string
-  copy: string
-  tags: string[]
-}
-
 export type Facility = {
-  icon: 'stageset' | 'screen' | 'edit' | 'camera' | 'library'
+  icon: 'stageset' | 'screen' | 'edit' | 'camera' | 'library' | 'audio'
   title: string
   copy: string
+  items?: string[]
 }
 
 export type Story = { quote: string; name: string; role: string }
@@ -192,25 +187,31 @@ export const stats: Stat[] = [
 
 export const programs: Program[] = [
   {
-    title: 'Two-Month Program',
-    tagline: 'A fast, practical start in the crafts that feed every modern film and video.',
+    title: 'The 2-Month Intensive',
     duration: '2 months',
-    schedule: 'Hands-on from week one, cameras and Adobe tools in hand.',
+    focus: 'Core Visual Media Skills',
+    tagline:
+      'Photography, videography, photo and video editing, with digital marketing.',
     courses: [
       'Photography',
       'Videography',
-      'Photo & Video Editing (Ps, Ai, Pr, Ae)',
       'Graphic Design',
       'Motion Design',
+      'Photo & Video Editing',
+      'Digital Marketing',
     ],
+    toolkit:
+      'Hands-on photo and video editing using industry-standard software: Premiere Pro (Pr), After Effects (Ae), Photoshop (Ps), Illustrator (Ai), InDesign (ID), and Cinema 4D (C4D).',
+    bestFor:
+      'Creators, marketers, and aspiring editors who need to build immediate, practical skills.',
     image: img('photo-1626785774573-4b799315345d', 1000, 78),
     alt: 'Designer working on a poster layout on screen',
   },
   {
-    title: 'Five-Month Program',
-    tagline: 'The full curriculum, at a faster pace. Everything below every course category.',
+    title: 'The 5-Month Immersive',
     duration: '5 months',
-    schedule: 'Morning & afternoon classes, 3 days a week.',
+    focus: 'The Complete Filmmaking Journey',
+    tagline: 'The full AFA curriculum, from script to screen.',
     courses: [
       'Photography',
       'Videography',
@@ -223,14 +224,16 @@ export const programs: Program[] = [
       'Graphic Design',
       'Motion Design',
     ],
+    bestFor: 'Dedicated students ready for a full-time, fast-paced crew experience.',
     image: img('photo-1503095396549-807759245b35', 1000, 78),
     alt: 'Stage light racks above a film set',
   },
   {
-    title: 'Ten-Month Program',
-    tagline: 'The full curriculum, with room to practise between classes. Perfect for steady progress.',
+    title: 'The 10-Month Extended',
     duration: '10 months',
-    schedule: 'Afternoon-only classes, 3 days a week.',
+    focus: 'The Complete Curriculum, Flexible Pace',
+    tagline:
+      'The exact same full curriculum as the 5-month program, but with a flexible weekly schedule.',
     courses: [
       'Photography',
       'Videography',
@@ -243,50 +246,39 @@ export const programs: Program[] = [
       'Graphic Design',
       'Motion Design',
     ],
+    bestFor:
+      'Working professionals or university students balancing other commitments.',
     image: img('photo-1524678606370-a47ad25cb82a', 1000, 78),
     alt: 'High-end camera body being prepared for a shoot',
-  },
-]
-
-export const path: PathStage[] = [
-  {
-    step: '01',
-    title: 'Two-Month Program',
-    length: '2 months',
-    copy: 'Photography, videography, photo & video editing (Ps, Ai, Pr, Ae), graphic design and motion design in one focused stretch.',
-    tags: ['Editing-focused', 'Graphic & motion', 'Hands-on'],
-  },
-  {
-    step: '02',
-    title: 'Five-Month Program',
-    length: '5 months',
-    copy: 'The full curriculum with morning and afternoon classes three days a week. Faster progress, half-day pace.',
-    tags: ['All courses', 'Morning + afternoon', '3 days a week'],
-  },
-  {
-    step: '03',
-    title: 'Ten-Month Program',
-    length: '10 months',
-    copy: 'The full curriculum with afternoon-only classes three days a week. More time between sessions to practise.',
-    tags: ['All courses', 'Afternoon only', '3 days a week'],
   },
 ]
 
 export const facilities: Facility[] = [
   {
     icon: 'stageset',
-    title: 'One classroom',
-    copy: 'The whole school happens in a single room. Lectures, reviews, colour checks and wall screenings all share the same four walls.',
-  },
-  {
-    icon: 'edit',
-    title: 'Editing computers',
-    copy: 'Dedicated computers loaded with professional editing, grading and sound software, ready for practice after class and on off-hours.',
+    title: 'Classroom',
+    copy: 'Lectures, reviews, colour checks and wall screenings all share the same four walls.',
   },
   {
     icon: 'camera',
-    title: 'Cameras, drone & kits',
-    copy: 'A fleet of cameras across formats, a drone for the aerial shots, plus lenses, microphones and lighting loaned for student shoots.',
+    title: 'Camera & Grip',
+    copy: '',
+    items: [
+      'Digital Cinema & DSLR cameras',
+      'Drone',
+      'Tripod, monopod and Gimbal',
+      'Spot and flood light',
+    ],
+  },
+  {
+    icon: 'audio',
+    title: 'Production Audio',
+    copy: 'Field Recording with Zoom H6. Microphones: wireless neck mic and shotgun mics, including the Sennheiser MKE 600.',
+  },
+  {
+    icon: 'edit',
+    title: 'The Post-Production Suite',
+    copy: 'The Workstations: Dedicated editing computers available for students to practice during off-hours. The Software: the complete Adobe Creative Cloud (Premiere Pro, After Effects, Photoshop, Illustrator, InDesign) for editing and motion design.',
   },
 ]
 

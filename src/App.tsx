@@ -9,7 +9,6 @@ import { About } from './components/About'
 import { Purpose } from './components/Purpose'
 import { HowWeWork } from './components/HowWeWork'
 import { Programs } from './components/Programs'
-import { LearningPath } from './components/LearningPath'
 import { Facilities } from './components/Facilities'
 import { Stories } from './components/Stories'
 import { Announcements } from './components/Announcements'
@@ -53,7 +52,6 @@ function Landing() {
         <Purpose />
         <HowWeWork />
         <Programs />
-        <LearningPath />
         <Facilities />
         <Stories />
         <Announcements />

@@ -1,6 +1,14 @@
-import { type Icon, Buildings, FilmSlate, Monitor, VideoCamera, Books } from '@phosphor-icons/react'
+import {
+  type Icon,
+  Buildings,
+  FilmSlate,
+  Monitor,
+  VideoCamera,
+  Books,
+  Microphone,
+} from '@phosphor-icons/react'
 import { Reveal } from './ui'
-import { images, facilities } from '../data/content'
+import { images, facilities, type Facility } from '../data/content'
 
 const iconMap: Record<string, Icon> = {
   stageset: Buildings,
@@ -8,13 +16,53 @@ const iconMap: Record<string, Icon> = {
   edit: Monitor,
   camera: VideoCamera,
   library: Books,
+  audio: Microphone,
+}
+
+function FacilityItem({ facility, delay = 0 }: { facility: Facility; delay?: number }) {
+  const Glyph = iconMap[facility.icon] ?? FilmSlate
+  return (
+    <Reveal
+      delay={delay}
+      className="flex gap-4 border-b border-line py-5"
+    >
+      <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-line bg-surface text-gold">
+        <Glyph size={19} weight="duotone" />
+      </span>
+      <div className="min-w-0">
+        <h3 className="font-display text-base font-semibold tracking-tight text-ink">
+          {facility.title}
+        </h3>
+        {facility.copy && (
+          <p className="mt-1 max-w-[52ch] text-sm leading-relaxed text-ash">
+            {facility.copy}
+          </p>
+        )}
+        {facility.items && (
+          <ul className="mt-2.5 flex flex-wrap gap-2">
+            {facility.items.map((item) => (
+              <li
+                key={item}
+                className="rounded-full border border-line px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-faint"
+              >
+                {item}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </Reveal>
+  )
 }
 
 export function Facilities() {
+  const topFacilities = facilities.slice(0, 2)
+  const bottomFacilities = facilities.slice(2)
+
   return (
     <section className="bg-canvas-soft py-20 md:py-32">
       <div id="facilities" className="mx-auto w-full max-w-[1400px] scroll-mt-24 px-5 md:px-8">
-        <div className="grid items-center gap-14 lg:grid-cols-[1fr_1.05fr] lg:gap-20">
+        <div className="grid gap-14 lg:grid-cols-2 lg:gap-x-20">
           <Reveal className="relative order-2 lg:order-1">
             <div className="absolute -left-3 -top-3 h-full w-full rounded-2xl border border-gold/40 md:-left-5 md:-top-5" />
             <img
@@ -27,7 +75,7 @@ export function Facilities() {
             />
             <div className="absolute bottom-5 left-5 right-5 rounded-xl border border-white/10 bg-black/70 p-5 backdrop-blur-md">
               <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-gold">
-                One room, full kit
+                Two rooms, full kit
               </p>
               <p className="mt-1 text-sm text-white">
                 The camera you learn on is the one you shoot your graduation film with.
@@ -37,37 +85,27 @@ export function Facilities() {
 
           <div className="order-1 lg:order-2">
             <h2 className="max-w-[20ch] font-display text-4xl font-bold leading-[1.06] tracking-tight text-ink md:text-5xl">
-              One classroom, and the gear to shoot any scene in it.
+              The AFA Studio &amp; Gear Vault
             </h2>
-            <p className="mt-6 max-w-[56ch] text-base leading-relaxed text-ash md:text-lg">
-              Everything needed to make real films sits in a single room in the Seid Yasin
-              building: computers for editing, cameras for shooting, and a drone for the
-              shots the others can&rsquo;t reach.
+            <p className="mt-4 max-w-[56ch] text-sm leading-relaxed text-ash md:text-base">
+              Professional tools for authentic storytelling. At Addisalem Film Academy,
+              your training is hands-on from week one. Our two dedicated classrooms are
+              fully equipped with the industry-standard cameras, audio recorders, and
+              editing suites you need to bring your vision to life.
             </p>
 
-            <ul className="mt-10 space-y-0 border-t border-line">
-              {facilities.map((facility, i) => {
-                const Glyph = iconMap[facility.icon] ?? FilmSlate
-                return (
-                  <Reveal key={facility.title} delay={i * 0.06}>
-                    <li className="grid grid-cols-[auto_1fr] gap-5 border-b border-line py-6">
-                      <span className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-line bg-surface text-gold">
-                        <Glyph size={20} weight="duotone" />
-                      </span>
-                      <div>
-                        <h3 className="font-display text-lg font-semibold tracking-tight text-ink">
-                          {facility.title}
-                        </h3>
-                        <p className="mt-1.5 max-w-[52ch] text-sm leading-relaxed text-ash">
-                          {facility.copy}
-                        </p>
-                      </div>
-                    </li>
-                  </Reveal>
-                )
-              })}
-            </ul>
+            <div className="mt-7 border-t border-line">
+              {topFacilities.map((facility, i) => (
+                <FacilityItem key={facility.title} facility={facility} delay={i * 0.06} />
+              ))}
+            </div>
           </div>
+        </div>
+
+        <div className="mt-12 grid border-t border-line lg:grid-cols-2 lg:gap-x-20">
+          {bottomFacilities.map((facility, i) => (
+            <FacilityItem key={facility.title} facility={facility} delay={i * 0.06} />
+          ))}
         </div>
       </div>
     </section>
