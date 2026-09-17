@@ -28,6 +28,14 @@ export function About() {
           </Reveal>
           <Reveal delay={0.25}>
             <p className="mt-5 max-w-[58ch] text-base leading-relaxed text-ash">
+              Our philosophy is simple: Learn Filmmaking from the Source
+              <span className="block font-mono text-sm tracking-[0.06em] text-gold">
+                &ldquo;ፊልምን ከምንጩ ይማሩ&rdquo;
+              </span>
+            </p>
+          </Reveal>
+          <Reveal delay={0.25}>
+            <p className="mt-5 max-w-[58ch] text-base leading-relaxed text-ash">
               Students here are making Ethiopian films, not just studying them from
               abroad. Our set days, screening nights and studio crews are built for the
               stories of the Amhara region and the whole country.
