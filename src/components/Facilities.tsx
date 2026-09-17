@@ -67,7 +67,7 @@ export function Facilities() {
             <div className="absolute -left-3 -top-3 h-full w-full rounded-2xl border border-gold/40 md:-left-5 md:-top-5" />
             <img
               src={images.facilities}
-              alt="Students and crew working together on a training set"
+              alt="A black video camera at the AFA studio"
               width={1400}
               height={1050}
               loading="lazy"

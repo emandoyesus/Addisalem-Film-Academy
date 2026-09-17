@@ -52,12 +52,21 @@ export function Gallery() {
             className="group relative w-[78vw] shrink-0 snap-start overflow-hidden rounded-2xl border border-line sm:w-[420px]"
           >
             <a href={img(item.id, 2400, 80)} aria-label={`Open ${item.caption} photo`}>
-              <div className="aspect-[3/2] overflow-hidden">
+              <div className="relative aspect-[3/2] overflow-hidden bg-black">
+                {item.contain && (
+                  <div
+                    aria-hidden
+                    className="absolute inset-0 scale-110 bg-cover bg-center opacity-60 blur-2xl"
+                    style={{ backgroundImage: `url(${img(item.id, 400, 40)})` }}
+                  />
+                )}
                 <img
                   src={img(item.id, 900, 75)}
                   alt={item.caption}
                   loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  className={`relative h-full w-full transition-transform duration-700 ease-out group-hover:scale-105 ${
+                    item.contain ? 'object-contain' : 'object-cover'
+                  }`}
                 />
               </div>
               <figcaption className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/90 to-transparent px-5 pb-4 pt-10">

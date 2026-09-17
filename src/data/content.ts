@@ -27,7 +27,7 @@ export type Facility = {
 
 export type Story = { quote: string; name: string; role: string }
 
-export type GalleryItem = { id: string; caption: string; w: number }
+export type GalleryItem = { id: string; caption: string; w: number; contain?: boolean }
 
 export type Stat = { value: string; label: string }
 
@@ -69,11 +69,13 @@ export const BRAND_GOLD = '#ffba21'
 /** Unsplash image helper. Swap any `id` for a real photo of the
     center, or replace the whole `img(...)` call with a local asset. */
 export const img = (id: string, w = 1200, q = 80): string =>
-  `https://images.unsplash.com/${id}?q=${q}&w=${w}&auto=format&fit=crop`
+  id.startsWith('/') || id.startsWith('http')
+    ? id
+    : `https://images.unsplash.com/${id}?q=${q}&w=${w}&auto=format&fit=crop`
 
 export const images = {
   about: img('photo-1502920917128-1aa500764cbd', 1200, 80),
-  facilities: img('photo-1521737604893-d14cc237f11d', 1400, 80),
+  facilities: img('photo-1553377102-7479aacccd00', 1400, 80),
 }
 
 export const site: SiteInfo = {
@@ -86,7 +88,7 @@ export const site: SiteInfo = {
     'https://www.google.com/maps/search/?api=1&query=Seid+Yasin+building%2C+Piyassa%2C+Dessie%2C+Ethiopia',
   phone: '09 89 81 84 79',
   phoneAlt: '09 21 25 88 15',
-  email: 'admissions@addisalemfilm.com',
+  email: 'addisalemfilms@gmail.com',
   hours: [
     { day: 'Monday to Friday', time: '9:00 – 17:00' },
     { day: 'Saturday', time: '9:00 – 13:00' },
@@ -304,7 +306,7 @@ export const stories: Story[] = [
 ]
 
 export const gallery: GalleryItem[] = [
-  { id: 'photo-1521737604893-d14cc237f11d', caption: 'On set', w: 3200 },
+  { id: '/media/gallery/01-add-award.jpg', caption: 'ADD Award', w: 2500, contain: true },
   { id: 'photo-1503095396549-807759245b35', caption: 'Screening night', w: 2400 },
   { id: 'photo-1505686994434-e3cc5abf1330', caption: 'Under the lights', w: 2400 },
   { id: 'photo-1512316609839-ce289d3eba0a', caption: 'In the edit bay', w: 2400 },
