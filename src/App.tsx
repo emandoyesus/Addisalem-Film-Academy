@@ -6,6 +6,7 @@ import { Hero } from './components/Hero'
 import { MarqueeStrip } from './components/MarqueeStrip'
 import { StatsBand } from './components/StatsBand'
 import { About } from './components/About'
+import { Purpose } from './components/Purpose'
 import { Programs } from './components/Programs'
 import { LearningPath } from './components/LearningPath'
 import { Facilities } from './components/Facilities'
@@ -48,6 +49,7 @@ function Landing() {
         <MarqueeStrip />
         <StatsBand />
         <About />
+        <Purpose />
         <Programs />
         <LearningPath />
         <Facilities />
