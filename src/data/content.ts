@@ -97,7 +97,7 @@ export const site: SiteInfo = {
     { day: 'Saturday', time: '9:00 – 13:00' },
     { day: 'Sunday', time: 'Closed' },
   ],
-  founded: 2014,
+  founded: 2011,
 }
 
 export const navLinks: { label: string; href: string }[] = [
@@ -184,10 +184,10 @@ export const announcements: Announcement[] = [
 
 /* TODO(owner): replace these figures with real numbers */
 export const stats: Stat[] = [
-  { value: '850+', label: 'Graduates since 2014' },
+  { value: '850+', label: 'Graduates since 2011' },
   { value: '120+', label: 'Short films produced by students' },
   { value: '10', label: 'Disciplines taught' },
-  { value: '40+', label: 'Alumni working in film today' },
+  { value: '12+', label: 'Alumni working in film today' },
 ]
 
 export const programs: Program[] = [
