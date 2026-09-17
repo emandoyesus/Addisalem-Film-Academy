@@ -66,7 +66,7 @@ export function Programs() {
   const reduce = useReducedMotion()
 
   return (
-    <section className="bg-canvas-soft py-20 md:py-32">
+    <section className="bg-canvas py-20 md:py-32">
       <div id="programs" className="mx-auto w-full max-w-[1400px] scroll-mt-24 px-5 md:px-8">
         <Eyebrow>Programs</Eyebrow>
         <motion.div

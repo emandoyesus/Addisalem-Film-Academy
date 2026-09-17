@@ -20,7 +20,7 @@ const pillars = [
 
 export function Purpose() {
   return (
-    <section className="border-t border-line bg-canvas py-20 md:py-32">
+    <section className="bg-canvas py-20 md:py-32">
       <div id="purpose" className="mx-auto w-full max-w-[1400px] scroll-mt-24 px-5 md:px-8">
         <Reveal>
           <Eyebrow>Why AFA exists</Eyebrow>

@@ -10,7 +10,7 @@ const values = [
 
 export function About() {
   return (
-    <section className="py-20 md:py-32">
+    <section className="bg-canvas-soft py-20 md:py-32">
       <div id="about" className="mx-auto w-full max-w-[1400px] scroll-mt-24 px-5 md:px-8">
         <div className="grid items-center gap-14 lg:grid-cols-[1.05fr_1fr] lg:gap-20">
         <div>
