@@ -1,5 +1,6 @@
-import { motion, useReducedMotion } from 'motion/react'
+import { motion } from 'motion/react'
 import { stories, type Story } from '../data/content'
+import { revealProps, useEntranceMotion } from '../lib/motion'
 
 function QuoteCard({
   quote,
@@ -37,7 +38,7 @@ function QuoteCard({
 }
 
 export function Stories() {
-  const reduce = useReducedMotion()
+  const animate = useEntranceMotion()
   const [first, second, third] = stories
   return (
     <section className="bg-canvas py-20 md:py-32">
@@ -54,29 +55,20 @@ export function Stories() {
         <div className="mt-12 grid gap-4 lg:grid-cols-5">
           <motion.div
             className="lg:col-span-3"
-            initial={reduce ? false : { opacity: 0, y: 26 }}
-            whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.25 }}
-            transition={{ duration: 0.7, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
+            {...revealProps(animate, { amount: 0.25, delay: 0.05, y: 26 })}
           >
             <QuoteCard {...first} featured />
           </motion.div>
           <div className="flex flex-col gap-4 lg:col-span-2">
             <motion.div
               className="flex-1"
-              initial={reduce ? false : { opacity: 0, y: 26 }}
-              whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.25 }}
-              transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+              {...revealProps(animate, { amount: 0.25, delay: 0.15, y: 26 })}
             >
               <QuoteCard {...second} />
             </motion.div>
             <motion.div
               className="flex-1"
-              initial={reduce ? false : { opacity: 0, y: 26 }}
-              whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.25 }}
-              transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              {...revealProps(animate, { amount: 0.25, delay: 0.25, y: 26 })}
             >
               <QuoteCard {...third} />
             </motion.div>

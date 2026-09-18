@@ -1,8 +1,9 @@
-import { motion, useReducedMotion } from 'motion/react'
+import { motion } from 'motion/react'
 import { Arrow, Eyebrow } from './ui'
 import { programs, type Program } from '../data/content'
 import { unsplashSrcSet } from '../lib/responsive'
 import { LoadingImage } from './LoadingImage'
+import { revealProps, useEntranceMotion } from '../lib/motion'
 
 function ProgramCard({
   program,
@@ -68,18 +69,13 @@ function ProgramCard({
 }
 
 export function Programs() {
-  const reduce = useReducedMotion()
+  const animate = useEntranceMotion()
 
   return (
     <section className="bg-canvas py-20 md:py-32">
       <div id="programs" className="mx-auto w-full max-w-[1400px] scroll-mt-24 px-5 md:px-8">
         <Eyebrow>Programs</Eyebrow>
-        <motion.div
-          initial={reduce ? false : { opacity: 0, y: 24 }}
-          whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-        >
+        <motion.div {...revealProps(animate, { amount: 0.4, delay: 0.1 })}>
           <h2 className="mt-5 max-w-[18ch] font-display text-4xl font-bold leading-[1.06] tracking-tight text-ink md:text-5xl">
             Three ways to learn film.
           </h2>
@@ -94,14 +90,11 @@ export function Programs() {
             <motion.div
               key={program.title}
               className="md:col-span-2 lg:col-span-1"
-              initial={reduce ? false : { opacity: 0, y: 24 }}
-              whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{
-                duration: 0.6,
+              {...revealProps(animate, {
+                amount: 0.2,
                 delay: 0.08 * i,
-                ease: [0.16, 1, 0.3, 1],
-              }}
+                duration: 0.6,
+              })}
             >
               <ProgramCard program={program} className="h-full" />
             </motion.div>
@@ -112,10 +105,7 @@ export function Programs() {
           const toolkit = programs.find((program) => program.toolkit)?.toolkit
           return toolkit ? (
             <motion.p
-              initial={reduce ? false : { opacity: 0, y: 16 }}
-              whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.4 }}
-              transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              {...revealProps(animate, { amount: 0.4, delay: 0.1, y: 16, duration: 0.6 })}
               className="mt-8 max-w-[80ch] border-l-2 border-gold pl-5 font-mono text-[11px] leading-relaxed text-ash"
             >
               <span className="uppercase tracking-[0.18em] text-gold">

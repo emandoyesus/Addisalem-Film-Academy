@@ -1,8 +1,9 @@
-import { motion, useReducedMotion } from 'motion/react'
+import { motion } from 'motion/react'
 import { stats } from '../data/content'
+import { revealProps, useEntranceMotion } from '../lib/motion'
 
 export function StatsBand() {
-  const reduce = useReducedMotion()
+  const animate = useEntranceMotion()
   return (
     <section
       className="mx-auto w-full max-w-[1400px] px-5 py-14 md:px-8 md:py-20"
@@ -12,10 +13,12 @@ export function StatsBand() {
         {stats.map((stat, i) => (
           <motion.div
             key={stat.label}
-            initial={reduce ? false : { opacity: 0, y: 20 }}
-            whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.6, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+            {...revealProps(animate, {
+              amount: 0.4,
+              delay: i * 0.08,
+              y: 20,
+              duration: 0.6,
+            })}
             className="border-r border-b border-line px-4 py-8 text-center lg:py-10"
           >
             <p className="font-display text-4xl font-bold tracking-tight text-gold md:text-5xl">

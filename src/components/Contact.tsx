@@ -12,6 +12,7 @@ import { motion, useReducedMotion } from 'motion/react'
 import { site, programs } from '../data/content'
 import { createLead } from '../lib/firebase'
 import { notifyEnrollment } from '../lib/notify'
+import { revealProps, useEntranceMotion } from '../lib/motion'
 
 type FormValues = {
   name: string
@@ -33,6 +34,7 @@ const initialValues: FormValues = {
 
 export function Contact() {
   const reduce = useReducedMotion()
+  const animate = useEntranceMotion()
   const formRef = useRef<HTMLFormElement>(null)
   const [values, setValues] = useState<FormValues>(initialValues)
   const [errors, setErrors] = useState<FormErrors>({})
@@ -138,12 +140,7 @@ const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
         </div>
 
         <div className="mt-14 grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
-          <motion.div
-            initial={reduce ? false : { opacity: 0, y: 24 }}
-            whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          >
+          <motion.div {...revealProps(animate, { amount: 0.2 })}>
             <ul className="grid gap-x-8 gap-y-10 sm:grid-cols-2">
               {infoItems.map((item) => (
                 <li key={item.label}>
@@ -200,12 +197,7 @@ const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
             </div>
           </motion.div>
 
-          <motion.div
-            initial={reduce ? false : { opacity: 0, y: 24 }}
-            whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          >
+          <motion.div {...revealProps(animate, { amount: 0.2, delay: 0.1 })}>
             {status === 'sent' ? (
               <div
                 id="enroll"

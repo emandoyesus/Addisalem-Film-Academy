@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
-import { motion, useReducedMotion } from 'motion/react'
+import { motion } from 'motion/react'
+import { revealProps, useEntranceMotion } from '../lib/motion'
 
 type RevealProps = {
   children: ReactNode
@@ -8,17 +9,13 @@ type RevealProps = {
   y?: number
 }
 
-/* Scroll-reveal wrapper honoring prefers-reduced-motion */
+/* Scroll-reveal wrapper. Desktop only — phones render the content straight
+   away so a column of staggered slide-ups never lags the scroll. */
 export function Reveal({ children, delay = 0, className, y = 28 }: RevealProps) {
-  const reduce = useReducedMotion()
+  const animate = useEntranceMotion()
+  if (!animate) return <div className={className}>{children}</div>
   return (
-    <motion.div
-      className={className}
-      initial={reduce ? false : { opacity: 0, y }}
-      whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }}
-    >
+    <motion.div className={className} {...revealProps(true, { delay, y })}>
       {children}
     </motion.div>
   )

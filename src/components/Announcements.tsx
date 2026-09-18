@@ -12,6 +12,7 @@ import {
 import { firebaseConfigured, fetchAnnouncements } from '../lib/firebase'
 import { LoadingImage } from './LoadingImage'
 import { Eyebrow } from './ui'
+import { revealProps, useEntranceMotion } from '../lib/motion'
 
 /* Clickable preview surface. Falls back to a branded poster when the
    thumbnail for a video is not available yet. */
@@ -182,7 +183,7 @@ function TagChip({ tag }: { tag: Announcement['tag'] }) {
 }
 
 export function Announcements() {
-  const reduce = useReducedMotion()
+  const animate = useEntranceMotion()
   const [active, setActive] = useState<{ videoId: string; title: string } | null>(null)
   const [items, setItems] = useState<Announcement[]>(seed)
 
@@ -232,10 +233,7 @@ export function Announcements() {
         <div className="mt-12 grid gap-4 lg:grid-cols-5">
           <motion.div
             className="lg:col-span-3"
-            initial={reduce ? false : { opacity: 0, y: 26 }}
-            whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.7, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
+            {...revealProps(animate, { amount: 0.2, delay: 0.05, y: 26 })}
           >
             <CardShell
               a={featured}
@@ -278,10 +276,11 @@ export function Announcements() {
               <motion.div
                 key={a.id}
                 className="flex-1"
-                initial={reduce ? false : { opacity: 0, y: 24 }}
-                whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.25 }}
-                transition={{ duration: 0.6, delay: 0.1 + i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                {...revealProps(animate, {
+                  amount: 0.25,
+                  delay: 0.1 + i * 0.08,
+                  duration: 0.6,
+                })}
               >
                 <CardShell
                   a={a}
