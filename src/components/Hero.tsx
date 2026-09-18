@@ -1,10 +1,14 @@
 import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import { site } from '../data/content'
+import { useMediaQuery } from '../lib/useMediaQuery'
 import { Arrow } from './ui'
 
 export function Hero() {
   const { scrollY } = useScroll()
   const reduce = useReducedMotion()
+  /* Parallax re-rasterises a full-screen background every scroll frame — fine
+     on desktop, janky on phones, so it stays desktop-only. */
+  const parallax = useMediaQuery('(min-width: 768px)') && !reduce
   const bgY = useTransform(scrollY, [0, 900], [0, 160])
   const shade = useTransform(scrollY, [0, 900], [0, 0.35])
   return (
@@ -13,10 +17,12 @@ export function Hero() {
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <motion.div
           className="absolute inset-0 bg-cover bg-[68%_center] md:bg-center"
-          style={{ backgroundImage: 'url(/media/hero.jpg)', y: reduce ? 0 : bgY }}
-          initial={reduce ? false : { scale: 1.08 }}
+          style={{ backgroundImage: 'url(/media/hero.jpg)', y: parallax ? bgY : 0 }}
+          initial={parallax ? { scale: 1.08 } : false}
           animate={{ scale: 1 }}
-          transition={{ duration: 2.2, ease: [0.16, 1, 0.3, 1] }}
+          transition={
+            parallax ? { duration: 2.2, ease: [0.16, 1, 0.3, 1] } : { duration: 0 }
+          }
         />
         {/* Cinematic scrim stack: darker bottom-left to carry floating text, centre kept clear */}
         <motion.div
