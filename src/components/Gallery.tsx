@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { ArrowLeft, ArrowRight } from '@phosphor-icons/react'
 import { gallery, img } from '../data/content'
 import { unsplashSrcSet } from '../lib/responsive'
+import { LoadingImage } from './LoadingImage'
 
 export function Gallery() {
   const track = useRef<HTMLDivElement>(null)
@@ -64,7 +65,7 @@ export function Gallery() {
                       style={{ backgroundImage: `url(${tile})` }}
                     />
                   )}
-                  <img
+                  <LoadingImage
                     src={tile}
                     srcSet={unsplashSrcSet(tile, [420, 640, 840, 1260], 72)}
                     sizes="(min-width: 640px) 420px, 78vw"

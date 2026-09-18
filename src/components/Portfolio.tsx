@@ -3,6 +3,7 @@ import { ArrowRight, ArrowUpRight } from '@phosphor-icons/react'
 import { type PortfolioItem } from '../lib/firebase'
 import { cloudinarySrcSet, cloudinaryUrl } from '../lib/responsive'
 import { usePortfolio } from '../lib/usePortfolio'
+import { LoadingImage } from './LoadingImage'
 import { Eyebrow, Reveal } from './ui'
 
 /* Owner-managed portfolio. Images are uploaded from /admin to Cloudinary and
@@ -34,7 +35,7 @@ export function PortfolioGrid({ items }: { items: PortfolioItem[] }) {
               rel="noopener noreferrer"
               aria-label={item.caption ? `Open ${item.caption}` : 'Open image'}
             >
-              <img
+              <LoadingImage
                 src={src}
                 srcSet={srcSet}
                 sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"

@@ -2,6 +2,7 @@ import { motion, useReducedMotion } from 'motion/react'
 import { Arrow, Eyebrow } from './ui'
 import { programs, type Program } from '../data/content'
 import { unsplashSrcSet } from '../lib/responsive'
+import { LoadingImage } from './LoadingImage'
 
 function ProgramCard({
   program,
@@ -16,7 +17,7 @@ function ProgramCard({
       aria-label={`Enquire about the ${program.title}`}
       className={`group relative flex min-h-[520px] flex-col overflow-hidden rounded-2xl border border-line bg-surface ${className}`}
     >
-      <img
+      <LoadingImage
         src={program.image}
         srcSet={unsplashSrcSet(program.image, [400, 600, 800, 1000, 1280], 70)}
         sizes="(min-width: 1024px) 33vw, 100vw"

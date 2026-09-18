@@ -10,6 +10,7 @@ import {
   type Announcement,
 } from '../data/content'
 import { firebaseConfigured, fetchAnnouncements } from '../lib/firebase'
+import { LoadingImage } from './LoadingImage'
 import { Eyebrow } from './ui'
 
 /* Clickable preview surface. Falls back to a branded poster when the
@@ -42,7 +43,7 @@ function VideoPreview({
 
   return (
     <div className="relative aspect-video w-full overflow-hidden">
-      <img
+      <LoadingImage
         src={youtubeThumb(videoId, hq)}
         srcSet={hq ? undefined : youtubeThumbSrcSet(videoId)}
         sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"

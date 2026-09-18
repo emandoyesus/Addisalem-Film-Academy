@@ -1,6 +1,7 @@
 import { Check } from '@phosphor-icons/react'
 import { images } from '../data/content'
 import { unsplashSrcSet } from '../lib/responsive'
+import { LoadingImage } from './LoadingImage'
 import { Reveal } from './ui'
 
 const values = [
@@ -58,7 +59,7 @@ export function About() {
 
         <Reveal delay={0.15} className="relative">
           <div className="absolute -right-3 -top-3 h-full w-full rounded-2xl border border-gold/40 md:-right-5 md:-top-5" />
-          <img
+          <LoadingImage
             src={images.about}
             srcSet={unsplashSrcSet(images.about, [480, 720, 960, 1200], 72)}
             sizes="(min-width: 1024px) 45vw, 100vw"

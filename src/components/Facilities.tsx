@@ -10,6 +10,7 @@ import {
 import { Reveal } from './ui'
 import { images, facilities, type Facility } from '../data/content'
 import { unsplashSrcSet } from '../lib/responsive'
+import { LoadingImage } from './LoadingImage'
 
 const iconMap: Record<string, Icon> = {
   stageset: Buildings,
@@ -66,7 +67,7 @@ export function Facilities() {
         <div className="grid gap-14 lg:grid-cols-2 lg:gap-x-20">
           <Reveal className="relative order-2 lg:order-1">
             <div className="absolute -left-3 -top-3 h-full w-full rounded-2xl border border-gold/40 md:-left-5 md:-top-5" />
-            <img
+            <LoadingImage
               src={images.facilities}
               srcSet={unsplashSrcSet(images.facilities, [480, 720, 960, 1200, 1600], 72)}
               sizes="(min-width: 1024px) 45vw, 100vw"

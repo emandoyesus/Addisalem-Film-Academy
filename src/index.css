@@ -192,6 +192,36 @@ h4 {
   border-radius: 2px;
 }
 
+/* Photo placeholder — a soft shimmer shown on a lazy <img> until it paints.
+   LoadingImage removes the class on load, so transparent PNGs and contained
+   posters don't keep animating behind the artwork. */
+@keyframes skeleton-sweep {
+  to {
+    background-position-x: -200%;
+  }
+}
+
+.media-skeleton {
+  background-color: var(--surface);
+  background-image: linear-gradient(
+    100deg,
+    var(--surface) 20%,
+    var(--surface-2) 40%,
+    var(--surface-2) 55%,
+    var(--surface) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-sweep 1.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .media-skeleton {
+    animation: none;
+    background-image: none;
+    background-color: var(--surface-2);
+  }
+}
+
 /* Focus visibility for keyboard users */
 :focus-visible {
   outline: 2px solid var(--gold);
