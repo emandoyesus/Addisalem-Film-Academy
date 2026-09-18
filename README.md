@@ -5,7 +5,8 @@ Public landing page + a private admin console for the Addisalem Film Academy (De
 ## Stack
 
 - React 19 + Vite + TypeScript + Tailwind CSS 4
-- Firebase (Firestore) — applications, announcements, admin auth
+- Firebase (Firestore) — applications, announcements, portfolio metadata, admin auth
+- Cloudinary (free tier) — portfolio image hosting (no Firebase Storage billing)
 - EmailJS — enrollment notification emails
 - Deployed on Vercel
 
@@ -28,6 +29,7 @@ From the console you can:
 
 - **Applications** — see every enrollment (newest first), tap a phone number to call it, and delete handled ones. Refreshed from Firestore.
 - **Announcements** — publish a YouTube link or external link-driven news post shown on the homepage; manage and delete published items.
+- **Studio portfolio** — upload poster art, illustration and photos (JPG, PNG or WebP — export Adobe files first), give each a caption, re-order by dragging (or the arrows), re-caption in place, and delete. Image files are hosted free on **Cloudinary**; only the URLs and order are saved in Firestore. Uploaded images appear in the public **Studio portfolio** section on the homepage, in the order shown here.
 
 ### Changing site text, phones, hours
 
@@ -48,6 +50,7 @@ npm run lint
 Copy `.env.example` to `.env` and fill in:
 
 - **Firebase** keys (Firebase Console → Project Settings → General → Your apps → web app).
+- **Cloudinary** values (free tier): `VITE_CLOUDINARY_CLOUD_NAME` and `VITE_CLOUDINARY_UPLOAD_PRESET`.
 - **EmailJS** values (EmailJS dashboard): the Service ID, Template ID (its "To email" must be the notification recipient), and the Public Key.
 - **`VITE_ADMIN_EMAILS`** (optional): comma-separated list of admin emails, e.g. `owner@addisalem.com,admin@sister-school.org`.
 
@@ -55,10 +58,21 @@ The build also needs these variables on the hosting platform (Vercel: *Settings 
 
 ### Firebase setup
 
-- **Firestore rules**: deploy the contents of `firestore.rules` (Firebase Console → Firestore Database → Rules). Public visitors may only create leads and read announcements; admins read/delete leads and write announcements; users may only read their own role document, and nobody may write roles from the client.
+- **Firestore rules**: deploy the contents of `firestore.rules` (Firebase Console → Firestore Database → Rules). Public visitors may only create leads and read announcements plus the portfolio list; admins read/delete leads and write announcements and the portfolio; users may only read their own role document, and nobody may write roles from the client.
 - **Authentication**: enable Email/Password and create one admin user.
 - **Admin role**: create Firestore document `users/{uid}` (`uid` = the admin user's UID from Authentication) with field `role: "admin"` — or skip Firestore entirely and list the admin's email in `VITE_ADMIN_EMAILS` instead.
-- **Firestore collections**: created on first use (`leads`, `announcements`). No Firestore billing beyond the project plan is required; email sending uses EmailJS, not Firebase (Firebase Extensions such as Trigger Email are not used).
+- **Firestore collections**: created on first use (`leads`, `announcements`, `portfolio`). No Firebase billing is required; email sending uses EmailJS, not Firebase, and portfolio images use Cloudinary, not Firebase Storage.
+
+### Cloudinary setup (free portfolio image hosting)
+
+Firebase Cloud Storage needs the paid Blaze plan, so portfolio images are hosted on Cloudinary's free tier instead. Image bytes never touch Firebase; only the Cloudinary URL, caption and order are stored in Firestore.
+
+1. Create a free account at <https://cloudinary.com>.
+2. Copy the **Cloud name** from the dashboard → `VITE_CLOUDINARY_CLOUD_NAME`.
+3. **Settings → Upload → Add upload preset**; set **Signing mode: Unsigned**, restrict **Format** to `jpg,png,webp` (and optionally a max file size / incoming transformation), then copy the preset name → `VITE_CLOUDINARY_UPLOAD_PRESET`.
+4. Add both variables to `.env` locally and to the Vercel project settings, then redeploy.
+
+The preset is public by design (that is what makes browser uploads possible), so keep it locked down with the format/size restrictions above. Deletion uses the one-time `delete_token` Cloudinary returns for unsigned uploads, so no API secret is shipped in the site.
 
 ### Notification emails
 
@@ -66,15 +80,17 @@ Emails are sent client-side via EmailJS (`src/lib/notify.ts`). Configuration ste
 
 ### Deployment
 
-Vercel builds from the repo automatically. Make sure the **VITE_FIREBASE_*** and **VITE_EMAILJS_*** variables exist in the Vercel project settings and redeploy after changing them.
+Vercel builds from the repo automatically. Make sure the **VITE_FIREBASE_***, **VITE_CLOUDINARY_*** and **VITE_EMAILJS_*** variables exist in the Vercel project settings and redeploy after changing them.
 
 ## File map
 
 | Path | Purpose |
 | --- | --- |
 | `src/data/content.ts` | All site copy: contacts, hours, programs, announcements, nav |
-| `src/pages/Admin.tsx` | `/admin` login, applications, announcement manager |
-| `src/lib/firebase.ts` | Firebase layer: leads, announcements, auth, admin-role resolution |
+| `src/pages/Admin.tsx` | `/admin` login, applications, announcement manager, portfolio panel |
+| `src/components/PortfolioPanel.tsx` | Admin upload / re-caption / re-order / delete for the portfolio |
+| `src/components/Portfolio.tsx` | Public "Studio portfolio" section (hidden when empty) |
+| `src/lib/firebase.ts` | Firebase layer: leads, announcements, portfolio metadata, auth, Cloudinary upload, admin-role resolution |
 | `src/lib/useAdmin.ts` | React hook exposing auth + admin status to the navbar and route guard |
 | `src/lib/notify.ts` | EmailJS enrollment notification |
 | `firestore.rules` | Firestore security rules (mirror in the console) |

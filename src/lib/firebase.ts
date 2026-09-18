@@ -26,7 +26,6 @@ async function loadFirebase(): Promise<{
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
     authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
     projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
     messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
     appId: import.meta.env.VITE_FIREBASE_APP_ID,
   }
@@ -224,4 +223,179 @@ export async function deleteLead(id: string): Promise<void> {
   const { db } = await loadFirebase()
   const { doc, deleteDoc } = await import('firebase/firestore')
   await deleteDoc(doc(db, 'leads', id))
+}
+
+/* Portfolio — owner-uploaded artwork and photos (Photoshop / Illustrator
+   exports, set photography). Image files are hosted on Cloudinary's free
+   tier via an unsigned upload preset; the returned URL plus the caption and
+   order live in the free Firestore `portfolio` collection. The order field is
+   authoritative: the public site sorts by it. No Firebase billing needed. */
+
+export type PortfolioItem = {
+  id: string
+  url: string
+  publicId: string
+  deleteToken?: string
+  caption: string
+  order: number
+}
+
+const cloudinaryConfig = () => ({
+  cloud: import.meta.env.VITE_CLOUDINARY_CLOUD_NAME as string | undefined,
+  preset: import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET as string | undefined,
+})
+
+export async function cloudinaryConfigured(): Promise<boolean> {
+  const { cloud, preset } = cloudinaryConfig()
+  return Boolean(cloud && preset)
+}
+
+/* Public read uses the Firestore REST endpoint instead of the SDK, so the
+   landing page stays free of the ~500 KB Firebase bundle that the admin
+   console loads on demand. The `portfolio` collection is world-readable per
+   firestore.rules; writes below still go through the SDK as the signed-in
+   admin. */
+export async function fetchPortfolio(): Promise<PortfolioItem[]> {
+  const projectId = import.meta.env.VITE_FIREBASE_PROJECT_ID as string | undefined
+  const apiKey = import.meta.env.VITE_FIREBASE_API_KEY as string | undefined
+  if (!projectId || !apiKey) return []
+  const endpoint =
+    `https://firestore.googleapis.com/v1/projects/${projectId}` +
+    `/databases/(default)/documents/portfolio` +
+    `?pageSize=100&orderBy=order&key=${apiKey}`
+  const res = await fetch(endpoint)
+  if (!res.ok) throw new Error(`Portfolio request failed (${res.status})`)
+  const json = (await res.json()) as {
+    documents?: {
+      name: string
+      fields?: Record<
+        string,
+        { stringValue?: string; integerValue?: string; doubleValue?: number }
+      >
+    }[]
+  }
+  return (json.documents ?? [])
+    .map((doc) => {
+      const f = doc.fields ?? {}
+      return {
+        id: doc.name.split('/').pop() ?? '',
+        url: f.url?.stringValue ?? '',
+        publicId: f.publicId?.stringValue ?? '',
+        deleteToken: f.deleteToken?.stringValue || undefined,
+        caption: f.caption?.stringValue ?? '',
+        order: Number(f.order?.integerValue ?? f.order?.doubleValue ?? 0),
+      }
+    })
+    .filter((item) => item.url)
+}
+
+type CloudinaryUpload = {
+  secure_url: string
+  public_id: string
+  delete_token?: string
+}
+
+/* Uploads straight from the browser to Cloudinary with an unsigned preset.
+   XHR (not fetch) is used so the progress bar can report bytes transferred. */
+export async function uploadPortfolioImage(
+  file: File,
+  caption: string,
+  order: number,
+  onProgress?: (percent: number) => void,
+): Promise<PortfolioItem> {
+  assertConfig()
+  const { cloud, preset } = cloudinaryConfig()
+  if (!cloud || !preset) {
+    throw new Error('Cloudinary is not configured (cloud name / upload preset).')
+  }
+  const form = new FormData()
+  form.append('file', file)
+  form.append('upload_preset', preset)
+  const result = await new Promise<CloudinaryUpload>((resolve, reject) => {
+    const xhr = new XMLHttpRequest()
+    xhr.open('POST', `https://api.cloudinary.com/v1_1/${cloud}/image/upload`)
+    xhr.upload.onprogress = (event) => {
+      if (onProgress && event.lengthComputable) {
+        onProgress(Math.round((event.loaded / event.total) * 100))
+      }
+    }
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          resolve(JSON.parse(xhr.responseText) as CloudinaryUpload)
+        } catch {
+          reject(new Error('Unexpected Cloudinary response.'))
+        }
+      } else {
+        reject(new Error(`Cloudinary upload failed (${xhr.status}).`))
+      }
+    }
+    xhr.onerror = () => reject(new Error('Cloudinary upload failed.'))
+    xhr.send(form)
+  })
+  const clean = caption.trim()
+  const { db } = await loadFirebase()
+  const { addDoc, collection, serverTimestamp } = await import('firebase/firestore')
+  const docRef = await addDoc(collection(db, 'portfolio'), {
+    url: result.secure_url,
+    publicId: result.public_id,
+    deleteToken: result.delete_token ?? '',
+    caption: clean,
+    order,
+    createdAt: serverTimestamp(),
+  })
+  return {
+    id: docRef.id,
+    url: result.secure_url,
+    publicId: result.public_id,
+    deleteToken: result.delete_token,
+    caption: clean,
+    order,
+  }
+}
+
+export async function updatePortfolioCaption(
+  id: string,
+  caption: string,
+): Promise<void> {
+  assertConfig()
+  const { db } = await loadFirebase()
+  const { doc, updateDoc } = await import('firebase/firestore')
+  await updateDoc(doc(db, 'portfolio', id), { caption: caption.trim() })
+}
+
+export async function savePortfolioOrder(
+  items: Pick<PortfolioItem, 'id'>[],
+): Promise<void> {
+  assertConfig()
+  const { db } = await loadFirebase()
+  const { doc, writeBatch } = await import('firebase/firestore')
+  const batch = writeBatch(db)
+  items.forEach((item, index) => {
+    batch.update(doc(db, 'portfolio', item.id), { order: index })
+  })
+  await batch.commit()
+}
+
+export async function deletePortfolioItem(item: PortfolioItem): Promise<void> {
+  assertConfig()
+  const { cloud } = cloudinaryConfig()
+  /* Unsigned uploads return a one-time delete token; use it to remove the
+     asset from Cloudinary. If it is missing, the asset is left in place and
+     only the Firestore entry is removed. */
+  if (cloud && item.deleteToken) {
+    try {
+      const form = new FormData()
+      form.append('token', item.deleteToken)
+      await fetch(
+        `https://api.cloudinary.com/v1_1/${cloud}/delete_by_token`,
+        { method: 'POST', body: form },
+      )
+    } catch {
+      /* Ignore; the Firestore record below is what drives the site. */
+    }
+  }
+  const { db } = await loadFirebase()
+  const { doc, deleteDoc } = await import('firebase/firestore')
+  await deleteDoc(doc(db, 'portfolio', item.id))
 }

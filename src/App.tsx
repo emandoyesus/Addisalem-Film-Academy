@@ -13,6 +13,7 @@ import { Facilities } from './components/Facilities'
 import { Stories } from './components/Stories'
 import { Announcements } from './components/Announcements'
 import { Gallery } from './components/Gallery'
+import { Portfolio } from './components/Portfolio'
 import { Contact } from './components/Contact'
 import { Footer } from './components/Footer'
 
@@ -56,6 +57,7 @@ function Landing() {
         <Stories />
         <Announcements />
         <Gallery />
+        <Portfolio />
         <Contact />
       </main>
 

@@ -20,6 +20,7 @@ import {
   type Lead,
 } from '../lib/firebase'
 import { useAuthStatus } from '../lib/useAdmin'
+import { PortfolioPanel } from '../components/PortfolioPanel'
 import {
   toVideoId,
   youtubeThumb,
@@ -59,7 +60,7 @@ export default function AdminPage() {
                 Addisalem
               </p>
               <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-faint">
-                Announcement console
+                Admin console
               </p>
             </div>
           </div>
@@ -436,6 +437,8 @@ function Manager() {
           ))}
         </ul>
       </section>
+
+      <PortfolioPanel />
     </div>
   )
 }
