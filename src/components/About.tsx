@@ -1,5 +1,6 @@
 import { Check } from '@phosphor-icons/react'
 import { images } from '../data/content'
+import { unsplashSrcSet } from '../lib/responsive'
 import { Reveal } from './ui'
 
 const values = [
@@ -59,10 +60,13 @@ export function About() {
           <div className="absolute -right-3 -top-3 h-full w-full rounded-2xl border border-gold/40 md:-right-5 md:-top-5" />
           <img
             src={images.about}
+            srcSet={unsplashSrcSet(images.about, [480, 720, 960, 1200], 72)}
+            sizes="(min-width: 1024px) 45vw, 100vw"
             alt="Professional camera used in training at Addisalem"
             width={1200}
             height={900}
             loading="lazy"
+            decoding="async"
             className="relative aspect-[4/3] w-full rounded-2xl object-cover"
           />
           <div className="mt-5 flex items-center justify-between border-t border-line pt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-faint">

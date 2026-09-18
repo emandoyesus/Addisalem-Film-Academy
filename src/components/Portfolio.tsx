@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight, ArrowUpRight } from '@phosphor-icons/react'
 import { type PortfolioItem } from '../lib/firebase'
+import { cloudinarySrcSet, cloudinaryUrl } from '../lib/responsive'
 import { usePortfolio } from '../lib/usePortfolio'
 import { Eyebrow, Reveal } from './ui'
 
@@ -11,37 +12,52 @@ import { Eyebrow, Reveal } from './ui'
    pieces with a link to the full /portfolio page. */
 const LANDING_LIMIT = 3
 
+/* Cloudinary renders each tile at the width the layout actually needs, in
+   AVIF/WebP, so phones download a fraction of the original upload. */
+const TILE_WIDTHS = [400, 600, 800, 1200, 1600]
+
 export function PortfolioGrid({ items }: { items: PortfolioItem[] }) {
   return (
     <div className="columns-2 gap-4 md:columns-3">
-      {items.map((item) => (
-        <figure
-          key={item.id}
-          className="group relative mb-4 break-inside-avoid overflow-hidden rounded-2xl border border-line bg-surface"
-        >
-          <a
-            href={item.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={item.caption ? `Open ${item.caption}` : 'Open image'}
+      {items.map((item) => {
+        const src = cloudinaryUrl(item.url, 800)
+        const srcSet = cloudinarySrcSet(item.url, TILE_WIDTHS)
+        const ratio = item.width && item.height ? `${item.width} / ${item.height}` : undefined
+        return (
+          <figure
+            key={item.id}
+            className="group relative mb-4 break-inside-avoid overflow-hidden rounded-2xl border border-line bg-surface"
           >
-            <img
-              src={item.url}
-              alt={item.caption || 'Studio work'}
-              loading="lazy"
-              className="w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-            />
-            {item.caption && (
-              <figcaption className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/90 to-transparent px-4 pb-3 pt-10">
-                <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white">
-                  {item.caption}
-                </span>
-                <ArrowUpRight size={13} className="text-white/70" />
-              </figcaption>
-            )}
-          </a>
-        </figure>
-      ))}
+            <a
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={item.caption ? `Open ${item.caption}` : 'Open image'}
+            >
+              <img
+                src={src}
+                srcSet={srcSet}
+                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                width={item.width}
+                height={item.height}
+                style={ratio ? { aspectRatio: ratio } : undefined}
+                alt={item.caption || 'Studio work'}
+                loading="lazy"
+                decoding="async"
+                className="w-full bg-surface-2 object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              />
+              {item.caption && (
+                <figcaption className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/90 to-transparent px-4 pb-3 pt-10">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white">
+                    {item.caption}
+                  </span>
+                  <ArrowUpRight size={13} className="text-white/70" />
+                </figcaption>
+              )}
+            </a>
+          </figure>
+        )
+      })}
     </div>
   )
 }

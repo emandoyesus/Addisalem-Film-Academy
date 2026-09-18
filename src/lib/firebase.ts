@@ -238,6 +238,8 @@ export type PortfolioItem = {
   deleteToken?: string
   caption: string
   order: number
+  width?: number
+  height?: number
 }
 
 const cloudinaryConfig = () => ({
@@ -284,6 +286,8 @@ export async function fetchPortfolio(): Promise<PortfolioItem[]> {
         deleteToken: f.deleteToken?.stringValue || undefined,
         caption: f.caption?.stringValue ?? '',
         order: Number(f.order?.integerValue ?? f.order?.doubleValue ?? 0),
+        width: Number(f.width?.integerValue ?? f.width?.doubleValue ?? 0) || undefined,
+        height: Number(f.height?.integerValue ?? f.height?.doubleValue ?? 0) || undefined,
       }
     })
     .filter((item) => item.url)
@@ -293,6 +297,8 @@ type CloudinaryUpload = {
   secure_url: string
   public_id: string
   delete_token?: string
+  width?: number
+  height?: number
 }
 
 /* Uploads straight from the browser to Cloudinary with an unsigned preset.
@@ -342,6 +348,8 @@ export async function uploadPortfolioImage(
     deleteToken: result.delete_token ?? '',
     caption: clean,
     order,
+    width: result.width ?? 0,
+    height: result.height ?? 0,
     createdAt: serverTimestamp(),
   })
   return {
@@ -351,6 +359,8 @@ export async function uploadPortfolioImage(
     deleteToken: result.delete_token,
     caption: clean,
     order,
+    width: result.width,
+    height: result.height,
   }
 }
 

@@ -27,7 +27,14 @@ export type Facility = {
 
 export type Story = { quote: string; name: string; role: string }
 
-export type GalleryItem = { id: string; caption: string; w: number; contain?: boolean }
+export type GalleryItem = {
+  id: string
+  caption: string
+  w: number
+  contain?: boolean
+  /** Optional smaller tile for the strip; `id` stays the full-size asset. */
+  src?: string
+}
 
 export type Stat = { value: string; label: string }
 
@@ -139,6 +146,18 @@ export function youtubeThumb(videoId: string, hq = false): string {
   return hq
     ? `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`
     : `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`
+}
+
+/** Small-first srcset so cards on phones fetch the ~8 KB thumbnail instead of
+    the 480–1280px one. Stops at `sddefault` because `maxresdefault` is not
+    guaranteed to exist for every upload. */
+export function youtubeThumbSrcSet(videoId: string): string {
+  const base = `https://i.ytimg.com/vi/${videoId}`
+  return [
+    `${base}/mqdefault.jpg 320w`,
+    `${base}/hqdefault.jpg 480w`,
+    `${base}/sddefault.jpg 640w`,
+  ].join(', ')
 }
 
 export function youtubeEmbed(videoId: string): string {
@@ -307,7 +326,7 @@ export const stories: Story[] = [
 ]
 
 export const gallery: GalleryItem[] = [
-  { id: '/media/gallery/01-add-award.jpg', caption: 'ADD Award', w: 2500, contain: true },
+  { id: '/media/gallery/01-add-award.jpg', src: '/media/gallery/01-add-award-900.webp', caption: 'ADD Award', w: 2500, contain: true },
   { id: 'photo-1503095396549-807759245b35', caption: 'Screening night', w: 2400 },
   { id: 'photo-1505686994434-e3cc5abf1330', caption: 'Under the lights', w: 2400 },
   { id: 'photo-1512316609839-ce289d3eba0a', caption: 'In the edit bay', w: 2400 },

@@ -4,12 +4,13 @@ export function LogoMark({ className = 'h-9 w-9' }: { className?: string }) {
       className={`inline-block overflow-hidden rounded-xl border border-line-strong ${className}`}
     >
       <img
-        src="/logo.jpg"
+        src="/logo.webp"
         alt="Addisalem Film Academy logo"
         width={72}
         height={72}
         className="h-full w-full object-cover"
         loading="eager"
+        decoding="async"
       />
     </span>
   )

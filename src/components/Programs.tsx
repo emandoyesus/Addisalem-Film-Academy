@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from 'motion/react'
 import { Arrow, Eyebrow } from './ui'
 import { programs, type Program } from '../data/content'
+import { unsplashSrcSet } from '../lib/responsive'
 
 function ProgramCard({
   program,
@@ -17,8 +18,11 @@ function ProgramCard({
     >
       <img
         src={program.image}
+        srcSet={unsplashSrcSet(program.image, [400, 600, 800, 1000, 1280], 70)}
+        sizes="(min-width: 1024px) 33vw, 100vw"
         alt={program.alt ?? program.title}
         loading="lazy"
+        decoding="async"
         className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-95 transition-opacity duration-500 group-hover:opacity-100" />

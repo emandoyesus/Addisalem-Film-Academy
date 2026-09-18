@@ -17,7 +17,12 @@
       content="Hands-on film training in Dessie, Ethiopia. Photography, videography, directing, cinematography, screenwriting, editing, sound, film production, graphic design and motion design."
     />
     <meta property="og:image" content="/logo.jpg" />
-    <link rel="preload" as="image" href="/media/hero.jpg" />
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link rel="preconnect" href="https://res.cloudinary.com" />
+    <link rel="preconnect" href="https://i.ytimg.com" />
+    <link rel="dns-prefetch" href="https://firestore.googleapis.com" />
+    <link rel="dns-prefetch" href="https://api.cloudinary.com" />
+    <link rel="preload" as="image" href="/media/hero.jpg" fetchpriority="high" />
     <title>Addisalem Film Academy · Dessie</title>
   </head>
   <body>

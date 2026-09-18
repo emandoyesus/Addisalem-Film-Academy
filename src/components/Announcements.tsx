@@ -5,6 +5,7 @@ import {
   announcements as seed,
   youtubeChannel,
   youtubeThumb,
+  youtubeThumbSrcSet,
   youtubeEmbed,
   type Announcement,
 } from '../data/content'
@@ -43,8 +44,11 @@ function VideoPreview({
     <div className="relative aspect-video w-full overflow-hidden">
       <img
         src={youtubeThumb(videoId, hq)}
+        srcSet={hq ? undefined : youtubeThumbSrcSet(videoId)}
+        sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
         alt=""
         loading="lazy"
+        decoding="async"
         onError={() => setOk(false)}
         className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
       />
