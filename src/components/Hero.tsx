@@ -12,7 +12,7 @@ export function Hero() {
       {/* Background plate with image + subtle parallax + Ken Burns entrance */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <motion.div
-          className="absolute inset-0 bg-cover bg-center"
+          className="absolute inset-0 bg-cover bg-[68%_center] md:bg-center"
           style={{ backgroundImage: 'url(/media/hero.jpg)', y: reduce ? 0 : bgY }}
           initial={reduce ? false : { scale: 1.08 }}
           animate={{ scale: 1 }}
