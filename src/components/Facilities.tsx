@@ -9,7 +9,7 @@ import {
 } from '@phosphor-icons/react'
 import { Reveal } from './ui'
 import { images, facilities, type Facility } from '../data/content'
-import { unsplashSrcSet } from '../lib/responsive'
+import { localSrcSet } from '../lib/responsive'
 import { LoadingImage } from './LoadingImage'
 
 const iconMap: Record<string, Icon> = {
@@ -69,16 +69,16 @@ export function Facilities() {
             <div className="absolute -left-3 -top-3 h-full w-full rounded-2xl border border-gold/40 md:-left-5 md:-top-5" />
             <LoadingImage
               src={images.facilities}
-              srcSet={unsplashSrcSet(images.facilities, [480, 720, 960, 1200, 1600], 72)}
+              srcSet={localSrcSet('/media/studio-gear', [480, 720, 960, 1200, 1600])}
               sizes="(min-width: 1024px) 45vw, 100vw"
-              alt="A black video camera at the AFA studio"
-              width={1400}
-              height={1050}
+              alt="The AFA studio and gear"
+              width={1250}
+              height={1250}
               loading="lazy"
               decoding="async"
-              className="relative aspect-[4/3] w-full rounded-2xl object-cover"
+              className="relative aspect-square w-full rounded-2xl object-cover"
             />
-            <div className="absolute bottom-5 left-5 right-5 rounded-xl border border-white/10 bg-black/70 p-5 backdrop-blur-md">
+            <div className="absolute bottom-5 left-5 right-5 rounded-xl border border-white/10 bg-black/80 p-5">
               <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-gold">
                 Two rooms, full kit
               </p>

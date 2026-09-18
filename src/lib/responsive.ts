@@ -46,3 +46,8 @@ export function cloudinarySrcSet(
   if (!CLOUDINARY_UPLOAD.test(url)) return undefined
   return widths.map((w) => `${cloudinaryUrl(url, w, opts)} ${w}w`).join(', ')
 }
+
+/** Builds a `srcset` from pre-generated local assets named `base-{width}.ext`. */
+export function localSrcSet(base: string, widths: number[], ext = 'webp'): string {
+  return widths.map((w) => `${base}-${w}.${ext} ${w}w`).join(', ')
+}
