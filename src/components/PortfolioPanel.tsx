@@ -154,7 +154,7 @@ export function PortfolioPanel() {
   }
 
   return (
-    <section className="mt-10">
+    <section>
       <div className="flex items-end justify-between gap-4">
         <div>
           <h2 className="font-display text-lg font-semibold text-ink">

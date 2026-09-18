@@ -3,10 +3,15 @@ import { Link } from 'react-router-dom'
 import {
   ArrowLeft,
   ArrowsClockwise,
+  Images,
   LinkSimple,
+  Megaphone,
   Phone,
+  SignOut,
   Trash,
+  UsersThree,
   YoutubeLogo,
+  type Icon,
 } from '@phosphor-icons/react'
 import {
   createAnnouncement,
@@ -30,6 +35,8 @@ import {
 
 const TAG_OPTIONS: AnnouncementTag[] = ['Sitcom', 'Edit', 'News']
 
+type Tab = 'announcements' | 'applications' | 'portfolio'
+
 type FormState = {
   title: string
   videoUrl: string
@@ -50,7 +57,7 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-black text-ink">
       <header className="border-b border-line">
-        <div className="mx-auto flex max-w-3xl items-center justify-between px-5 py-5">
+        <div className="mx-auto flex max-w-4xl items-center justify-between px-5 py-5">
           <div className="flex items-center gap-3">
             <span className="flex h-9 w-9 items-center justify-center rounded-full border border-gold/50 bg-gold-soft font-mono text-xs font-semibold text-gold">
               AF
@@ -73,7 +80,7 @@ export default function AdminPage() {
           </Link>
         </div>
       </header>
-      <main className="mx-auto max-w-3xl px-5 py-10">
+      <main className="mx-auto max-w-4xl px-5 py-10">
         <LoginGate>
           <Manager />
         </LoginGate>
@@ -212,7 +219,7 @@ function LoginGate({ children }: { children: ReactNode }) {
   )
 }
 
-function Manager() {
+function AnnouncementsPanel() {
   const [items, setItems] = useState<Announcement[]>([])
   const [form, setForm] = useState<FormState>(emptyForm)
   const [busy, setBusy] = useState(false)
@@ -269,25 +276,10 @@ function Manager() {
 
   return (
     <div>
-      <div className="mb-6 flex items-end justify-between gap-4">
-        <div>
-          <h1 className="font-display text-3xl font-bold tracking-tight text-ink">
-            Manage announcements
-          </h1>
-          <p className="mt-2 text-sm text-ash">
-            Paste a YouTube link to publish it. Newest becomes the featured card.
-          </p>
-        </div>
-        <button
-          type="button"
-          onClick={() => {
-            void signOut()
-          }}
-          className="inline-flex shrink-0 items-center gap-2 rounded-full border border-line-strong px-4 py-2 font-mono text-[11px] uppercase tracking-[0.14em] text-ash transition-colors hover:border-gold/60 hover:text-gold"
-        >
-          Sign out
-        </button>
-      </div>
+      <p className="mb-6 max-w-[60ch] text-sm text-ash">
+        Paste a YouTube link to publish it. The newest entry leads the
+        announcement feed on the home page.
+      </p>
 
       {notice && (
         <p className="mb-6 rounded-xl border border-line-strong bg-surface px-4 py-3 text-sm text-gold">
@@ -399,8 +391,6 @@ function Manager() {
         </button>
       </form>
 
-      <LeadsPanel />
-
       <section className="mt-10">
         <h2 className="font-display text-lg font-semibold text-ink">
           Published ({items.length})
@@ -437,8 +427,74 @@ function Manager() {
           ))}
         </ul>
       </section>
+    </div>
+  )
+}
 
-      <PortfolioPanel />
+const TABS: { id: Tab; label: string; icon: Icon }[] = [
+  { id: 'announcements', label: 'Announcements', icon: Megaphone },
+  { id: 'applications', label: 'Applications', icon: UsersThree },
+  { id: 'portfolio', label: 'Portfolio', icon: Images },
+]
+
+function Manager() {
+  const [tab, setTab] = useState<Tab>('announcements')
+
+  return (
+    <div>
+      <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="font-display text-3xl font-bold tracking-tight text-ink">
+            Console
+          </h1>
+          <p className="mt-2 max-w-[60ch] text-sm text-ash">
+            Publish announcements, review applications and curate the studio
+            portfolio.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => {
+            void signOut()
+          }}
+          className="inline-flex shrink-0 items-center gap-2 rounded-full border border-line-strong px-4 py-2 font-mono text-[11px] uppercase tracking-[0.14em] text-ash transition-colors hover:border-gold/60 hover:text-gold"
+        >
+          <SignOut size={14} />
+          Sign out
+        </button>
+      </div>
+
+      <div
+        role="tablist"
+        aria-label="Console sections"
+        className="mb-8 grid grid-cols-3 gap-1 rounded-2xl border border-line-strong bg-surface p-1.5"
+      >
+        {TABS.map((t) => {
+          const Glyph = t.icon
+          const active = tab === t.id
+          return (
+            <button
+              key={t.id}
+              type="button"
+              role="tab"
+              aria-selected={active}
+              onClick={() => setTab(t.id)}
+              className={`flex items-center justify-center gap-2 rounded-xl px-3 py-2.5 font-mono text-[11px] uppercase tracking-[0.12em] transition-colors ${
+                active
+                  ? 'bg-gold text-black'
+                  : 'text-ash hover:bg-surface-2 hover:text-ink'
+              }`}
+            >
+              <Glyph size={15} weight={active ? 'fill' : 'regular'} />
+              <span className="hidden sm:inline">{t.label}</span>
+            </button>
+          )
+        })}
+      </div>
+
+      {tab === 'announcements' && <AnnouncementsPanel />}
+      {tab === 'applications' && <LeadsPanel />}
+      {tab === 'portfolio' && <PortfolioPanel />}
     </div>
   )
 }
@@ -483,7 +539,7 @@ function LeadsPanel() {
       : ''
 
   return (
-    <section className="mt-10">
+    <section>
       <div className="flex items-end justify-between gap-4">
         <div>
           <h2 className="font-display text-lg font-semibold text-ink">
