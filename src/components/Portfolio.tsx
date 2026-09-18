@@ -1,38 +1,57 @@
-import { useEffect, useState } from 'react'
-import { ArrowUpRight } from '@phosphor-icons/react'
-import { fetchPortfolio, firebaseConfigured, type PortfolioItem } from '../lib/firebase'
+import { Link } from 'react-router-dom'
+import { ArrowRight, ArrowUpRight } from '@phosphor-icons/react'
+import { type PortfolioItem } from '../lib/firebase'
+import { usePortfolio } from '../lib/usePortfolio'
 import { Eyebrow, Reveal } from './ui'
 
-/* Owner-managed portfolio. Images are uploaded from /admin to Firebase
-   Storage and listed in the Firestore `portfolio` collection, so the studio
-   can add poster art, illustration and set photography without a deploy.
-   The section renders nothing until there is something to show. */
-export function Portfolio() {
-  const [items, setItems] = useState<PortfolioItem[]>([])
-  const [ready, setReady] = useState(false)
+/* Owner-managed portfolio. Images are uploaded from /admin to Cloudinary and
+   listed in the Firestore `portfolio` collection, so the studio can add poster
+   art, illustration and set photography without a deploy. The landing section
+   renders nothing until there is something to show, and shows at most three
+   pieces with a link to the full /portfolio page. */
+const LANDING_LIMIT = 3
 
-  useEffect(() => {
-    let cancelled = false
-    void (async () => {
-      if (!(await firebaseConfigured())) {
-        if (!cancelled) setReady(true)
-        return
-      }
-      try {
-        const remote = await fetchPortfolio()
-        if (!cancelled) setItems(remote)
-      } catch {
-        /* Stay empty when Firestore is unreachable. */
-      } finally {
-        if (!cancelled) setReady(true)
-      }
-    })()
-    return () => {
-      cancelled = true
-    }
-  }, [])
+export function PortfolioGrid({ items }: { items: PortfolioItem[] }) {
+  return (
+    <div className="columns-2 gap-4 md:columns-3">
+      {items.map((item) => (
+        <figure
+          key={item.id}
+          className="group relative mb-4 break-inside-avoid overflow-hidden rounded-2xl border border-line bg-surface"
+        >
+          <a
+            href={item.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={item.caption ? `Open ${item.caption}` : 'Open image'}
+          >
+            <img
+              src={item.url}
+              alt={item.caption || 'Studio work'}
+              loading="lazy"
+              className="w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+            />
+            {item.caption && (
+              <figcaption className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/90 to-transparent px-4 pb-3 pt-10">
+                <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white">
+                  {item.caption}
+                </span>
+                <ArrowUpRight size={13} className="text-white/70" />
+              </figcaption>
+            )}
+          </a>
+        </figure>
+      ))}
+    </div>
+  )
+}
+
+export function Portfolio() {
+  const { items, ready } = usePortfolio()
 
   if (!ready || items.length === 0) return null
+
+  const shown = items.slice(0, LANDING_LIMIT)
 
   return (
     <section className="bg-canvas py-20 md:py-32">
@@ -48,36 +67,20 @@ export function Portfolio() {
           </p>
         </Reveal>
 
-        <Reveal delay={0.1} className="mt-12 columns-2 gap-4 md:columns-3">
-          {items.map((item) => (
-            <figure
-              key={item.id}
-              className="group relative mb-4 break-inside-avoid overflow-hidden rounded-2xl border border-line bg-surface"
-            >
-              <a
-                href={item.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={item.caption ? `Open ${item.caption}` : 'Open image'}
-              >
-                <img
-                  src={item.url}
-                  alt={item.caption || 'Studio work'}
-                  loading="lazy"
-                  className="w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                />
-                {item.caption && (
-                  <figcaption className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/90 to-transparent px-4 pb-3 pt-10">
-                    <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white">
-                      {item.caption}
-                    </span>
-                    <ArrowUpRight size={13} className="text-white/70" />
-                  </figcaption>
-                )}
-              </a>
-            </figure>
-          ))}
+        <Reveal delay={0.1} className="mt-12">
+          <PortfolioGrid items={shown} />
         </Reveal>
+
+        {items.length > LANDING_LIMIT && (
+          <Reveal delay={0.15} className="mt-10 flex justify-center">
+            <Link
+              to="/portfolio"
+              className="inline-flex items-center gap-2 rounded-full border border-line-strong px-6 py-3 font-mono text-[11px] uppercase tracking-[0.16em] text-ink transition-all duration-300 hover:border-gold/60 hover:text-gold active:translate-y-[-1px] active:scale-[0.98]"
+            >
+              See more work <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </Reveal>
+        )}
       </div>
     </section>
   )

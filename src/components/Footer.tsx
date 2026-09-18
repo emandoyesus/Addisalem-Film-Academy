@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router-dom'
 import {
   type Icon,
   InstagramLogo,
@@ -17,6 +18,9 @@ const iconMap: Record<string, Icon> = {
 
 export function Footer() {
   const year = new Date().getFullYear()
+  const { pathname } = useLocation()
+  const onHome = pathname === '/'
+  const sectionHref = (href: string) => (onHome ? href : `/${href}`)
   return (
     <footer className="border-t border-line bg-canvas">
       <div className="mx-auto w-full max-w-[1400px] px-5 py-16 md:px-8 md:py-20">
@@ -52,7 +56,7 @@ export function Footer() {
               {navLinks.map((link) => (
                 <li key={link.href}>
                   <a
-                    href={link.href}
+                    href={sectionHref(link.href)}
                     className="text-sm text-ash transition-colors hover:text-ink"
                   >
                     {link.label}
@@ -70,7 +74,7 @@ export function Footer() {
               {programs.map((p) => (
                 <li key={p.title}>
                   <a
-                    href="#programs"
+                    href={sectionHref('#programs')}
                     className="text-sm text-ash transition-colors hover:text-ink"
                   >
                     {p.title}

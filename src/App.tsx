@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { useAuthStatus } from './lib/useAdmin'
-import { Navbar } from './components/Navbar'
+import { Layout } from './components/Layout'
 import { Hero } from './components/Hero'
 import { MarqueeStrip } from './components/MarqueeStrip'
 import { StatsBand } from './components/StatsBand'
@@ -15,9 +15,9 @@ import { Announcements } from './components/Announcements'
 import { Gallery } from './components/Gallery'
 import { Portfolio } from './components/Portfolio'
 import { Contact } from './components/Contact'
-import { Footer } from './components/Footer'
 
 const Admin = lazy(() => import('./pages/Admin.tsx'))
+const PortfolioPage = lazy(() => import('./pages/PortfolioPage.tsx'))
 
 /* Route guard for /admin — the console is only reachable for a signed-in,
    role-confirmed admin. A signed-in regular user is bounced to the home page;
@@ -35,34 +35,21 @@ function AdminRoute() {
 
 function Landing() {
   return (
-    <div className="grain min-h-[100dvh] bg-canvas text-ink">
-      <a
-        href="#top"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-gold focus:px-5 focus:py-3 focus:font-mono focus:text-[11px] focus:uppercase focus:tracking-[0.16em] focus:text-gold-ink"
-      >
-        Skip to content
-      </a>
-
-      <Navbar />
-
-      <main>
-        <Hero />
-        <MarqueeStrip />
-        <StatsBand />
-        <About />
-        <Purpose />
-        <HowWeWork />
-        <Programs />
-        <Facilities />
-        <Stories />
-        <Announcements />
-        <Gallery />
-        <Portfolio />
-        <Contact />
-      </main>
-
-      <Footer />
-    </div>
+    <Layout>
+      <Hero />
+      <MarqueeStrip />
+      <StatsBand />
+      <About />
+      <Purpose />
+      <HowWeWork />
+      <Programs />
+      <Facilities />
+      <Stories />
+      <Announcements />
+      <Gallery />
+      <Portfolio />
+      <Contact />
+    </Layout>
   )
 }
 
@@ -70,6 +57,14 @@ export default function App() {
   return (
     <Routes>
       <Route path="/admin/*" element={<AdminRoute />} />
+      <Route
+        path="/portfolio"
+        element={
+          <Suspense fallback={null}>
+            <PortfolioPage />
+          </Suspense>
+        }
+      />
       <Route path="*" element={<Landing />} />
     </Routes>
   )

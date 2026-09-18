@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import {
   AnimatePresence,
   motion,
@@ -17,6 +17,12 @@ export function Navbar() {
   const [open, setOpen] = useState(false)
   const { isAdmin } = useAuthStatus({ lazy: true })
   const { scrollY } = useScroll()
+  const { pathname } = useLocation()
+
+  /* Section links are plain in-page hashes; from a standalone route such as
+     /portfolio they need to point back at the home page first. */
+  const onHome = pathname === '/'
+  const sectionHref = (href: string) => (onHome ? href : `/${href}`)
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
     setScrolled(latest > 24)
@@ -51,7 +57,7 @@ export function Navbar() {
             {navLinks.map((link) => (
               <li key={link.href}>
                 <a
-                  href={link.href}
+                  href={sectionHref(link.href)}
                   className="text-sm font-medium text-ash transition-colors duration-200 hover:text-ink"
                 >
                   {link.label}
@@ -77,7 +83,7 @@ export function Navbar() {
               </Link>
             )}
             <a
-              href="#enroll"
+              href={sectionHref('#enroll')}
               className="rounded-full bg-gold px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.16em] text-gold-ink transition-all duration-300 hover:bg-gold-deep active:translate-y-[-1px] active:scale-[0.98]"
             >
               Enroll
@@ -125,7 +131,7 @@ export function Navbar() {
                   transition={{ delay: 0.06 * i, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <a
-                    href={link.href}
+                    href={sectionHref(link.href)}
                     onClick={() => setOpen(false)}
                     className="flex items-center justify-between py-4 font-display text-2xl font-semibold text-ink"
                   >
@@ -157,7 +163,7 @@ export function Navbar() {
               )}
             </ul>
             <a
-              href="#enroll"
+              href={sectionHref('#enroll')}
               onClick={() => setOpen(false)}
               className="mt-auto block rounded-full bg-gold px-6 py-4 text-center font-mono text-[11px] uppercase tracking-[0.16em] text-gold-ink"
             >
