@@ -131,9 +131,19 @@ export async function fetchAnnouncements(): Promise<Announcement[]> {
   const { db } = await loadFirebase()
   const { collection, query, orderBy, getDocs } = await import('firebase/firestore')
   const snap = await getDocs(
-    query(collection(db, 'announcements'), orderBy('order', 'asc'), orderBy('createdAt', 'desc')),
+    query(collection(db, 'announcements'), orderBy('createdAt', 'desc')),
   )
-  return snap.docs.map(announcementFromDoc)
+  const items = snap.docs.map(announcementFromDoc)
+  /* Manually-ordered docs lead in ascending `order`; anything without an
+     explicit order (legacy entries) trails behind, newest first — this keeps a
+     single auto-indexed orderBy so no composite index is required in Firestore. */
+  return items.sort((a, b) => {
+    const aOrdered = a.order !== undefined
+    const bOrdered = b.order !== undefined
+    if (aOrdered !== bOrdered) return aOrdered ? -1 : 1
+    if (aOrdered && bOrdered) return a.order! - b.order!
+    return 0
+  })
 }
 
 export async function saveAnnouncementOrder(
