@@ -28,7 +28,7 @@ import {
   signOut,
   type Lead,
 } from '../lib/firebase'
-import { useAuthStatus } from '../lib/useAdmin'
+import { useAuthStatus, markAdminVisit } from '../lib/useAdmin'
 import { PortfolioPanel } from '../components/PortfolioPanel'
 import {
   toVideoId,
@@ -66,6 +66,10 @@ const emptyForm: FormState = {
 }
 
 export default function AdminPage() {
+  useEffect(() => {
+    markAdminVisit()
+  }, [])
+
   return (
     <div className="min-h-screen bg-black text-ink">
       <header className="border-b border-line">

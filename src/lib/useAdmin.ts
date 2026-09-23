@@ -31,6 +31,14 @@ function writeHint(isAdmin: boolean): void {
   }
 }
 
+/* Called from the /admin page as soon as it mounts (before any auth/role
+   roundtrip) so the navbar "Admin Portal" button reliably shows for anyone
+   who has entered /admin in the URL. The real role check later keeps it for
+   admins and clears it for everyone else. */
+export function markAdminVisit(): void {
+  writeHint(true)
+}
+
 const idle: AuthStatus = { pending: true, signedIn: false, isAdmin: false }
 
 export function useAuthStatus(opts?: { lazy?: boolean }): AuthStatus {
