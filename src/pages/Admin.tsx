@@ -28,7 +28,7 @@ import {
   signOut,
   type Lead,
 } from '../lib/firebase'
-import { useAuthStatus, markAdminVisit } from '../lib/useAdmin'
+import { useAuthStatus } from '../lib/useAdmin'
 import { PortfolioPanel } from '../components/PortfolioPanel'
 import {
   toVideoId,
@@ -66,10 +66,6 @@ const emptyForm: FormState = {
 }
 
 export default function AdminPage() {
-  useEffect(() => {
-    markAdminVisit()
-  }, [])
-
   return (
     <div className="min-h-screen bg-black text-ink">
       <header className="border-b border-line">
@@ -87,13 +83,18 @@ export default function AdminPage() {
               </p>
             </div>
           </div>
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 rounded-full border border-line-strong px-4 py-2 font-mono text-[11px] uppercase tracking-[0.14em] text-ash transition-colors hover:border-gold/60 hover:text-gold"
-          >
-            <ArrowLeft size={14} />
-            Back to site
-          </Link>
+          <div className="flex items-center gap-3">
+            <span className="inline-flex items-center rounded-full border border-gold/70 bg-gold-soft px-4 py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-gold">
+              Admin Portal
+            </span>
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 rounded-full border border-line-strong px-4 py-2 font-mono text-[11px] uppercase tracking-[0.14em] text-ash transition-colors hover:border-gold/60 hover:text-gold"
+            >
+              <ArrowLeft size={14} />
+              Back to site
+            </Link>
+          </div>
         </div>
       </header>
       <main className="mx-auto max-w-4xl px-5 py-10">

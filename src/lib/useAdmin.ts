@@ -7,32 +7,6 @@ export type AuthStatus = {
   isAdmin: boolean
 }
 
-/* /admin writes this flag the moment it mounts so the navbar keeps showing the
-   "Admin Portal" button for this browser afterwards (see readAdminHint). */
-const HINT_KEY = 'af_admin'
-
-function readHint(): boolean {
-  if (typeof localStorage === 'undefined') return false
-  return localStorage.getItem(HINT_KEY) === '1'
-}
-
-export function readAdminHint(): boolean {
-  return readHint()
-}
-
-function writeHint(value: boolean): void {
-  if (typeof localStorage === 'undefined') return
-  try {
-    localStorage.setItem(HINT_KEY, value ? '1' : '0')
-  } catch {
-    /* storage unavailable — ignore */
-  }
-}
-
-export function markAdminVisit(): void {
-  writeHint(true)
-}
-
 const idle: AuthStatus = { pending: true, signedIn: false, isAdmin: false }
 
 /* The console treats any signed-in email/password user as an administrator.
