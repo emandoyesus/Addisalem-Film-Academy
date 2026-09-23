@@ -329,6 +329,12 @@ export const stories: Story[] = [
 
 export const gallery: GalleryItem[] = [
   { id: '/media/gallery/01-add-award.jpg', src: '/media/gallery/01-add-award-900.webp', caption: 'ADD Award', w: 2500, contain: true },
+  { id: '/media/gallery/02-actor.jpg', src: '/media/gallery/02-actor-900.webp', caption: 'Actor', w: 1280, contain: true },
+  { id: '/media/gallery/03-cinematographer.jpg', src: '/media/gallery/03-cinematographer-900.webp', caption: 'Cinematographer', w: 1280, contain: true },
+  { id: '/media/gallery/04-director.jpg', src: '/media/gallery/04-director-900.webp', caption: 'Director', w: 1280, contain: true },
+  { id: '/media/gallery/05-graphics-designer.jpg', src: '/media/gallery/05-graphics-designer-900.webp', caption: 'Graphics designer', w: 1280, contain: true },
+  { id: '/media/gallery/06-script-writer.jpg', src: '/media/gallery/06-script-writer-900.webp', caption: 'Script writer', w: 1280, contain: true },
+  { id: '/media/gallery/07-video-editor.jpg', src: '/media/gallery/07-video-editor-900.webp', caption: 'Video editor', w: 1280, contain: true },
   { id: 'photo-1503095396549-807759245b35', caption: 'Screening night', w: 2400 },
   { id: 'photo-1505686994434-e3cc5abf1330', caption: 'Under the lights', w: 2400 },
   { id: 'photo-1512316609839-ce289d3eba0a', caption: 'In the edit bay', w: 2400 },
