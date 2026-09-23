@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import {
   AnimatePresence,
   motion,
@@ -9,11 +9,13 @@ import {
 } from 'motion/react'
 import { Phone } from '@phosphor-icons/react'
 import { navLinks, site } from '../data/content'
+import { useAuthStatus } from '../lib/useAdmin'
 import { Logo } from './Logo'
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const { isAdmin } = useAuthStatus({ lazy: true })
   const { scrollY } = useScroll()
   const { pathname } = useLocation()
 
@@ -72,6 +74,14 @@ export function Navbar() {
               <Phone size={15} weight="regular" />
               {site.phone}
             </a>
+            {isAdmin && (
+              <Link
+                to="/admin"
+                className="inline-flex items-center rounded-full border border-gold/70 bg-gold-soft px-4 py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-gold transition-colors duration-200 hover:bg-gold hover:text-gold-ink"
+              >
+                Admin Portal
+              </Link>
+            )}
             <a
               href={sectionHref('#enroll')}
               className="rounded-full bg-gold px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.16em] text-gold-ink transition-all duration-300 hover:bg-gold-deep active:translate-y-[-1px] active:scale-[0.98]"
@@ -132,6 +142,25 @@ export function Navbar() {
                   </a>
                 </motion.li>
               ))}
+              {isAdmin && (
+                <motion.li
+                  initial={reduce ? false : { opacity: 0, x: -16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{
+                    delay: 0.06 * navLinks.length,
+                    duration: 0.4,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                >
+                  <Link
+                    to="/admin"
+                    onClick={() => setOpen(false)}
+                    className="mt-2 flex rounded-xl border border-gold/70 bg-gold-soft px-4 py-3 font-display text-2xl font-semibold text-gold"
+                  >
+                    Admin Portal
+                  </Link>
+                </motion.li>
+              )}
             </ul>
             <a
               href={sectionHref('#enroll')}

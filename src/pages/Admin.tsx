@@ -28,7 +28,7 @@ import {
   signOut,
   type Lead,
 } from '../lib/firebase'
-import { useAuthStatus } from '../lib/useAdmin'
+import { useAuthStatus, markAdminVisit } from '../lib/useAdmin'
 import { PortfolioPanel } from '../components/PortfolioPanel'
 import {
   toVideoId,
@@ -66,6 +66,13 @@ const emptyForm: FormState = {
 }
 
 export default function AdminPage() {
+  /* Seed the navbar "Admin Portal" button for this browser so it appears the
+     moment the admin navigates back to the site, before the auth listener
+     answers. */
+  useEffect(() => {
+    markAdminVisit()
+  }, [])
+
   return (
     <div className="min-h-screen bg-black text-ink">
       <header className="border-b border-line">
