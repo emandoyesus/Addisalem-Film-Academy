@@ -54,6 +54,8 @@ export type Announcement = {
   videoId?: string
   /** Any external link, e.g. the channel video URL. */
   href?: string
+  /** Feed position; ascending, 0 = featured. Omitted for legacy docs. */
+  order?: number
 }
 
 export type SiteInfo = {

@@ -122,6 +122,7 @@ const announcementFromDoc = (
     description: String(d.description ?? ''),
     videoId: typeof d.videoId === 'string' && d.videoId ? d.videoId : undefined,
     href: typeof d.href === 'string' && d.href ? d.href : undefined,
+    order: typeof d.order === 'number' ? d.order : undefined,
   }
 }
 
@@ -130,9 +131,22 @@ export async function fetchAnnouncements(): Promise<Announcement[]> {
   const { db } = await loadFirebase()
   const { collection, query, orderBy, getDocs } = await import('firebase/firestore')
   const snap = await getDocs(
-    query(collection(db, 'announcements'), orderBy('createdAt', 'desc')),
+    query(collection(db, 'announcements'), orderBy('order', 'asc'), orderBy('createdAt', 'desc')),
   )
   return snap.docs.map(announcementFromDoc)
+}
+
+export async function saveAnnouncementOrder(
+  items: Pick<Announcement, 'id'>[],
+): Promise<void> {
+  assertConfig()
+  const { db } = await loadFirebase()
+  const { doc, writeBatch } = await import('firebase/firestore')
+  const batch = writeBatch(db)
+  items.forEach((item, index) => {
+    batch.update(doc(db, 'announcements', item.id), { order: index })
+  })
+  await batch.commit()
 }
 
 export async function createAnnouncement(
@@ -151,9 +165,10 @@ export async function createAnnouncement(
     description: input.description,
     videoId: input.videoId ?? '',
     href: input.href ?? '',
+    order: 0,
     createdAt: serverTimestamp(),
   })
-  return { ...input, id: ref.id }
+  return { ...input, id: ref.id, order: 0 }
 }
 
 export async function deleteAnnouncement(id: string): Promise<void> {

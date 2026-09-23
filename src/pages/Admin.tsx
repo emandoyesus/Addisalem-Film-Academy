@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom'
 import {
   ArrowLeft,
   ArrowsClockwise,
+  CaretDown,
+  CaretUp,
+  DotsSixVertical,
   Images,
   LinkSimple,
   Megaphone,
@@ -20,6 +23,7 @@ import {
   fetchAnnouncements,
   fetchLeads,
   firebaseConfigured,
+  saveAnnouncementOrder,
   signIn,
   signOut,
   type Lead,
@@ -232,6 +236,7 @@ function AnnouncementsPanel() {
   const [form, setForm] = useState<FormState>(emptyForm)
   const [busy, setBusy] = useState(false)
   const [notice, setNotice] = useState('')
+  const [dragId, setDragId] = useState<string | null>(null)
 
   const load = () => {
     void fetchAnnouncements()
@@ -286,6 +291,40 @@ function AnnouncementsPanel() {
     } finally {
       load()
     }
+  }
+
+  const persistOrder = (next: Announcement[]) => {
+    void saveAnnouncementOrder(next).catch(() =>
+      setNotice('Could not save the new order.'),
+    )
+  }
+
+  const move = (a: Announcement, dir: number) => {
+    setItems((prev) => {
+      const index = prev.findIndex((item) => item.id === a.id)
+      const to = index + dir
+      if (index === -1 || to < 0 || to >= prev.length) return prev
+      const next = [...prev]
+      ;[next[index], next[to]] = [next[to], next[index]]
+      persistOrder(next)
+      return next
+    })
+  }
+
+  const dropOn = (targetId: string) => {
+    const sourceId = dragId
+    setDragId(null)
+    if (!sourceId || sourceId === targetId) return
+    setItems((prev) => {
+      const from = prev.findIndex((item) => item.id === sourceId)
+      const to = prev.findIndex((item) => item.id === targetId)
+      if (from === -1 || to === -1) return prev
+      const next = [...prev]
+      const [moved] = next.splice(from, 1)
+      next.splice(to, 0, moved)
+      persistOrder(next)
+      return next
+    })
   }
 
   return (
@@ -415,12 +454,25 @@ function AnnouncementsPanel() {
               Nothing published yet. The site keeps its seed announcements for now.
             </li>
           )}
-          {items.map((a) => (
+          {items.map((a, index) => (
             <li
               key={a.id}
-              className="flex items-center justify-between gap-4 px-5 py-4"
+              draggable
+              onDragStart={() => setDragId(a.id)}
+              onDragEnd={() => setDragId(null)}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={() => dropOn(a.id)}
+              className={`flex items-center gap-3 px-4 py-3 transition-opacity ${
+                dragId === a.id ? 'opacity-40' : ''
+              }`}
             >
-              <div className="min-w-0">
+              <span
+                className="cursor-grab text-faint active:cursor-grabbing"
+                aria-hidden="true"
+              >
+                <DotsSixVertical size={18} />
+              </span>
+              <div className="min-w-0 flex-1">
                 <p className="truncate font-display text-sm font-semibold text-ink">
                   {a.title}
                 </p>
@@ -428,6 +480,26 @@ function AnnouncementsPanel() {
                   {a.tag} &middot; {a.date}
                   {a.videoId ? ' &middot; has video' : ''}
                 </p>
+              </div>
+              <div className="flex shrink-0 flex-col">
+                <button
+                  type="button"
+                  onClick={() => move(a, -1)}
+                  disabled={index === 0}
+                  aria-label="Move up"
+                  className="text-faint transition-colors hover:text-gold disabled:opacity-30"
+                >
+                  <CaretUp size={14} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => move(a, 1)}
+                  disabled={index === items.length - 1}
+                  aria-label="Move down"
+                  className="text-faint transition-colors hover:text-gold disabled:opacity-30"
+                >
+                  <CaretDown size={14} />
+                </button>
               </div>
               <button
                 type="button"
@@ -471,7 +543,7 @@ function Manager() {
           onClick={() => {
             void signOut()
           }}
-          className="inline-flex shrink-0 items-center gap-2 rounded-full border border-line-strong px-4 py-2 font-mono text-[11px] uppercase tracking-[0.14em] text-ash transition-colors hover:border-gold/60 hover:text-gold"
+          className="inline-flex shrink-0 items-center gap-2 rounded-full border border-err/50 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.14em] text-err transition-colors hover:bg-err hover:text-white"
         >
           <SignOut size={14} />
           Sign out
