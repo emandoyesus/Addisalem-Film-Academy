@@ -11,15 +11,21 @@ export type AuthStatus = {
   isAdmin: boolean
 }
 
-/* localStorage hint: a returning admin gets the navbar "Admin Portal" button
-   immediately while the real auth/role check re-runs in the background, instead
-   of waiting for the lazy Firebase SDK + auth roundtrip. Non-admins clear it. */
+/* The /admin page sets this flag the moment it mounts, so the navbar "Admin
+   Portal" button shows for any browser that has entered /admin (readAdminHint).
+   Auth/role gating still happens inside the /admin page itself. */
 
 const HINT_KEY = 'af_admin'
 
 function readHint(): boolean {
   if (typeof localStorage === 'undefined') return false
   return localStorage.getItem(HINT_KEY) === '1'
+}
+
+/* The navbar reads this flag directly — once a browser has entered /admin it
+   keeps showing the "Admin Portal" button; nothing on the site clears it. */
+export function readAdminHint(): boolean {
+  return readHint()
 }
 
 function writeHint(isAdmin: boolean): void {
@@ -31,10 +37,8 @@ function writeHint(isAdmin: boolean): void {
   }
 }
 
-/* Called from the /admin page as soon as it mounts (before any auth/role
-   roundtrip) so the navbar "Admin Portal" button reliably shows for anyone
-   who has entered /admin in the URL. The real role check later keeps it for
-   admins and clears it for everyone else. */
+/* Called from the /admin page as soon as it mounts so the navbar "Admin
+   Portal" button reliably shows for anyone who entered /admin in the URL. */
 export function markAdminVisit(): void {
   writeHint(true)
 }

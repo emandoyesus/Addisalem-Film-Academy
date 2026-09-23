@@ -9,15 +9,24 @@ import {
 } from 'motion/react'
 import { Phone } from '@phosphor-icons/react'
 import { navLinks, site } from '../data/content'
-import { useAuthStatus } from '../lib/useAdmin'
+import { readAdminHint } from '../lib/useAdmin'
 import { Logo } from './Logo'
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
-  const { isAdmin } = useAuthStatus({ lazy: true })
   const { scrollY } = useScroll()
   const { pathname } = useLocation()
+
+  /* Re-reads the flag on every render and stays in sync when /admin is opened
+     in another tab. */
+  const [, setTick] = useState(0)
+  useEffect(() => {
+    const onStorage = () => setTick((n) => n + 1)
+    addEventListener('storage', onStorage)
+    return () => removeEventListener('storage', onStorage)
+  }, [])
+  const isAdmin = readAdminHint()
 
   /* Section links are plain in-page hashes; from a standalone route such as
      /portfolio they need to point back at the home page first. */
