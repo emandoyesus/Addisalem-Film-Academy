@@ -118,7 +118,7 @@ const announcementFromDoc = (
     id: doc.id,
     title: String(d.title ?? 'Untitled'),
     date: String(d.date ?? ''),
-    tag: (d.tag === 'Sitcom' || d.tag === 'Edit' || d.tag === 'News' ? d.tag : 'News'),
+    tag: (d.tag === 'Sitcom' || d.tag === 'Edit' || d.tag === 'News' || d.tag === 'Short Film' || d.tag === 'None' ? d.tag : 'News'),
     description: String(d.description ?? ''),
     videoId: typeof d.videoId === 'string' && d.videoId ? d.videoId : undefined,
     href: typeof d.href === 'string' && d.href ? d.href : undefined,

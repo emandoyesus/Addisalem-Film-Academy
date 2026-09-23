@@ -33,7 +33,15 @@ import {
   type AnnouncementTag,
 } from '../data/content'
 
-const TAG_OPTIONS: AnnouncementTag[] = ['Sitcom', 'Edit', 'News']
+const MAX_ANNOUNCEMENTS = 4
+
+const TAG_OPTIONS: AnnouncementTag[] = [
+  'Sitcom',
+  'Edit',
+  'News',
+  'Short Film',
+  'None',
+]
 
 type Tab = 'announcements' | 'applications' | 'portfolio'
 
@@ -240,6 +248,12 @@ function AnnouncementsPanel() {
 
   const submit = (e: FormEvent) => {
     e.preventDefault()
+    if (items.length >= MAX_ANNOUNCEMENTS) {
+      setNotice(
+        `Announcement limit reached — delete one first (max ${MAX_ANNOUNCEMENTS}).`,
+      )
+      return
+    }
     setBusy(true)
     setNotice('')
     void createAnnouncement({
@@ -393,7 +407,7 @@ function AnnouncementsPanel() {
 
       <section className="mt-10">
         <h2 className="font-display text-lg font-semibold text-ink">
-          Published ({items.length})
+          Published ({items.length} / {MAX_ANNOUNCEMENTS})
         </h2>
         <ul className="mt-4 divide-y divide-line-strong rounded-2xl border border-line-strong bg-surface">
           {items.length === 0 && (

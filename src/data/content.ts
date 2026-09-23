@@ -40,7 +40,7 @@ export type Stat = { value: string; label: string }
 
 export type Social = { label: string; href: string; icon: string }
 
-export type AnnouncementTag = 'Sitcom' | 'Edit' | 'News'
+export type AnnouncementTag = 'Sitcom' | 'Edit' | 'News' | 'Short Film' | 'None'
 
 export type Announcement = {
   id: string

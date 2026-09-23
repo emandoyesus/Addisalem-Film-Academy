@@ -244,7 +244,11 @@ export function Announcements() {
                 videoId={featured.videoId}
                 hq
                 label={
-                  featured.tag === 'News' ? 'Read the announcement' : 'Watch on the channel'
+                  featured.videoId
+                    ? 'Watch on the channel'
+                    : featured.href
+                      ? 'Read the announcement'
+                      : 'View details'
                 }
               />
               <div className="flex items-center justify-between gap-4 p-6 md:p-7">
