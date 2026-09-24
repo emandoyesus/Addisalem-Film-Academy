@@ -1,6 +1,6 @@
 import { Check } from '@phosphor-icons/react'
 import { images } from '../data/content'
-import { unsplashSrcSet } from '../lib/responsive'
+import { localSrcSet, unsplashSrcSet } from '../lib/responsive'
 import { LoadingImage } from './LoadingImage'
 import { Reveal } from './ui'
 
@@ -61,17 +61,21 @@ export function About() {
           <div className="absolute -right-3 -top-3 h-full w-full rounded-2xl border border-gold/40 md:-right-5 md:-top-5" />
           <LoadingImage
             src={images.about}
-            srcSet={unsplashSrcSet(images.about, [480, 720, 960, 1200], 72)}
+            srcSet={
+              images.about.startsWith('/media')
+                ? localSrcSet('/media/about-camera', [480, 720, 960, 1200], 'webp')
+                : unsplashSrcSet(images.about, [480, 720, 960, 1200], 72)
+            }
             sizes="(min-width: 1024px) 45vw, 100vw"
-            alt="Shooting with an advanced camera at Addisalem"
+            alt="A professional modern cinema camera rig at Addisalem"
             width={1200}
             height={900}
             loading="lazy"
             decoding="async"
-            className="relative aspect-[4/3] w-full rounded-2xl object-cover"
+            className="relative aspect-[4/3] w-full rounded-2xl object-cover shadow-2xl"
           />
           <div className="mt-5 flex items-center justify-between border-t border-line pt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-faint">
-            <span>Camera kits on loan to students</span>
+            <span>Modern cinema camera kits on loan to students</span>
             <span aria-hidden="true">Take 01 / Keep going</span>
           </div>
         </Reveal>

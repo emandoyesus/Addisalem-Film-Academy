@@ -1,7 +1,7 @@
 import { motion } from 'motion/react'
 import { Arrow, Eyebrow } from './ui'
-import { programs, type Program } from '../data/content'
-import { unsplashSrcSet } from '../lib/responsive'
+import { images, programs, type Program } from '../data/content'
+import { localSrcSet, unsplashSrcSet } from '../lib/responsive'
 import { LoadingImage } from './LoadingImage'
 import { revealProps, useEntranceMotion } from '../lib/motion'
 
@@ -19,15 +19,19 @@ function ProgramCard({
       className={`group relative flex min-h-[520px] flex-col overflow-hidden rounded-2xl border border-line bg-surface ${className}`}
     >
       <LoadingImage
-        src={program.image}
-        srcSet={unsplashSrcSet(program.image, [400, 600, 800, 1000, 1280], 70)}
+        src={images.programs}
+        srcSet={
+          images.programs.startsWith('/media')
+            ? localSrcSet('/media/programs-bg', [400, 600, 800, 1000, 1280], 'webp')
+            : unsplashSrcSet(images.programs, [400, 600, 800, 1000, 1280], 70)
+        }
         sizes="(min-width: 1024px) 33vw, 100vw"
-        alt={program.alt ?? program.title}
+        alt="Film production set at Addisalem"
         loading="lazy"
         decoding="async"
-        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+        className="absolute inset-0 h-full w-full scale-[1.2] object-cover blur-[16px]"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-95 transition-opacity duration-500 group-hover:opacity-100" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/65 to-black/35" />
       <div className="relative flex flex-1 flex-col p-6 md:p-7">
         <div className="flex-1">
           <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/60">
