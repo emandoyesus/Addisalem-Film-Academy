@@ -19,6 +19,10 @@ const principles = [
   },
 ]
 
+/* "How we work" — an open step column, not a card grid. Each principle is a
+   step on a hairline: a ghost take-number in the corner, a mono "Step" tag and
+   the text underneath. Deliberately the opposite of the statement rows in
+   "Why AFA exists". */
 export function HowWeWork() {
   return (
     <section className="bg-canvas-soft py-20 md:py-32">
@@ -30,28 +34,32 @@ export function HowWeWork() {
           </h2>
         </Reveal>
 
-        <div className="mt-12 grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-2">
+        <ol className="mt-14 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
           {principles.map((principle, i) => (
             <Reveal
               key={principle.title}
               delay={0.08 * i}
-              className="group flex flex-col justify-between gap-6 bg-surface p-7 transition-colors duration-300 hover:bg-surface-2 md:p-9"
+              className="relative border-t border-line pt-10"
             >
-              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-gold">
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute right-0 top-0 select-none font-display text-[64px] font-bold leading-[0.8] text-gold/15 transition-colors duration-300 group-hover:text-gold/30"
+              >
                 {String(i + 1).padStart(2, '0')}
+              </span>
+              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-gold">
+                Step {String(i + 1).padStart(2, '0')}
               </p>
-              <div>
-                <h3 className="font-display text-xl font-bold leading-snug tracking-tight text-ink md:text-2xl">
-                  {principle.title}
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-ash">{principle.body}</p>
-              </div>
+              <h3 className="mt-4 max-w-[24ch] font-display text-xl font-bold leading-snug tracking-tight text-ink">
+                {principle.title}
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-ash">{principle.body}</p>
             </Reveal>
           ))}
-        </div>
+        </ol>
 
         <Reveal delay={0.15}>
-          <p className="mt-10 max-w-[46ch] border-l-2 border-gold pl-5 font-display text-xl font-bold leading-snug tracking-tight text-ink md:text-2xl">
+          <p className="mt-14 max-w-[46ch] border-l-2 border-gold pl-5 font-display text-xl font-bold leading-snug tracking-tight text-ink md:text-2xl">
             We aren&rsquo;t here to study film from a distance. We are here to make it.
           </p>
         </Reveal>
