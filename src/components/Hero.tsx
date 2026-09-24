@@ -68,6 +68,15 @@ export function Hero() {
           </motion.h1>
 
           <motion.p
+            initial={reduce ? false : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.42, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-4 font-mono text-sm tracking-[0.08em] text-gold sm:text-base"
+          >
+            &ldquo;ፊልምን ከምንጩ ይማሩ&rdquo;
+          </motion.p>
+
+          <motion.p
             initial={reduce ? false : { opacity: 0, y: 26 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
