@@ -26,11 +26,11 @@
   --line-strong: rgba(255, 255, 255, 0.26);
 
   /* brand gold-orange */
-  --gold: #ffba21;
+  --gold: #ffc221;
   --gold-deep: #e6a200;
   --gold-ink: #000000;
-  --gold-soft: rgba(255, 186, 33, 0.12);
-  --gold-glow: rgba(255, 186, 33, 0.14);
+  --gold-soft: rgba(255, 194, 33, 0.12);
+  --gold-glow: rgba(255, 194, 33, 0.14);
 
   /* status feedback — success & failure */
   --ok: #34d399;
