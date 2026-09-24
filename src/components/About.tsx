@@ -67,7 +67,7 @@ export function About() {
                 : unsplashSrcSet(images.about, [480, 720, 960, 1200], 72)
             }
             sizes="(min-width: 1024px) 45vw, 100vw"
-            alt="A professional modern cinema camera rig at Addisalem"
+            alt="A camera with a lens attached at Addisalem"
             width={1200}
             height={900}
             loading="lazy"
