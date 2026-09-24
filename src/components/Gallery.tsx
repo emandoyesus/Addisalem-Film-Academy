@@ -17,10 +17,12 @@ export function Gallery() {
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="max-w-[60ch]">
             <h2 className="font-display text-4xl font-bold leading-[1.06] tracking-tight text-ink md:text-5xl">
-              The lot, between take one and wrap.
+              The ADD Award — every year, for the best of the craft.
             </h2>
             <p className="mt-6 text-base leading-relaxed text-ash md:text-lg">
-              Set days, edit bays and screening nights from inside the center.
+              One night a year the academy crowns the finest in each field:
+              actor, cinematographer, director, graphics designer, script writer
+              and video editor.
             </p>
           </div>
           <div className="flex gap-2">
