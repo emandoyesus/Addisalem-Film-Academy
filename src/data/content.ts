@@ -335,8 +335,8 @@ export const gallery: GalleryItem[] = [
 ]
 
 export const socials: Social[] = [
-  { label: 'Instagram', href: '#', icon: 'instagram' },
-  { label: 'YouTube', href: '#', icon: 'youtube' },
-  { label: 'Telegram', href: '#', icon: 'telegram' },
-  { label: 'TikTok', href: '#', icon: 'tiktok' },
+  { label: 'YouTube', href: youtubeChannel, icon: 'youtube' },
+  { label: 'Telegram', href: 'https://t.me/Addisalemfilmacademy', icon: 'telegram' },
+  { label: 'TikTok', href: 'https://www.tiktok.com/@addisalemfilms', icon: 'tiktok' },
+  { label: 'Instagram', href: 'https://www.instagram.com/aschalew.addisalem', icon: 'instagram' },
 ]
