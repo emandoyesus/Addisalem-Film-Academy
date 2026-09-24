@@ -91,12 +91,18 @@ export function Navbar() {
           </div>
 
           {/* Mobile toggle */}
+          <a
+            href={sectionHref('#enroll')}
+            className="rounded-full bg-gold px-4 py-2 font-mono text-[10px] uppercase tracking-[0.16em] text-gold-ink transition-colors duration-300 hover:bg-gold-deep lg:hidden"
+          >
+            Enroll
+          </a>
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
             aria-label={open ? 'Close menu' : 'Open menu'}
-            className="relative z-50 flex h-10 w-10 items-center justify-center rounded-full border border-line-strong text-ink lg:hidden"
+            className="relative z-50 ml-3 flex h-10 w-10 items-center justify-center rounded-full border border-line-strong text-ink lg:hidden"
           >
             <span className="flex flex-col items-center justify-center gap-[5px]">
               <motion.span
@@ -162,13 +168,6 @@ export function Navbar() {
                 </motion.li>
               )}
             </ul>
-            <a
-              href={sectionHref('#enroll')}
-              onClick={() => setOpen(false)}
-              className="mt-auto block rounded-full bg-gold px-6 py-4 text-center font-mono text-[11px] uppercase tracking-[0.16em] text-gold-ink"
-            >
-              Enroll this intake
-            </a>
           </motion.div>
         )}
       </AnimatePresence>
