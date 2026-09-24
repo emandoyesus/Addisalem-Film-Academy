@@ -81,7 +81,7 @@ export const img = (id: string, w = 1200, q = 80): string =>
 
 export const images = {
   about: img('photo-1502920917128-1aa500764cbd', 1200, 80),
-  facilities: '/media/studio-gear-1200.webp',
+  facilities: img('photo-1553377102-7479aacccd00', 1400, 80),
 }
 
 export const site: SiteInfo = {
