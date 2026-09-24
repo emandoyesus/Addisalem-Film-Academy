@@ -27,6 +27,13 @@ service cloud.firestore {
       allow write: if request.auth != null;
     }
 
+    // The ADD Award gallery strip on the home page: world-readable, admin-only
+    // writes (managed from the console's Awards tab).
+    match /gallery/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
     // Only the signed-in user may read their own role document.
     // Role documents are created/edited from the Firebase console only,
     // so no client-side write rules are granted (prevents self-promotion).

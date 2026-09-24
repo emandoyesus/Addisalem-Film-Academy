@@ -12,6 +12,7 @@ import {
   Phone,
   SignOut,
   Trash,
+  Trophy,
   UsersThree,
   YoutubeLogo,
   type Icon,
@@ -29,6 +30,7 @@ import {
   type Lead,
 } from '../lib/firebase'
 import { useAuthStatus, markAdminVisit } from '../lib/useAdmin'
+import { AwardsPanel } from '../components/AwardsPanel'
 import { PortfolioPanel } from '../components/PortfolioPanel'
 import {
   toVideoId,
@@ -47,7 +49,7 @@ const TAG_OPTIONS: AnnouncementTag[] = [
   'None',
 ]
 
-type Tab = 'announcements' | 'applications' | 'portfolio'
+type Tab = 'announcements' | 'applications' | 'portfolio' | 'awards'
 
 type FormState = {
   title: string
@@ -500,6 +502,7 @@ const TABS: { id: Tab; label: string; icon: Icon }[] = [
   { id: 'announcements', label: 'Announcements', icon: Megaphone },
   { id: 'applications', label: 'Applications', icon: UsersThree },
   { id: 'portfolio', label: 'Portfolio', icon: Images },
+  { id: 'awards', label: 'Awards', icon: Trophy },
 ]
 
 function Manager() {
@@ -514,7 +517,7 @@ function Manager() {
           </h1>
           <p className="mt-2 max-w-[60ch] text-sm text-ash">
             Publish announcements, review applications and curate the studio
-            portfolio.
+            portfolio and the ADD Award strip.
           </p>
         </div>
         <button
@@ -532,7 +535,7 @@ function Manager() {
       <div
         role="tablist"
         aria-label="Console sections"
-        className="mb-8 grid grid-cols-3 gap-1 rounded-2xl border border-line-strong bg-surface p-1.5"
+        className="mb-8 grid grid-cols-4 gap-1 rounded-2xl border border-line-strong bg-surface p-1.5"
       >
         {TABS.map((t) => {
           const Glyph = t.icon
@@ -560,6 +563,7 @@ function Manager() {
       {tab === 'announcements' && <AnnouncementsPanel />}
       {tab === 'applications' && <LeadsPanel />}
       {tab === 'portfolio' && <PortfolioPanel />}
+      {tab === 'awards' && <AwardsPanel />}
     </div>
   )
 }

@@ -1,15 +1,20 @@
 import { useRef } from 'react'
 import { ArrowLeft, ArrowRight } from '@phosphor-icons/react'
-import { gallery, img } from '../data/content'
-import { unsplashSrcSet } from '../lib/responsive'
+import { useGallery } from '../lib/useGallery'
+import { cloudinarySrcSet, unsplashSrcSet } from '../lib/responsive'
 import { LoadingImage } from './LoadingImage'
 
 export function Gallery() {
   const track = useRef<HTMLDivElement>(null)
+  const slides = useGallery()
 
   const scroll = (dir: number) => {
     track.current?.scrollBy({ left: dir * 560, behavior: 'smooth' })
   }
+
+  const srcSetFor = (tile: string) =>
+    cloudinarySrcSet(tile, [420, 640, 840, 1260]) ??
+    unsplashSrcSet(tile, [420, 640, 840, 1260], 72)
 
   return (
     <section className="py-20 md:py-32">
@@ -50,47 +55,43 @@ export function Gallery() {
         ref={track}
         className="film-strip mt-12 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-5 md:px-8 lg:px-[max(2rem,calc((100vw-1400px)/2))]"
       >
-        {gallery.map((item, i) => {
-          const full = item.id.startsWith('/') ? item.id : img(item.id, 2400, 80)
-          const tile = item.src ?? img(item.id, 900, 75)
-          return (
-            <figure
-              key={item.id}
-              className="group relative w-[78vw] shrink-0 snap-start overflow-hidden rounded-2xl border border-line sm:w-[420px]"
-            >
-              <a href={full} aria-label={`Open ${item.caption} photo`}>
-                <div className="relative aspect-[3/2] overflow-hidden bg-black">
-                  {item.contain && (
-                    <div
-                      aria-hidden
-                      className="absolute inset-0 scale-110 bg-cover bg-center opacity-60 blur-2xl"
-                      style={{ backgroundImage: `url(${tile})` }}
-                    />
-                  )}
-                  <LoadingImage
-                    src={tile}
-                    srcSet={unsplashSrcSet(tile, [420, 640, 840, 1260], 72)}
-                    sizes="(min-width: 640px) 420px, 78vw"
-                    alt={item.caption}
-                    loading="lazy"
-                    decoding="async"
-                    className={`relative h-full w-full transition-transform duration-700 ease-out group-hover:scale-105 ${
-                      item.contain ? 'object-contain' : 'object-cover'
-                    }`}
+        {slides.map((item, i) => (
+          <figure
+            key={item.key}
+            className="group relative w-[78vw] shrink-0 snap-start overflow-hidden rounded-2xl border border-line sm:w-[420px]"
+          >
+            <a href={item.full} aria-label={`Open ${item.caption} photo`}>
+              <div className="relative aspect-[3/2] overflow-hidden bg-black">
+                {item.contain && (
+                  <div
+                    aria-hidden
+                    className="absolute inset-0 scale-110 bg-cover bg-center opacity-60 blur-2xl"
+                    style={{ backgroundImage: `url(${item.tile})` }}
                   />
-                </div>
-                <figcaption className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/90 to-transparent px-5 pb-4 pt-10">
-                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white">
-                    {item.caption}
-                  </span>
-                  <span className="font-mono text-[10px] tracking-[0.2em] text-white/60">
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                </figcaption>
-              </a>
-            </figure>
-          )
-        })}
+                )}
+                <LoadingImage
+                  src={item.tile}
+                  srcSet={srcSetFor(item.tile)}
+                  sizes="(min-width: 640px) 420px, 78vw"
+                  alt={item.caption}
+                  loading="lazy"
+                  decoding="async"
+                  className={`relative h-full w-full transition-transform duration-700 ease-out group-hover:scale-105 ${
+                    item.contain ? 'object-contain' : 'object-cover'
+                  }`}
+                />
+              </div>
+              <figcaption className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/90 to-transparent px-5 pb-4 pt-10">
+                <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white">
+                  {item.caption}
+                </span>
+                <span className="font-mono text-[10px] tracking-[0.2em] text-white/60">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+              </figcaption>
+            </a>
+          </figure>
+        ))}
       </div>
     </section>
   )

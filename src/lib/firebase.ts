@@ -327,14 +327,11 @@ type CloudinaryUpload = {
 }
 
 /* Uploads straight from the browser to Cloudinary with an unsigned preset.
-   XHR (not fetch) is used so the progress bar can report bytes transferred. */
-export async function uploadPortfolioImage(
+   XHR (not fetch) is used so callers can report bytes transferred. */
+async function uploadToCloudinary(
   file: File,
-  caption: string,
-  order: number,
   onProgress?: (percent: number) => void,
-): Promise<PortfolioItem> {
-  assertConfig()
+): Promise<CloudinaryUpload> {
   const { cloud, preset } = cloudinaryConfig()
   if (!cloud || !preset) {
     throw new Error('Cloudinary is not configured (cloud name / upload preset).')
@@ -342,7 +339,7 @@ export async function uploadPortfolioImage(
   const form = new FormData()
   form.append('file', file)
   form.append('upload_preset', preset)
-  const result = await new Promise<CloudinaryUpload>((resolve, reject) => {
+  return new Promise<CloudinaryUpload>((resolve, reject) => {
     const xhr = new XMLHttpRequest()
     xhr.open('POST', `https://api.cloudinary.com/v1_1/${cloud}/image/upload`)
     xhr.upload.onprogress = (event) => {
@@ -364,6 +361,18 @@ export async function uploadPortfolioImage(
     xhr.onerror = () => reject(new Error('Cloudinary upload failed.'))
     xhr.send(form)
   })
+}
+
+/* Uploads a portfolio image (poster art, set photography) and records it in
+   Firestore's `portfolio` collection. */
+export async function uploadPortfolioImage(
+  file: File,
+  caption: string,
+  order: number,
+  onProgress?: (percent: number) => void,
+): Promise<PortfolioItem> {
+  assertConfig()
+  const result = await uploadToCloudinary(file, onProgress)
   const clean = caption.trim()
   const { db } = await loadFirebase()
   const { addDoc, collection, serverTimestamp } = await import('firebase/firestore')
@@ -433,4 +442,169 @@ export async function deletePortfolioItem(item: PortfolioItem): Promise<void> {
   const { db } = await loadFirebase()
   const { doc, deleteDoc } = await import('firebase/firestore')
   await deleteDoc(doc(db, 'portfolio', item.id))
+}
+
+/* ADD Award gallery — the yearly awards photos shown in the home Gallery
+   strip. Same delivery as the portfolio: images live on Cloudinary, the
+   caption, order and orientation live in Firestore's `gallery` collection. */
+
+export type GalleryItem = {
+  id: string
+  url: string
+  publicId: string
+  deleteToken?: string
+  caption: string
+  order: number
+  width?: number
+  height?: number
+  contain?: boolean
+}
+
+export async function fetchGallery(): Promise<GalleryItem[]> {
+  const projectId = import.meta.env.VITE_FIREBASE_PROJECT_ID as string | undefined
+  const apiKey = import.meta.env.VITE_FIREBASE_API_KEY as string | undefined
+  if (!projectId || !apiKey) return []
+  const endpoint =
+    `https://firestore.googleapis.com/v1/projects/${projectId}` +
+    `/databases/(default)/documents/gallery` +
+    `?pageSize=100&orderBy=order&key=${apiKey}`
+  const res = await fetch(endpoint)
+  if (!res.ok) throw new Error(`Gallery request failed (${res.status})`)
+  const json = (await res.json()) as {
+    documents?: {
+      name: string
+      fields?: Record<
+        string,
+        { stringValue?: string; integerValue?: string; doubleValue?: number; booleanValue?: boolean }
+      >
+    }[]
+  }
+  return (json.documents ?? [])
+    .map((doc) => {
+      const f = doc.fields ?? {}
+      return {
+        id: doc.name.split('/').pop() ?? '',
+        url: f.url?.stringValue ?? '',
+        publicId: f.publicId?.stringValue ?? '',
+        deleteToken: f.deleteToken?.stringValue || undefined,
+        caption: f.caption?.stringValue ?? '',
+        order: Number(f.order?.integerValue ?? f.order?.doubleValue ?? 0),
+        width: Number(f.width?.integerValue ?? f.width?.doubleValue ?? 0) || undefined,
+        height: Number(f.height?.integerValue ?? f.height?.doubleValue ?? 0) || undefined,
+        contain: f.contain?.booleanValue,
+      }
+    })
+    .filter((item) => item.url)
+}
+
+/* Portrait and square shots sit in the strip letterboxed (contain); true
+   landscape photos stretch edge to edge (cover). */
+const shouldContain = (w: number | undefined, h: number | undefined): boolean =>
+  !(w && h && w > h * 1.2)
+
+export async function uploadGalleryImage(
+  file: File,
+  caption: string,
+  order: number,
+  onProgress?: (percent: number) => void,
+): Promise<GalleryItem> {
+  assertConfig()
+  const result = await uploadToCloudinary(file, onProgress)
+  const clean = caption.trim()
+  const contain = shouldContain(result.width, result.height)
+  const { db } = await loadFirebase()
+  const { addDoc, collection, serverTimestamp } = await import('firebase/firestore')
+  const docRef = await addDoc(collection(db, 'gallery'), {
+    url: result.secure_url,
+    publicId: result.public_id,
+    deleteToken: result.delete_token ?? '',
+    caption: clean,
+    order,
+    width: result.width ?? 0,
+    height: result.height ?? 0,
+    contain,
+    createdAt: serverTimestamp(),
+  })
+  return {
+    id: docRef.id,
+    url: result.secure_url,
+    publicId: result.public_id,
+    deleteToken: result.delete_token,
+    caption: clean,
+    order,
+    width: result.width,
+    height: result.height,
+    contain,
+  }
+}
+
+export async function updateGalleryCaption(
+  id: string,
+  caption: string,
+): Promise<void> {
+  assertConfig()
+  const { db } = await loadFirebase()
+  const { doc, updateDoc } = await import('firebase/firestore')
+  await updateDoc(doc(db, 'gallery', id), { caption: caption.trim() })
+}
+
+export async function saveGalleryOrder(
+  items: Pick<GalleryItem, 'id'>[],
+): Promise<void> {
+  assertConfig()
+  const { db } = await loadFirebase()
+  const { doc, writeBatch } = await import('firebase/firestore')
+  const batch = writeBatch(db)
+  items.forEach((item, index) => {
+    batch.update(doc(db, 'gallery', item.id), { order: index })
+  })
+  await batch.commit()
+}
+
+export async function deleteGalleryItem(item: GalleryItem): Promise<void> {
+  assertConfig()
+  const { cloud } = cloudinaryConfig()
+  if (cloud && item.deleteToken) {
+    try {
+      const form = new FormData()
+      form.append('token', item.deleteToken)
+      await fetch(
+        `https://api.cloudinary.com/v1_1/${cloud}/delete_by_token`,
+        { method: 'POST', body: form },
+      )
+    } catch {
+      /* Ignore; the Firestore record below is what drives the site. */
+    }
+  }
+  const { db } = await loadFirebase()
+  const { doc, deleteDoc } = await import('firebase/firestore')
+  await deleteDoc(doc(db, 'gallery', item.id))
+}
+
+/* The seven bundled award photos, so the console can pick them up into
+   Firestore in one click instead of re-uploading by hand. */
+const AWARD_SEEDS: { file: string; caption: string }[] = [
+  { file: '/media/gallery/01-add-award.jpg', caption: 'ADD Award' },
+  { file: '/media/gallery/02-actor.jpg', caption: 'Best actor of the year' },
+  { file: '/media/gallery/03-cinematographer.jpg', caption: 'Best cinematographer of the year' },
+  { file: '/media/gallery/04-director.jpg', caption: 'Best director of the year' },
+  { file: '/media/gallery/05-graphics-designer.jpg', caption: 'Best graphics designer of the year' },
+  { file: '/media/gallery/06-script-writer.jpg', caption: 'Best script writer of the year' },
+  { file: '/media/gallery/07-video-editor.jpg', caption: 'Best video editor of the year' },
+]
+
+export async function seedAwardGallery(): Promise<number> {
+  assertConfig()
+  const created: GalleryItem[] = []
+  for (let index = 0; index < AWARD_SEEDS.length; index++) {
+    const seed = AWARD_SEEDS[index]
+    const res = await fetch(seed.file)
+    if (!res.ok) throw new Error(`Could not load ${seed.file}`)
+    const blob = await res.blob()
+    const file = new File([blob], seed.file.split('/').pop() ?? `award-${index}.jpg`, {
+      type: blob.type || 'image/jpeg',
+    })
+    created.push(await uploadGalleryImage(file, seed.caption, index))
+  }
+  return created.length
 }
