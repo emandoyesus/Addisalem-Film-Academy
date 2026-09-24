@@ -20,7 +20,7 @@ export function Gallery() {
               The ADD Award — every year, for the best of the craft.
             </h2>
             <p className="mt-6 text-base leading-relaxed text-ash md:text-lg">
-              One night a year the academy crowns the finest in each field:
+              One day a year the academy crowns the finest in each field:
               actor, cinematographer, director, graphics designer, script writer
               and video editor.
             </p>
