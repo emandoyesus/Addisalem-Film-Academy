@@ -35,46 +35,6 @@ export function Eyebrow({ children, className = '' }: EyebrowProps) {
   )
 }
 
-/* Primary pill CTA */
-export function PillLink({
-  href,
-  children,
-  className = '',
-}: {
-  href: string
-  children: ReactNode
-  className?: string
-}) {
-  return (
-    <a
-      href={href}
-      className={`inline-flex items-center gap-2 rounded-full bg-gold px-6 py-3 font-mono text-[11px] uppercase tracking-[0.16em] text-gold-ink transition-all duration-300 active:translate-y-[-1px] active:scale-[0.98] hover:bg-gold-deep ${className}`}
-    >
-      {children}
-    </a>
-  )
-}
-
-/* Ghost pill CTA — for use over dark photography / accent backgrounds */
-export function GhostLink({
-  href,
-  children,
-  className = '',
-}: {
-  href: string
-  children: ReactNode
-  className?: string
-}) {
-  return (
-    <a
-      href={href}
-      className={`inline-flex items-center gap-2 rounded-full border border-line-strong px-6 py-3 font-mono text-[11px] uppercase tracking-[0.16em] text-ink transition-all duration-300 hover:border-gold/60 hover:text-gold active:translate-y-[-1px] active:scale-[0.98] ${className}`}
-    >
-      {children}
-    </a>
-  )
-}
-
 export function Arrow({ className = 'h-3.5 w-3.5' }: { className?: string }) {
   return (
     <svg viewBox="0 0 16 16" fill="none" className={className} aria-hidden="true">

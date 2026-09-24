@@ -70,46 +70,6 @@ export async function subscribeAuth(
   return onAuthStateChanged(auth, onUser)
 }
 
-/* Admin resolution — a signed-in user is an admin when either:
-   - their Firestore document `users/{uid}` has `role: "admin"`, or
-   - their auth email is in the VITE_ADMIN_EMAILS allowlist (comma-separated).
-   The doc is read via rules restricted to the user's own uid, so another
-   client can't read/write roles. */
-
-const adminEmails: string =
-  (import.meta.env.VITE_ADMIN_EMAILS as string | undefined) ?? ''
-
-export async function subscribeAdminState(
-  onChange: (isAdmin: boolean) => void,
-): Promise<() => void> {
-  const { auth, db } = await loadFirebase()
-  const { onAuthStateChanged } = await import('firebase/auth')
-  const { doc, onSnapshot } = await import('firebase/firestore')
-  const allowlist = adminEmails
-    .split(',')
-    .map((e) => e.trim().toLowerCase())
-    .filter(Boolean)
-  let unsubRole: (() => void) | undefined
-  const unsubAuth = onAuthStateChanged(auth, (user) => {
-    unsubRole?.()
-    unsubRole = undefined
-    if (!user) {
-      onChange(false)
-      return
-    }
-    const emailOk = Boolean(
-      user.email && allowlist.includes(user.email.toLowerCase()),
-    )
-    unsubRole = onSnapshot(doc(db, 'users', user.uid), (snap) => {
-      onChange(emailOk || snap.data()?.role === 'admin')
-    })
-  })
-  return () => {
-    unsubAuth()
-    unsubRole?.()
-  }
-}
-
 const announcementFromDoc = (
   doc: QueryDocumentSnapshot<Record<string, unknown>>,
 ): Announcement => {

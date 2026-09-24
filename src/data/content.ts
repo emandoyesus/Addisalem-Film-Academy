@@ -72,9 +72,6 @@ export type SiteInfo = {
   founded: number
 }
 
-/** Sorted by most common brand gold-orange in the official logo. */
-export const BRAND_GOLD = '#ffba21'
-
 /** Unsplash image helper. Swap any `id` for a real photo of the
     center, or replace the whole `img(...)` call with a local asset. */
 export const img = (id: string, w = 1200, q = 80): string =>
