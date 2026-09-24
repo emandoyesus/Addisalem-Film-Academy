@@ -43,43 +43,8 @@
   --err-soft: rgba(248, 113, 113, 0.14);
 }
 
-/* Light mode stays strictly inside the brand trio: white canvas,
-   black ink, one gold-orange hue (deepened only for WCAG text). */
-@media (prefers-color-scheme: light) {
-  :root {
-    color-scheme: light;
-
-    --canvas: #ffffff;
-    --canvas-soft: #f4f4f4;
-    --surface: #f7f7f7;
-    --surface-2: #ededed;
-
-    --ink: #000000;
-    --ash: rgba(0, 0, 0, 0.72);
-    --faint: rgba(0, 0, 0, 0.55);
-
-    --line: rgba(0, 0, 0, 0.15);
-    --line-strong: rgba(0, 0, 0, 0.28);
-
-    --gold: #9a5c00;
-    --gold-deep: #7c4800;
-    --gold-ink: #ffffff;
-    --gold-soft: rgba(154, 92, 0, 0.1);
-    --gold-glow: rgba(154, 92, 0, 0.1);
-
-    /* status feedback — success & failure */
-    --ok: #047857;
-    --ok-deep: #065f46;
-    --ok-ink: #ffffff;
-    --ok-soft: rgba(4, 120, 87, 0.1);
-    --err: #b91c1c;
-    --err-deep: #991b1b;
-    --err-ink: #ffffff;
-    --err-soft: rgba(185, 28, 28, 0.1);
-  }
-}
-
-@theme inline {
+:root {
+  color-scheme: dark;
   --color-canvas: var(--canvas);
   --color-canvas-soft: var(--canvas-soft);
   --color-surface: var(--surface);
