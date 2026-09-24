@@ -63,7 +63,7 @@ export function About() {
             src={images.about}
             srcSet={unsplashSrcSet(images.about, [480, 720, 960, 1200], 72)}
             sizes="(min-width: 1024px) 45vw, 100vw"
-            alt="Professional camera used in training at Addisalem"
+            alt="Hands-on filming on a cinema set at Addisalem"
             width={1200}
             height={900}
             loading="lazy"
