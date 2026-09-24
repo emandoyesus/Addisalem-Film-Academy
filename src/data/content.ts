@@ -307,21 +307,21 @@ export const facilities: Facility[] = [
 export const stories: Story[] = [
   {
     quote:
-      'I came for a weekend phone-film workshop and stayed for three years. Now I shoot commercial work in Addis.',
+      'I came for a weekend phone-film workshop and stayed for a year. Now I shoot commercial work in Addis.',
     name: 'Almaz Kebede',
-    role: 'Directing graduate · 2022',
+    role: '10-Month graduate · 2022',
   },
   {
     quote:
       'The set days did more for me than a year of theory. You learn speed, stillness and how to ask for what you need.',
     name: 'Biruk Tadesse',
-    role: 'Cinematography graduate · 2023',
+    role: '5-Month graduate · 2023',
   },
   {
     quote:
       'My short premiered at a Dessie festival to a full room. Addisalem gave me the craft, and the room gave me courage.',
     name: 'Hanna Mesfin',
-    role: 'Editing graduate · 2024',
+    role: '2-Month graduate · 2024',
   },
 ]
 
