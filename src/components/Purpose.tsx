@@ -27,7 +27,7 @@ export function Purpose() {
       <div id="purpose" className="mx-auto w-full max-w-[1400px] scroll-mt-24 px-5 md:px-8">
         <Reveal>
           <Eyebrow>Why AFA exists</Eyebrow>
-          <h2 className="mt-5 max-w-[20ch] font-display text-4xl font-bold leading-[1.06] tracking-tight text-ink md:text-5xl">
+          <h2 className="mt-5 max-w-[20ch] font-display text-4xl font-bold leading-[1.06] tracking-tight text-gold md:text-5xl">
             Built to turn passion into practice.
           </h2>
         </Reveal>

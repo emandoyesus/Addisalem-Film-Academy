@@ -28,7 +28,7 @@ type EyebrowProps = { children: ReactNode; className?: string }
 export function Eyebrow({ children, className = '' }: EyebrowProps) {
   return (
     <p
-      className={`font-mono text-[11px] uppercase tracking-[0.22em] text-gold ${className}`}
+      className={`font-mono text-[11px] uppercase tracking-[0.22em] text-ink ${className}`}
     >
       {children}
     </p>

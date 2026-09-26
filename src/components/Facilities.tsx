@@ -89,7 +89,7 @@ export function Facilities() {
           </Reveal>
 
           <div className="order-1 lg:order-2">
-            <h2 className="max-w-[20ch] font-display text-4xl font-bold leading-[1.06] tracking-tight text-ink md:text-5xl">
+            <h2 className="max-w-[20ch] font-display text-4xl font-bold leading-[1.06] tracking-tight text-gold md:text-5xl">
               The AFA Studio &amp; Gear Vault
             </h2>
             <p className="mt-4 max-w-[56ch] text-sm leading-relaxed text-ash md:text-base">

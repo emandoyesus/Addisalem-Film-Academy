@@ -75,7 +75,7 @@ export function Portfolio() {
       <div id="portfolio" className="mx-auto w-full max-w-[1400px] scroll-mt-24 px-5 md:px-8">
         <Reveal className="max-w-[60ch]">
           <Eyebrow>Studio portfolio</Eyebrow>
-          <h2 className="mt-5 font-display text-4xl font-bold leading-[1.06] tracking-tight text-ink md:text-5xl">
+          <h2 className="mt-5 font-display text-4xl font-bold leading-[1.06] tracking-tight text-gold md:text-5xl">
             Work made on our floor.
           </h2>
           <p className="mt-6 text-base leading-relaxed text-ash md:text-lg">

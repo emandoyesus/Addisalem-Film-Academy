@@ -21,9 +21,8 @@ export function Gallery() {
       <div id="gallery" className="mx-auto w-full max-w-[1400px] scroll-mt-24 px-5 md:px-8">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="max-w-[60ch]">
-            <h2 className="font-display text-4xl font-bold leading-[1.06] tracking-tight text-ink md:text-5xl">
-              The <span className="text-gold">ADD Award</span> — every year, for the best of
-              the craft.
+            <h2 className="font-display text-4xl font-bold leading-[1.06] tracking-tight text-gold md:text-5xl">
+              The ADD Award — every year, for the best of the craft.
             </h2>
             <p className="mt-6 text-base leading-relaxed text-ash md:text-lg">
               One day a year the academy crowns the finest in each field:

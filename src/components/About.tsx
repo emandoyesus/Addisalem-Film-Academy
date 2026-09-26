@@ -30,7 +30,7 @@ export function About() {
         <div className="grid items-center gap-14 lg:grid-cols-[1.05fr_1fr] lg:gap-20">
         <div>
           <Reveal delay={0.05}>
-            <h2 className="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-tight text-ink md:text-5xl">
+            <h2 className="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-tight text-gold md:text-5xl">
               The craft school of Northern Ethiopia.
             </h2>
           </Reveal>

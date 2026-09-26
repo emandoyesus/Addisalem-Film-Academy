@@ -80,7 +80,7 @@ export function Programs() {
       <div id="programs" className="mx-auto w-full max-w-[1400px] scroll-mt-24 px-5 md:px-8">
         <Eyebrow>Programs</Eyebrow>
         <motion.div {...revealProps(animate, { amount: 0.4, delay: 0.1 })}>
-          <h2 className="mt-5 max-w-[18ch] font-display text-4xl font-bold leading-[1.06] tracking-tight text-ink md:text-5xl">
+          <h2 className="mt-5 max-w-[18ch] font-display text-4xl font-bold leading-[1.06] tracking-tight text-gold md:text-5xl">
             Four ways to learn film.
           </h2>
           <p className="mt-6 max-w-[60ch] text-base leading-relaxed text-ash md:text-lg">

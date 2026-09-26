@@ -211,7 +211,7 @@ export function Announcements() {
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="max-w-[60ch]">
             <Eyebrow>What&rsquo;s new</Eyebrow>
-            <h2 className="mt-5 font-display text-4xl font-bold leading-[1.06] tracking-tight text-ink md:text-5xl">
+            <h2 className="mt-5 font-display text-4xl font-bold leading-[1.06] tracking-tight text-gold md:text-5xl">
               Sitcoms, edits and news, fresh from the channel.
             </h2>
             <p className="mt-6 text-base leading-relaxed text-ash md:text-lg">

@@ -73,7 +73,7 @@ export function WhyChoose() {
         <div className="grid gap-8 lg:grid-cols-2 lg:items-end lg:gap-x-20">
           <Reveal>
             <Eyebrow>Why choose AFA</Eyebrow>
-            <h2 className="mt-5 max-w-[18ch] font-display text-4xl font-bold leading-[1.06] tracking-tight text-ink md:text-5xl">
+            <h2 className="mt-5 max-w-[18ch] font-display text-4xl font-bold leading-[1.06] tracking-tight text-gold md:text-5xl">
               Why choose Addisalem Film Academy?
             </h2>
           </Reveal>
