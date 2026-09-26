@@ -81,7 +81,7 @@ export function Programs() {
         <Eyebrow>Programs</Eyebrow>
         <motion.div {...revealProps(animate, { amount: 0.4, delay: 0.1 })}>
           <h2 className="mt-5 max-w-[18ch] font-display text-4xl font-bold leading-[1.06] tracking-tight text-ink md:text-5xl">
-            Three ways to learn film.
+            Four ways to learn film.
           </h2>
           <p className="mt-6 max-w-[60ch] text-base leading-relaxed text-ash md:text-lg">
             Choose the timeline that fits your schedule. Whether you need a quick skills
@@ -104,6 +104,44 @@ export function Programs() {
             </motion.div>
           ))}
         </div>
+
+        <motion.div
+          {...revealProps(animate, { amount: 0.4, delay: 0.1, y: 16, duration: 0.6 })}
+          className="mt-8 overflow-hidden rounded-2xl border border-line bg-surface"
+        >
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -right-6 -top-10 select-none font-display text-[120px] font-bold leading-none text-gold/10"
+          >
+            04
+          </div>
+          <div className="relative grid gap-6 p-7 md:grid-cols-[minmax(0,12rem)_1fr] md:gap-10 md:p-9">
+            <div className="flex flex-col gap-3">
+              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-gold">
+                Also offered
+              </p>
+              <h3 className="font-display text-2xl font-bold leading-tight tracking-tight text-ink">
+                The 1-Month Skill Boost
+              </h3>
+              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-ash">
+                1 month &middot; one discipline
+              </p>
+            </div>
+            <div className="grid gap-5 border-t border-line pt-5 md:border-l md:border-t-0 md:pt-0 md:pl-10">
+              <p className="text-sm leading-relaxed text-ash">
+                A single focus course chosen from one of the ten disciplines &mdash;
+                fast-paced, targeted training on one specific skill, with boot-camp
+                energy.
+              </p>
+              <a
+                href="#contact"
+                className="inline-flex w-fit items-center gap-2 font-mono text-[10px] uppercase tracking-[0.18em] text-gold transition-colors hover:text-white"
+              >
+                Enquire <Arrow className="h-3 w-3" />
+              </a>
+            </div>
+          </div>
+        </motion.div>
 
         {(() => {
           const toolkit = programs.find((program) => program.toolkit)?.toolkit
