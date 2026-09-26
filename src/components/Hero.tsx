@@ -120,7 +120,7 @@ export function Hero() {
           <span className="block h-8 w-px bg-line-strong" />
           Scroll
         </div>
-        <span className="hidden font-mono text-[10px] uppercase tracking-[0.24em] text-faint sm:block">
+        <span className="hidden font-mono text-[10px] uppercase tracking-[0.24em] text-gold sm:block">
           Est. {site.founded}
         </span>
       </motion.div>
