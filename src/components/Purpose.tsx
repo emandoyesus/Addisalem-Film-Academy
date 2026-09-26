@@ -43,7 +43,7 @@ export function Purpose() {
                 <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-faint">
                   {pillar.index}
                 </p>
-                <h3 className="mt-3 font-display text-xl font-bold tracking-tight text-ink">
+                <h3 className="mt-3 font-display text-xl font-bold tracking-tight text-gold">
                   AFA {pillar.word}
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-ash">{pillar.body}</p>
