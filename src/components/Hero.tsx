@@ -10,7 +10,10 @@ export function Hero() {
      on desktop, janky on phones, so it stays desktop-only. */
   const parallax = useMediaQuery('(min-width: 768px)') && !reduce
   const bgY = useTransform(scrollY, [0, 900], [0, 160])
-  const shade = useTransform(scrollY, [0, 900], [0, 0.35])
+  /* The scrim must stay ON at rest — it is the only thing carrying contrast
+     under the headline and buttons, and the photo behind it is not uniformly
+     dark. Rests at 0.8 and firms up to full as the hero leaves. */
+  const shade = useTransform(scrollY, [0, 900], [0.8, 1])
   return (
     <section id="top" className="relative isolate flex min-h-[100dvh] flex-col">
       {/* Background plate with image + subtle parallax + Ken Burns entrance */}
@@ -29,7 +32,7 @@ export function Hero() {
           className="absolute inset-0"
           style={{
             background:
-              'linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 45%, rgba(0,0,0,0.82) 100%), linear-gradient(96deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.35) 38%, rgba(0,0,0,0.06) 58%, rgba(0,0,0,0) 68%)',
+              'linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.12) 42%, rgba(0,0,0,0.9) 100%), linear-gradient(96deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.62) 34%, rgba(0,0,0,0.28) 58%, rgba(0,0,0,0.05) 76%, rgba(0,0,0,0) 88%)',
             opacity: shade,
           }}
         />
@@ -100,7 +103,7 @@ export function Hero() {
             </a>
             <a
               href="#contact"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-line-strong bg-canvas/20 px-5 py-3 font-mono text-[10px] uppercase tracking-[0.15em] text-ink backdrop-blur-sm transition-all duration-300 hover:border-gold/60 hover:text-gold active:translate-y-[-1px] active:scale-[0.98] sm:w-auto sm:py-2.5"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-line-strong bg-canvas/45 px-5 py-3 font-mono text-[10px] uppercase tracking-[0.15em] text-ink backdrop-blur-md transition-all duration-300 hover:border-gold/60 hover:text-gold active:translate-y-[-1px] active:scale-[0.98] sm:w-auto sm:py-2.5"
             >
               Talk to admissions
             </a>
