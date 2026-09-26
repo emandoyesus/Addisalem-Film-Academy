@@ -93,8 +93,8 @@ export const site: SiteInfo = {
   address: 'Piyassa, Dessie, Ethiopia',
   mapUrl:
     'https://www.google.com/maps/search/?api=1&query=Piyassa%2C+Dessie%2C+Ethiopia',
-  phone: '09 89 81 84 79',
-  phoneAlt: '09 21 25 88 15',
+  phone: '09 21 25 88 15',
+  phoneAlt: '09 89 81 84 79',
   email: 'addisalemfilms@gmail.com',
   hours: [
     { day: 'Monday to Friday', time: '9:00 – 17:00' },
