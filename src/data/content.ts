@@ -80,7 +80,7 @@ export const img = (id: string, w = 1200, q = 80): string =>
     : `https://images.unsplash.com/${id}?q=${q}&w=${w}&auto=format&fit=crop`
 
 export const images = {
-  about: img('photo-1739296385311-3ca880ca05a2', 1200, 80),
+  about: img('photo-1585357240405-de103eba8302', 1200, 80),
   facilities: img('photo-1553377102-7479aacccd00', 1400, 80),
   programs: '/media/programs-bg.webp',
   boost: img('photo-1524678606370-a47ad25cb82a', 900, 75),
