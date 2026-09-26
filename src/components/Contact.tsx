@@ -9,7 +9,7 @@ import {
   ArrowUpRight,
 } from '@phosphor-icons/react'
 import { motion, useReducedMotion } from 'motion/react'
-import { site, programs } from '../data/content'
+import { site, allPrograms } from '../data/content'
 import { createLead } from '../lib/firebase'
 import { notifyEnrollment } from '../lib/notify'
 import { revealProps, useEntranceMotion } from '../lib/motion'
@@ -290,7 +290,7 @@ const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
                     className={`${fieldClass(Boolean(errors.program))} appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%228%22%3E%3Cpath%20d%3D%22M1%201l5%205%205-5%22%20stroke%3D%22%23808080%22%20stroke-width%3D%221.5%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E')] bg-[position:right_1rem_center] bg-no-repeat pr-10`}
                   >
                     <option value="">Select a program</option>
-                    {programs.map((p) => (
+                    {allPrograms.map((p) => (
                       <option key={p.title} value={p.title}>
                         {p.title}
                       </option>

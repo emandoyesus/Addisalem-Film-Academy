@@ -1,6 +1,6 @@
 import { motion } from 'motion/react'
 import { Arrow, Eyebrow } from './ui'
-import { images, programs, type Program } from '../data/content'
+import { images, programs, skillBoost, type Program } from '../data/content'
 import { localSrcSet, unsplashSrcSet } from '../lib/responsive'
 import { LoadingImage } from './LoadingImage'
 import { revealProps, useEntranceMotion } from '../lib/motion'
@@ -121,17 +121,15 @@ export function Programs() {
                 Also offered
               </p>
               <h3 className="font-display text-2xl font-bold leading-tight tracking-tight text-ink">
-                The 1-Month Skill Boost
+                {skillBoost.title}
               </h3>
               <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-ash">
-                1 month &middot; one discipline
+                {skillBoost.duration} &middot; {skillBoost.focus}
               </p>
             </div>
             <div className="grid gap-5 border-t border-line pt-5 md:border-l md:border-t-0 md:pt-0 md:pl-10">
               <p className="text-sm leading-relaxed text-ash">
-                A single focus course chosen from one of the ten disciplines &mdash;
-                fast-paced, targeted training on one specific skill, with boot-camp
-                energy.
+                {skillBoost.tagline}
               </p>
               <a
                 href="#contact"

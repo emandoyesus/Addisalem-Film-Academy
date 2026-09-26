@@ -276,6 +276,21 @@ export const programs: Program[] = [
   },
 ]
 
+/* The 1-Month Skill Boost is a single-discipline short course rather than a
+   full curriculum, so it stays out of `programs` — that array drives the
+   ProgramCard grid, which only renders fixed-timeline courses. */
+export const skillBoost = {
+  title: 'The 1-Month Skill Boost',
+  duration: '1 month',
+  focus: 'one discipline',
+  tagline:
+    'A single focus course chosen from one of the ten disciplines — fast-paced, targeted training on one specific skill, with boot-camp energy.',
+} as const
+
+/** Everything a visitor can pick as "program of interest" or link to from the
+    footer. Keeps the enquiry dropdown and the footer list in step. */
+export const allPrograms: { title: string }[] = [...programs, skillBoost]
+
 export const facilities: Facility[] = [
   {
     icon: 'stageset',

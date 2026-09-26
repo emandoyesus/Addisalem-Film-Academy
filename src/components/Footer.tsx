@@ -6,7 +6,7 @@ import {
   TelegramLogo,
   TiktokLogo,
 } from '@phosphor-icons/react'
-import { site, navLinks, programs, socials } from '../data/content'
+import { site, navLinks, allPrograms, socials } from '../data/content'
 import { Logo } from './Logo'
 
 const iconMap: Record<string, Icon> = {
@@ -71,7 +71,7 @@ export function Footer() {
               Programs
             </p>
             <ul className="mt-5 space-y-3">
-              {programs.map((p) => (
+              {allPrograms.map((p) => (
                 <li key={p.title}>
                   <a
                     href={sectionHref('#programs')}
