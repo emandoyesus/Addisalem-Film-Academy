@@ -90,9 +90,9 @@ export const site: SiteInfo = {
   label: 'ADDISALEM',
   city: 'Dessie',
   region: 'Dessie, Ethiopia',
-  address: 'Seid Yasin building, Piyassa, Dessie, Ethiopia',
+  address: 'Piyassa, Dessie, Ethiopia',
   mapUrl:
-    'https://www.google.com/maps/search/?api=1&query=Seid+Yasin+building%2C+Piyassa%2C+Dessie%2C+Ethiopia',
+    'https://www.google.com/maps/search/?api=1&query=Piyassa%2C+Dessie%2C+Ethiopia',
   phone: '09 89 81 84 79',
   phoneAlt: '09 21 25 88 15',
   email: 'addisalemfilms@gmail.com',
