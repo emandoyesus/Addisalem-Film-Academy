@@ -8,7 +8,7 @@
     {
       "source": "/media/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
       ]
     },
     {
@@ -18,9 +18,9 @@
       ]
     },
     {
-      "source": "/(logo\\.webp|logo\\.jpg|favicon\\.svg)",
+      "source": "/(logo\\.webp|logo\\.jpg|favicon\\.svg|favicon\\.ico|favicon\\.png|favicon-16x16\\.png|favicon-32x32\\.png|apple-touch-icon\\.png)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
       ]
     }
   ]

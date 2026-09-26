@@ -17,7 +17,7 @@ export function Hero() {
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <motion.div
           className="absolute inset-0 bg-cover bg-[68%_center] md:bg-center"
-          style={{ backgroundImage: 'url(/media/hero.jpg)', y: parallax ? bgY : 0 }}
+          style={{ backgroundImage: 'url(/media/hero-2.jpg)', y: parallax ? bgY : 0 }}
           initial={parallax ? { scale: 1.08 } : false}
           animate={{ scale: 1 }}
           transition={
