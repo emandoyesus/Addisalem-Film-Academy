@@ -8,6 +8,7 @@ import { StatsBand } from './components/StatsBand'
 import { About } from './components/About'
 import { Purpose } from './components/Purpose'
 import { HowWeWork } from './components/HowWeWork'
+import { WhyChoose } from './components/WhyChoose'
 import { Programs } from './components/Programs'
 import { Facilities } from './components/Facilities'
 import { Stories } from './components/Stories'
@@ -41,6 +42,7 @@ function Landing() {
       <About />
       <Purpose />
       <HowWeWork />
+      <WhyChoose />
       <Programs />
       <Facilities />
       <Stories />
