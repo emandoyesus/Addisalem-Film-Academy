@@ -55,7 +55,7 @@ function VideoPreview({
         className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
       />
       <span
-        className={`absolute inset-0 m-auto flex h-16 w-16 items-center justify-center rounded-full border border-white/20 bg-black/60 text-gold backdrop-blur-sm transition-all duration-300 ${
+        className={`absolute inset-0 m-auto flex h-16 w-16 items-center justify-center rounded-full border border-white/20 bg-black/80 text-gold transition-all duration-300 ${
           playAlways
             ? 'opacity-100'
             : 'opacity-0 group-hover:opacity-100 group-hover:scale-110'
@@ -96,7 +96,7 @@ function VideoModal({
       animate={{ opacity: 1 }}
       exit={reduce ? undefined : { opacity: 0 }}
       transition={{ duration: 0.25 }}
-      className="fixed inset-0 z-[90] flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-[90] flex items-center justify-center bg-black/90 p-4"
       onClick={onClose}
       role="dialog"
       aria-modal="true"

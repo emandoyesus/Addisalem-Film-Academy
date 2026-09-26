@@ -51,7 +51,7 @@ function ProgramCard({
             {program.courses.map((course) => (
               <span
                 key={course}
-                className="rounded-full border border-white/20 bg-black/40 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-white/80 backdrop-blur-sm"
+                className="rounded-full border border-white/20 bg-black/75 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-white/80"
               >
                 {course}
               </span>

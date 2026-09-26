@@ -103,7 +103,7 @@ export function Hero() {
             </a>
             <a
               href="#contact"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-line-strong bg-canvas/45 px-5 py-3 font-mono text-[10px] uppercase tracking-[0.15em] text-ink backdrop-blur-md transition-all duration-300 hover:border-gold/60 hover:text-gold active:translate-y-[-1px] active:scale-[0.98] sm:w-auto sm:py-2.5"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-line-strong bg-surface-2 px-5 py-3 font-mono text-[10px] uppercase tracking-[0.15em] text-ink transition-all duration-300 hover:border-gold/60 hover:text-gold active:translate-y-[-1px] active:scale-[0.98] sm:w-auto sm:py-2.5"
             >
               Talk to admissions
             </a>
