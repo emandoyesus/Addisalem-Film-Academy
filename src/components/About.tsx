@@ -2,7 +2,7 @@ import { Check } from '@phosphor-icons/react'
 import { images } from '../data/content'
 import { localSrcSet, unsplashSrcSet } from '../lib/responsive'
 import { LoadingImage } from './LoadingImage'
-import { Eyebrow, Reveal } from './ui'
+import { Reveal } from './ui'
 
 const pillars = [
   {
@@ -30,7 +30,6 @@ export function About() {
         <div className="grid items-center gap-14 lg:grid-cols-[1.05fr_1fr] lg:gap-20">
         <div>
           <Reveal delay={0.05}>
-            <Eyebrow>Who we are</Eyebrow>
             <h2 className="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-tight text-gold md:text-5xl">
               The craft school of Northern Ethiopia.
             </h2>
