@@ -6,6 +6,11 @@
 
 export type HoursEntry = { day: string; time: string }
 
+/** Machine-readable opening hours for schema.org. The `hours` strings above stay
+    human-readable for display; these drive the structured data instead of being
+    parsed out of prose. */
+export type SchemaHours = { days: string[]; opens: string; closes: string }
+
 export type Program = {
   title: string
   duration: string
@@ -69,6 +74,7 @@ export type SiteInfo = {
   phoneAlt: string
   email: string
   hours: HoursEntry[]
+  schemaHours: SchemaHours[]
   founded: number
 }
 
@@ -102,8 +108,25 @@ export const site: SiteInfo = {
     { day: 'Saturday', time: '9:00 – 13:00' },
     { day: 'Sunday', time: 'Closed' },
   ],
+  schemaHours: [
+    {
+      days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      opens: '09:00',
+      closes: '17:00',
+    },
+    { days: ['Saturday'], opens: '09:00', closes: '13:00' },
+  ],
   founded: 2011,
 }
+
+/* Canonical origin. The apex domain 308-redirects to www, so www is the
+   canonical host everywhere (canonical link, og:url, sitemap, JSON-LD). */
+export const siteUrl = 'https://www.addisalemfilms.com'
+
+/* Kept in sync with the description/og:description in index.html, which cannot
+   import from here. */
+export const siteDescription =
+  'Hands-on film training in Dessie, Ethiopia. Photography, videography, directing, cinematography, screenwriting, editing, sound, film production, graphic design and motion design.'
 
 export const navLinks: { label: string; href: string }[] = [
   { label: 'About', href: '#about' },
