@@ -91,6 +91,7 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  zoom: 1.25;
   overflow-x: hidden; /* fallback for browsers without overflow-x: clip */
   overflow-x: clip; /* no scroll container, so fixed/sticky stay cheap on mobile */
 }
