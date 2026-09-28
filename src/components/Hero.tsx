@@ -85,8 +85,8 @@ export function Hero() {
             transition={{ duration: 0.9, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
             className="mt-4 hidden max-w-[52ch] text-[13px] leading-relaxed text-ash sm:block md:text-sm"
           >
-            Photography, video, directing, editing, design and more — taught hands-on in
-            Dessie.
+            Photography, cinematography, directing, editing, design and more — taught
+            hands-on in Dessie.
           </motion.p>
 
           <motion.div
