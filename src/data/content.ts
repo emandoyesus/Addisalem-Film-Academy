@@ -109,7 +109,7 @@ export const navLinks: { label: string; href: string }[] = [
   { label: 'About', href: '#about' },
   { label: 'Programs', href: '#programs' },
   { label: 'Facilities', href: '#facilities' },
-  { label: 'Stories', href: '#stories' },
+  { label: 'Awards', href: '#gallery' },
   { label: 'Portfolio', href: '#portfolio' },
   { label: 'Contact', href: '#contact' },
 ]

@@ -109,6 +109,14 @@ export function Footer() {
               </li>
               <li>
                 <a
+                  href={`tel:${site.phoneAlt.replace(/\s/g, '')}`}
+                  className="transition-colors hover:text-ink"
+                >
+                  {site.phoneAlt}
+                </a>
+              </li>
+              <li>
+                <a
                   href={`mailto:${site.email}`}
                   className="transition-colors hover:text-ink"
                 >
