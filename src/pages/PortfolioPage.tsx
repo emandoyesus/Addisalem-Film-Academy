@@ -25,7 +25,7 @@ export default function PortfolioPage() {
 
         <div className="mt-10 max-w-[62ch]">
           <Eyebrow>Studio portfolio</Eyebrow>
-          <h1 className="mt-5 font-display text-4xl font-bold leading-[1.04] tracking-tight text-ink md:text-6xl">
+          <h1 className="mt-5 font-display text-4xl font-bold leading-[1.04] tracking-tight text-gold md:text-6xl">
             Everything made on our floor.
           </h1>
           <p className="mt-6 text-base leading-relaxed text-ash md:text-lg">
