@@ -85,6 +85,16 @@ html {
   }
 }
 
+/* The build prerenders the page into #root for crawlers and for anyone without
+   JavaScript. A browser gets that markup painted before the bundle runs, and
+   the app's entrance animations then start from opacity 0 — which would read as
+   the page blinking out and back in. The inline script in index.html sets `.js`
+   immediately, so browsers skip straight to the app's own reveal; without
+   JavaScript the class is never set and the prerender simply shows. */
+.js #root {
+  visibility: hidden;
+}
+
 body {
   background-color: var(--canvas);
   color: var(--ink);

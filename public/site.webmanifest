@@ -1,0 +1,26 @@
+{
+  "name": "Addisalem Film Academy",
+  "short_name": "Addisalem",
+  "description": "Hands-on film training in Dessie, Ethiopia. Photography, videography, directing, cinematography, screenwriting, editing, sound, film production, graphic design and motion design.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "categories": ["education"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "640x640",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

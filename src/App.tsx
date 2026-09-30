@@ -16,9 +16,13 @@ import { Announcements } from './components/Announcements'
 import { Gallery } from './components/Gallery'
 import { Portfolio } from './components/Portfolio'
 import { Contact } from './components/Contact'
+import PortfolioPage from './pages/PortfolioPage'
 
+/* Only the admin console is code-split: it is heavy, gated behind sign-in, and
+   never part of a prerendered page. PortfolioPage stays in the main bundle so
+   the build-time prerender in src/entry-server.tsx can render it — a lazy
+   component would resolve to its Suspense fallback instead. */
 const Admin = lazy(() => import('./pages/Admin.tsx'))
-const PortfolioPage = lazy(() => import('./pages/PortfolioPage.tsx'))
 
 /* Keeps the private console out of the index. robots.txt already disallows
    /admin; this covers crawlers that reach it by a stale or typed URL. */
