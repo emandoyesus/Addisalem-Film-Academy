@@ -45,7 +45,12 @@ export type Stat = { value: string; label: string }
 
 export type Social = { label: string; href: string; icon: string }
 
-export type AnnouncementTag = 'Sitcom' | 'Edit' | 'News' | 'Short Film' | 'None'
+export type AnnouncementTag =
+  | 'Showcase & Portfolio'
+  | 'Education & Tips'
+  | 'Social Proof & Stories'
+  | 'Behind-the-Scenes'
+  | 'Academy Updates & Ads'
 
 export type Announcement = {
   id: string
@@ -197,7 +202,7 @@ export const announcements: Announcement[] = [
     id: 'sitcom-teaser',
     title: 'Sitcom teaser: our first episode is cutting',
     date: '7 Sep 2026',
-    tag: 'Sitcom',
+    tag: 'Showcase & Portfolio',
     description:
       'A two-minute taste of the first episode, shot on the studio set and cut by our editing students. The full episode lands on the channel on Friday.',
     videoId: '',
@@ -207,7 +212,7 @@ export const announcements: Announcement[] = [
     id: 'student-edit',
     title: 'Student edit of the day: dawn over Tossa',
     date: '1 Sep 2026',
-    tag: 'Edit',
+    tag: 'Education & Tips',
     description:
       'A weekend-shot short, graded in the post-lab by a second-year colour trainee.',
     videoId: '',
@@ -217,7 +222,7 @@ export const announcements: Announcement[] = [
     id: 'november-intake',
     title: 'Admissions open for the November intake',
     date: '22 Aug 2026',
-    tag: 'News',
+    tag: 'Academy Updates & Ads',
     description:
       'Early-bird applications for foundation courses close on 15 October. Campus tours run every Saturday morning.',
   },

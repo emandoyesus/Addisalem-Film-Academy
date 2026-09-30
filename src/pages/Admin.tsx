@@ -42,11 +42,11 @@ import {
 const MAX_ANNOUNCEMENTS = 4
 
 const TAG_OPTIONS: AnnouncementTag[] = [
-  'Sitcom',
-  'Edit',
-  'News',
-  'Short Film',
-  'None',
+  'Showcase & Portfolio',
+  'Education & Tips',
+  'Social Proof & Stories',
+  'Behind-the-Scenes',
+  'Academy Updates & Ads',
 ]
 
 type Tab = 'announcements' | 'applications' | 'portfolio' | 'awards'
@@ -63,7 +63,7 @@ const emptyForm: FormState = {
   title: '',
   videoUrl: '',
   href: '',
-  tag: 'Sitcom',
+  tag: 'Showcase & Portfolio',
   description: '',
 }
 

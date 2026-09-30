@@ -212,11 +212,11 @@ export function Announcements() {
           <div className="max-w-[60ch]">
             <Eyebrow>What&rsquo;s new</Eyebrow>
             <h2 className="mt-5 font-display text-4xl font-bold leading-[1.06] tracking-tight text-gold md:text-5xl">
-              Sitcoms, edits and news, fresh from the channel.
+              Student work, academy news and behind-the-scenes, fresh from the channel.
             </h2>
             <p className="mt-6 text-base leading-relaxed text-ash md:text-lg">
-              New episodes and student edits are announced here first. Every film school
-              needs a screening room, and ours is on YouTube.
+              Showcases, production tips and academy updates are announced here first. Every
+              film school needs a screening room, and ours is on YouTube.
             </p>
           </div>
           <a
