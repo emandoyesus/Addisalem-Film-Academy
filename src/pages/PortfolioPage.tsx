@@ -3,12 +3,22 @@ import { ArrowLeft } from '@phosphor-icons/react'
 import { Layout } from '../components/Layout'
 import { PortfolioGrid } from '../components/Portfolio'
 import { usePortfolio } from '../lib/usePortfolio'
+import { usePageMeta } from '../lib/usePageMeta'
 import { Eyebrow } from '../components/ui'
 
 /* Standalone portfolio, reachable from the landing section's "See more work".
    Shows the whole studio collection in the owner's arranged order. */
 export default function PortfolioPage() {
   const { items, ready } = usePortfolio()
+
+  /* This route shares the home page's index.html, so it has to claim its own
+     canonical URL or Google treats it as a duplicate of the landing page. */
+  usePageMeta({
+    title: 'Studio portfolio · Addisalem Film Academy',
+    description:
+      'Poster art, illustration and set photography made by Addisalem Film Academy students and instructors in Dessie, Ethiopia.',
+    path: '/portfolio',
+  })
 
   return (
     <Layout>
