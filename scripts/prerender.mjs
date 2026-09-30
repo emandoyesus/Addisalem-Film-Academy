@@ -67,3 +67,14 @@ const sitemap = renderSitemap()
 const urls = (sitemap.match(/<loc>/g) ?? []).length
 writeFileSync('dist/sitemap.xml', sitemap)
 console.log(`wrote dist/sitemap.xml (${urls} urls)`)
+
+/* Vercel serves 404.html for any path without a matching file, which is what
+   keeps deep links working now that the catch-all rewrite is gone. The page is
+   the home document, so it keeps that canonical — but it must not be indexed,
+   or every mistyped URL becomes a duplicate of the home page in search. */
+const notFound = readFileSync('dist/index.html', 'utf8')
+writeFileSync(
+  'dist/404.html',
+  notFound.replace('</head>', '  <meta name="robots" content="noindex" />\n  </head>'),
+)
+console.log('wrote dist/404.html (noindex)')
