@@ -26,6 +26,8 @@ export type PrerenderRoute = {
   meta: RouteMeta
   changefreq: string
   priority: string
+  /** False for private routes: served with noindex and left out of the sitemap. */
+  indexable?: boolean
 }
 
 export const prerenderRoutes: PrerenderRoute[] = [
@@ -42,6 +44,18 @@ export const prerenderRoutes: PrerenderRoute[] = [
     meta: portfolioMeta,
     changefreq: 'weekly',
     priority: '0.7',
+  },
+  {
+    /* Prerendered precisely so it stops falling back to the home document, which
+       would hand /admin the home page's canonical. Admin itself is lazy-loaded,
+       so this serves its loader shell marked noindex, and robots.txt already
+       disallows the path. */
+    url: '/admin',
+    file: 'admin.html',
+    meta: { title: 'Admin · Addisalem Film Academy', description: 'Private.' },
+    changefreq: 'never',
+    priority: '0.0',
+    indexable: false,
   },
 ]
 
@@ -65,7 +79,12 @@ export function applyMeta(html: string, route: PrerenderRoute): string {
   const swaps: [RegExp, string][] = [
     [/<title>[\s\S]*?<\/title>/i, `<title>${title}</title>`],
     [metaByName('description'), `<meta name="description" content="${escapeAttr(description)}" />`],
-    [/<link\s+rel="canonical"[^>]*>/i, `<link rel="canonical" href="${escapeAttr(url)}" />`],
+    [
+      /<link\s+rel="canonical"[^>]*>/i,
+      route.indexable === false
+        ? '<meta name="robots" content="noindex, nofollow" />'
+        : `<link rel="canonical" href="${escapeAttr(url)}" />`,
+    ],
     [
       metaByProperty('og:url'),
       `<meta property="og:url" content="${escapeAttr(url)}" />`,
@@ -113,6 +132,7 @@ export function renderDocument(route: PrerenderRoute, template: string): string 
 export function renderSitemap(routes: PrerenderRoute[] = prerenderRoutes): string {
   const lastmod = new Date().toISOString().slice(0, 10)
   const urls = routes
+    .filter((route) => route.indexable !== false)
     .map(
       (route) => `  <url>
     <loc>${siteUrl}${route.url}</loc>

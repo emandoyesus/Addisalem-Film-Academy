@@ -63,5 +63,7 @@ for (const route of prerenderRoutes) {
   )
 }
 
-writeFileSync('dist/sitemap.xml', renderSitemap())
-console.log(`wrote dist/sitemap.xml (${prerenderRoutes.length} urls)`)
+const sitemap = renderSitemap()
+const urls = (sitemap.match(/<loc>/g) ?? []).length
+writeFileSync('dist/sitemap.xml', sitemap)
+console.log(`wrote dist/sitemap.xml (${urls} urls)`)
