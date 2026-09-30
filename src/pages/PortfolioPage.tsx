@@ -4,6 +4,7 @@ import { Layout } from '../components/Layout'
 import { PortfolioGrid } from '../components/Portfolio'
 import { usePortfolio } from '../lib/usePortfolio'
 import { usePageMeta } from '../lib/usePageMeta'
+import { portfolioMeta } from '../data/content'
 import { Eyebrow } from '../components/ui'
 
 /* Standalone portfolio, reachable from the landing section's "See more work".
@@ -13,12 +14,7 @@ export default function PortfolioPage() {
 
   /* This route shares the home page's index.html, so it has to claim its own
      canonical URL or Google treats it as a duplicate of the landing page. */
-  usePageMeta({
-    title: 'Studio portfolio · Addisalem Film Academy',
-    description:
-      'Poster art, illustration and set photography made by Addisalem Film Academy students and instructors in Dessie, Ethiopia.',
-    path: '/portfolio',
-  })
+  usePageMeta({ ...portfolioMeta, path: '/portfolio' })
 
   return (
     <Layout>

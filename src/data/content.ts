@@ -133,6 +133,15 @@ export const siteUrl = 'https://www.addisalemfilms.com'
 export const siteDescription =
   'Hands-on film training in Dessie, Ethiopia. Photography, videography, directing, cinematography, screenwriting, editing, sound, film production, graphic design and motion design.'
 
+/* Identity of the standalone /portfolio route. Read by the route at runtime
+   (src/lib/usePageMeta) and by the build-time prerender in vite.config.ts, so
+   the served HTML and the client-side tags can never drift apart. */
+export const portfolioMeta = {
+  title: 'Studio portfolio · Addisalem Film Academy',
+  description:
+    'Poster art, illustration and set photography made by Addisalem Film Academy students and instructors in Dessie, Ethiopia.',
+}
+
 export const navLinks: { label: string; href: string }[] = [
   { label: 'About', href: '#about' },
   { label: 'Programs', href: '#programs' },
