@@ -107,11 +107,11 @@ export function Programs() {
 
         <motion.div
           {...revealProps(animate, { amount: 0.4, delay: 0.1, y: 16, duration: 0.6 })}
-          className="mt-8 overflow-hidden rounded-2xl border border-line bg-surface"
+          className="relative mt-8 overflow-hidden rounded-2xl border border-line bg-surface"
         >
           <div
             aria-hidden
-            className="pointer-events-none absolute -right-6 -top-10 select-none font-display text-[120px] font-bold leading-none text-gold/10"
+            className="pointer-events-none absolute right-6 top-4 select-none font-display text-[120px] font-bold leading-none text-gold/10"
           >
             04
           </div>
