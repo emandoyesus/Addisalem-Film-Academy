@@ -1,0 +1,211 @@
+<!doctype html>
+<!--
+  Social preview card generator — 1200x630, the minimum both Facebook and
+  LinkedIn want for a large-image card. Rendered by scripts/og-image.mjs with
+  headless Chromium, which is already a build dependency path (we ship no image
+  libraries, and shelling out to a browser we can screenshot is more honest than
+  hand-rolling a JPEG encoder).
+
+  Design constraints, taken from the live site rather than invented:
+    - Pure black canvas (#000) with the one gold accent (#ffc221). The site has
+      no gradients on its chrome and no second accent, so the card stays in the
+      same system instead of becoming a one-off.
+    - The hero photo sits behind a scrim on the real site, so it is legible here
+      too. Left-aligned type with the right half open, matching the hero.
+    - Space Grotesk for display, JetBrains Mono for the meta line — the exact
+      pair the site loads, so the card reads as the same brand.
+  The logo is inlined as a data URI so the render has no network dependency.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      @font-face {
+        font-family: 'Space Grotesk';
+        src: url('FONT_DISPLAY') format('woff2-variations');
+        font-weight: 300 700;
+      }
+      @font-face {
+        font-family: 'JetBrains Mono';
+        src: url('FONT_MONO') format('woff2-variations');
+        font-weight: 300 700;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+      }
+
+      body {
+        background: #000;
+        color: #fff;
+        font-family: 'Space Grotesk', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .card {
+        position: relative;
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 64px 72px;
+      }
+
+      /* Hero photo, pushed to the right and cropped so the type side stays
+         quiet. Sits behind a scrim exactly as it does in the live hero. */
+      .photo {
+        position: absolute;
+        inset: 0;
+        background-image: url('HERO');
+        background-size: cover;
+        background-position: 72% center;
+        opacity: 0.72;
+      }
+
+      /* Heavy on the type side, clearing toward the right so the photo still
+         reads as a photo. A flat 0.9 everywhere turned the card into a black
+         rectangle with a logo on it. */
+      .scrim {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            100deg,
+            rgba(0, 0, 0, 0.96) 0%,
+            rgba(0, 0, 0, 0.88) 30%,
+            rgba(0, 0, 0, 0.5) 58%,
+            rgba(0, 0, 0, 0.18) 100%
+          ),
+          linear-gradient(0deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 52%);
+      }
+
+      /* Warm key light, matching the hero's radial gold wash. */
+      .key {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          70% 90% at 14% 58%,
+          rgba(255, 194, 33, 0.13) 0%,
+          rgba(255, 194, 33, 0.04) 44%,
+          transparent 72%
+        );
+      }
+
+      .content {
+        position: relative;
+        max-width: 760px;
+      }
+
+      .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 17px;
+        font-weight: 500;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: #ffc221;
+      }
+
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: #ffc221;
+      }
+
+      h1 {
+        margin-top: 22px;
+        font-size: 78px;
+        font-weight: 700;
+        line-height: 1.02;
+        letter-spacing: -0.025em;
+      }
+
+      .sub {
+        margin-top: 20px;
+        max-width: 30ch;
+        font-size: 25px;
+        line-height: 1.38;
+        color: rgba(255, 255, 255, 0.76);
+      }
+
+      .rule {
+        margin-top: 34px;
+        width: 84px;
+        height: 3px;
+        background: #ffc221;
+      }
+
+      .meta {
+        margin-top: 30px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 19px;
+        letter-spacing: 0.1em;
+        color: rgba(255, 255, 255, 0.55);
+      }
+
+      .meta .sep {
+        width: 4px;
+        height: 4px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.3);
+      }
+
+      /* Watermark mark, bottom-right, mirroring the hero's open right side. */
+      .mark {
+        position: absolute;
+        right: 64px;
+        bottom: 60px;
+        width: 96px;
+        height: 96px;
+        border-radius: 999px;
+        overflow: hidden;
+        border: 2px solid rgba(255, 194, 33, 0.5);
+        opacity: 0.9;
+      }
+
+      .mark img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="photo"></div>
+      <div class="scrim"></div>
+      <div class="key"></div>
+
+      <div class="content">
+        <div class="eyebrow"><span class="dot"></span>Addisalem Film Academy &middot; Dessie</div>
+        <h1>Learn Filmmaking from the Source.</h1>
+        <p class="sub">Hands-on film training in Dessie, Ethiopia &mdash; real sets, real deadlines.</p>
+        <div class="rule"></div>
+        <div class="meta">
+          <span>Est. 2011</span>
+          <span class="sep"></span>
+          <span>Piyassa, Dessie</span>
+        </div>
+      </div>
+
+      <div class="mark"><img src="LOGO" alt="" /></div>
+    </div>
+  </body>
+</html>

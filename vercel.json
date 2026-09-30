@@ -9,6 +9,12 @@
   ],
   "headers": [
     {
+      "source": "/og-image.png",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, s-maxage=86400, must-revalidate" }
+      ]
+    },
+    {
       "source": "/media/(.*)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
@@ -21,7 +27,7 @@
       ]
     },
     {
-      "source": "/(logo\\.webp|logo\\.jpg|favicon\\.svg|favicon\\.ico|favicon\\.png|favicon-16x16\\.png|favicon-32x32\\.png|apple-touch-icon\\.png)",
+      "source": "/(logo\\.webp|logo\\.jpg|favicon\\.svg|favicon\\.ico|favicon\\.png|favicon-16x16\\.png|favicon-32x32\\.png|apple-touch-icon\\.png|site\\.webmanifest)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
       ]
