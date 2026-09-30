@@ -109,12 +109,6 @@ export function Programs() {
           {...revealProps(animate, { amount: 0.4, delay: 0.1, y: 16, duration: 0.6 })}
           className="relative mt-8 overflow-hidden rounded-2xl border border-line bg-surface"
         >
-          <div
-            aria-hidden
-            className="pointer-events-none absolute right-6 top-4 select-none font-display text-[120px] font-bold leading-none text-gold/10"
-          >
-            04
-          </div>
           <div className="relative grid gap-6 p-7 md:grid-cols-[minmax(0,12rem)_1fr] md:gap-10 md:p-9">
             <div className="flex flex-col gap-3">
               <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-gold">
