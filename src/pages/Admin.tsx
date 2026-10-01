@@ -1,10 +1,11 @@
-import { useEffect, useState, type FormEvent, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import {
   ArrowLeft,
   ArrowsClockwise,
   CaretDown,
   CaretUp,
+  Check,
   DotsSixVertical,
   Images,
   LinkSimple,
@@ -27,6 +28,8 @@ import {
   saveAnnouncementOrder,
   signIn,
   signOut,
+  updateAnnouncement,
+  type AnnouncementPatch,
   type Lead,
 } from '../lib/firebase'
 import { useAuthStatus, markAdminVisit } from '../lib/useAdmin'
@@ -35,6 +38,7 @@ import { PortfolioPanel } from '../components/PortfolioPanel'
 import {
   toVideoId,
   youtubeThumb,
+  youtubeWatch,
   type Announcement,
   type AnnouncementTag,
 } from '../data/content'
@@ -65,6 +69,95 @@ const emptyForm: FormState = {
   href: '',
   tag: 'Showcase & Portfolio',
   description: '',
+}
+
+/* Field styling shared by the publish form and the in-place rows, so a post
+   looks identical whether it is being created or edited. */
+const fieldLabel =
+  'font-mono text-[10px] uppercase tracking-[0.18em] text-faint'
+const boxInput =
+  'w-full rounded-xl border border-line-strong bg-black px-4 py-3 text-sm text-ink outline-none placeholder:text-faint focus:border-gold/70'
+const bareInput =
+  'w-full bg-transparent text-sm text-ink outline-none placeholder:text-faint'
+
+const enterToBlur = (e: { key: string; currentTarget: HTMLInputElement }) => {
+  if (e.key === 'Enter') e.currentTarget.blur()
+}
+
+/* A labelled field whose input sits inside a bordered dark box, optionally
+   with a leading glyph (the YouTube and external-link rows). */
+function IconField({
+  label,
+  icon,
+  className = '',
+  children,
+}: {
+  label: string
+  icon: ReactNode
+  className?: string
+  children: ReactNode
+}) {
+  return (
+    <label className={`block ${className}`}>
+      <span className={fieldLabel}>{label}</span>
+      <div className="mt-2 flex items-center gap-3 rounded-xl border border-line-strong bg-black px-4 py-3 focus-within:border-gold/70">
+        <span className="shrink-0">{icon}</span>
+        {children}
+      </div>
+    </label>
+  )
+}
+
+/* YouTube link input with a live thumbnail of whatever it parses to, plus an
+   inline warning when the pasted text holds no video ID. */
+function VideoField({
+  value,
+  onChange,
+  onCommit,
+  invalid,
+  className = 'mt-5',
+}: {
+  value: string
+  onChange: (value: string) => void
+  onCommit?: () => void
+  invalid?: boolean
+  className?: string
+}) {
+  const videoId = toVideoId(value)
+  return (
+    <div className={className}>
+      <IconField
+        label="YouTube link"
+        icon={<YoutubeLogo size={16} className="text-gold" />}
+      >
+        <input
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          onBlur={onCommit}
+          onKeyDown={enterToBlur}
+          placeholder="https://www.youtube.com/watch?v=..."
+          aria-label="YouTube link"
+          className={bareInput}
+        />
+      </IconField>
+      {videoId && (
+        <div className="mt-3 flex items-center gap-3">
+          <img
+            src={youtubeThumb(videoId)}
+            alt=""
+            className="h-16 w-28 rounded-lg border border-line object-cover"
+          />
+          <p className="font-mono text-[11px] text-gold">Video ID: {videoId}</p>
+        </div>
+      )}
+      {invalid && !videoId && (
+        <p className="mt-3 font-mono text-[11px] text-gold">
+          No video ID in that link — paste the full watch URL, or leave it empty
+          for a text-only post.
+        </p>
+      )}
+    </div>
+  )
 }
 
 export default function AdminPage() {
@@ -218,6 +311,8 @@ function AnnouncementsPanel() {
   const [busy, setBusy] = useState(false)
   const [notice, setNotice] = useState('')
   const [dragId, setDragId] = useState<string | null>(null)
+  const [savedId, setSavedId] = useState<string | null>(null)
+  const savedTimer = useRef<number | undefined>(undefined)
 
   const load = () => {
     void fetchAnnouncements()
@@ -229,8 +324,45 @@ function AnnouncementsPanel() {
     load()
   }, [])
 
+  useEffect(
+    () => () => {
+      if (savedTimer.current) window.clearTimeout(savedTimer.current)
+    },
+    [],
+  )
+
+  const flashSaved = (id: string) => {
+    setSavedId(id)
+    if (savedTimer.current) window.clearTimeout(savedTimer.current)
+    savedTimer.current = window.setTimeout(() => setSavedId(null), 1600)
+  }
+
+  /* Saves one field of a published post in place, the way the portfolio rows
+     re-caption an image: the row keeps its draft until the write resolves, and
+     a failed write reloads the list so the inputs snap back to what Firestore
+     actually holds. */
+  const save = (id: string, patch: AnnouncementPatch, message: string) => {
+    /* Firestore rejects undefined, so an empty field is written as '' — that is
+       how a video or link is cleared there. The local copy mirrors what the
+       public feed reads back out ('' becomes "no video" again). */
+    const applied: AnnouncementPatch = { ...patch }
+    if (patch.videoId !== undefined) applied.videoId = patch.videoId || undefined
+    if (patch.href !== undefined) applied.href = patch.href || undefined
+    void updateAnnouncement(id, patch)
+      .then(() => {
+        setItems((prev) =>
+          prev.map((a) => (a.id === id ? { ...a, ...applied } : a)),
+        )
+        setNotice(message)
+        flashSaved(id)
+      })
+      .catch(() => {
+        setNotice('Save failed. Check the console error.')
+        load()
+      })
+  }
+
   const videoId = toVideoId(form.videoUrl)
-  const previewSrc = videoId ? youtubeThumb(videoId) : ''
 
   const submit = (e: FormEvent) => {
     e.preventDefault()
@@ -312,7 +444,8 @@ function AnnouncementsPanel() {
     <div>
       <p className="mb-6 max-w-[60ch] text-sm text-ash">
         Paste a YouTube link to publish it. The newest entry leads the
-        announcement feed on the home page.
+        announcement feed on the home page — edit any published post in place
+        below, the changes save as you click away from a field.
       </p>
 
       {notice && (
@@ -329,55 +462,29 @@ function AnnouncementsPanel() {
           New announcement
         </h2>
 
-        <label className="mt-5 block">
-          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-faint">
-            YouTube link
-          </span>
-          <div className="mt-2 flex items-center gap-3 rounded-xl border border-line-strong bg-black px-4 py-3 focus-within:border-gold/70">
-            <YoutubeLogo size={16} className="text-gold" />
-            <input
-              value={form.videoUrl}
-              onChange={(e) =>
-                setForm((f) => ({ ...f, videoUrl: e.target.value }))
-              }
-              placeholder="https://www.youtube.com/watch?v=..."
-              className="w-full bg-transparent text-sm text-ink outline-none placeholder:text-faint"
-            />
-          </div>
-        </label>
-        {previewSrc && (
-          <div className="mt-3 flex items-center gap-3">
-            <img
-              src={previewSrc}
-              alt=""
-              className="h-16 w-28 rounded-lg border border-line object-cover"
-            />
-            <p className="font-mono text-[11px] text-gold">Video ID: {videoId}</p>
-          </div>
-        )}
+        <VideoField
+          value={form.videoUrl}
+          onChange={(videoUrl) => setForm((f) => ({ ...f, videoUrl }))}
+        />
 
         <label className="mt-5 block">
-          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-faint">
-            Title
-          </span>
+          <span className={fieldLabel}>Title</span>
           <input
             required
             value={form.title}
             onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
-            className="mt-2 w-full rounded-xl border border-line-strong bg-black px-4 py-3 text-sm text-ink outline-none focus:border-gold/70"
+            className={boxInput}
           />
         </label>
 
         <label className="mt-5 block">
-          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-faint">
-            Type
-          </span>
+          <span className={fieldLabel}>Type</span>
           <select
             value={form.tag}
             onChange={(e) =>
               setForm((f) => ({ ...f, tag: e.target.value as AnnouncementTag }))
             }
-            className="mt-2 w-full rounded-xl border border-line-strong bg-black px-4 py-3 text-sm text-ink outline-none focus:border-gold/70"
+            className={boxInput}
           >
             {TAG_OPTIONS.map((t) => (
               <option key={t} value={t}>
@@ -388,33 +495,30 @@ function AnnouncementsPanel() {
         </label>
 
         <label className="mt-5 block">
-          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-faint">
-            Short description
-          </span>
+          <span className={fieldLabel}>Short description</span>
           <textarea
             rows={3}
             value={form.description}
             onChange={(e) =>
               setForm((f) => ({ ...f, description: e.target.value }))
             }
-            className="mt-2 w-full rounded-xl border border-line-strong bg-black px-4 py-3 text-sm text-ink outline-none focus:border-gold/70"
+            className={boxInput}
           />
         </label>
 
-        <label className="mt-5 block">
-          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-faint">
-            External link (optional)
-          </span>
-          <div className="mt-2 flex items-center gap-3 rounded-xl border border-line-strong bg-black px-4 py-3 focus-within:border-gold/70">
-            <LinkSimple size={16} className="text-gold" />
-            <input
-              value={form.href}
-              onChange={(e) => setForm((f) => ({ ...f, href: e.target.value }))}
-              placeholder="Optional, for news without a video"
-              className="w-full bg-transparent text-sm text-ink outline-none placeholder:text-faint"
-            />
-          </div>
-        </label>
+        <IconField
+          label="External link (optional)"
+          icon={<LinkSimple size={16} className="text-gold" />}
+          className="mt-5"
+        >
+          <input
+            value={form.href}
+            onChange={(e) => setForm((f) => ({ ...f, href: e.target.value }))}
+            placeholder="Optional, for news without a video"
+            aria-label="External link (optional)"
+            className={bareInput}
+          />
+        </IconField>
 
         <button
           type="submit"
@@ -429,6 +533,11 @@ function AnnouncementsPanel() {
         <h2 className="font-display text-lg font-semibold text-ink">
           Published ({items.length} / {MAX_ANNOUNCEMENTS})
         </h2>
+        <p className="mt-2 max-w-[60ch] text-sm text-ash">
+          Every field is editable here — click one, change it, click away and it
+          saves. Re-order with the arrows or by dragging; the first entry is the
+          featured card on the home page.
+        </p>
         <ul className="mt-4 divide-y divide-line-strong rounded-2xl border border-line-strong bg-surface">
           {items.length === 0 && (
             <li className="px-5 py-4 text-sm text-ash">
@@ -436,65 +545,267 @@ function AnnouncementsPanel() {
             </li>
           )}
           {items.map((a, index) => (
-            <li
+            <AnnouncementRow
               key={a.id}
-              draggable
+              item={a}
+              index={index}
+              count={items.length}
+              dragging={dragId === a.id}
+              saved={savedId === a.id}
               onDragStart={() => setDragId(a.id)}
               onDragEnd={() => setDragId(null)}
-              onDragOver={(e) => e.preventDefault()}
               onDrop={() => dropOn(a.id)}
-              className={`flex items-center gap-3 px-4 py-3 transition-opacity ${
-                dragId === a.id ? 'opacity-40' : ''
-              }`}
-            >
-              <span
-                className="cursor-grab text-faint active:cursor-grabbing"
-                aria-hidden="true"
-              >
-                <DotsSixVertical size={18} />
-              </span>
-              <div className="min-w-0 flex-1">
-                <p className="truncate font-display text-sm font-semibold text-ink">
-                  {a.title}
-                </p>
-                <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
-                  {a.tag} &middot; {a.date}
-                  {a.videoId ? ' &middot; has video' : ''}
-                </p>
-              </div>
-              <div className="flex shrink-0 flex-col">
-                <button
-                  type="button"
-                  onClick={() => move(a, -1)}
-                  disabled={index === 0}
-                  aria-label="Move up"
-                  className="text-faint transition-colors hover:text-gold disabled:opacity-30"
-                >
-                  <CaretUp size={14} />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => move(a, 1)}
-                  disabled={index === items.length - 1}
-                  aria-label="Move down"
-                  className="text-faint transition-colors hover:text-gold disabled:opacity-30"
-                >
-                  <CaretDown size={14} />
-                </button>
-              </div>
-              <button
-                type="button"
-                onClick={() => remove(a.id)}
-                aria-label={`Delete ${a.title}`}
-                className="shrink-0 rounded-full border border-line-strong p-2.5 text-ash transition-colors hover:border-gold/60 hover:text-gold"
-              >
-                <Trash size={15} />
-              </button>
-            </li>
+              onMove={(dir) => move(a, dir)}
+              onDelete={() => remove(a.id)}
+              onSave={(patch, message) => save(a.id, patch, message)}
+            />
           ))}
         </ul>
       </section>
     </div>
+  )
+}
+
+/* Everything the console writes for one post, in the string form the inputs
+   need. The video lives in Firestore as an ID; the field shows the watch URL
+   so the admin can paste it straight back in. */
+type AnnouncementDraft = {
+  title: string
+  date: string
+  tag: AnnouncementTag
+  description: string
+  videoUrl: string
+  href: string
+}
+
+const toDraft = (a: Announcement): AnnouncementDraft => ({
+  title: a.title,
+  date: a.date,
+  tag: a.tag,
+  description: a.description,
+  videoUrl: a.videoId ? youtubeWatch(a.videoId) : '',
+  href: a.href ?? '',
+})
+
+/* One published announcement, edited in place like a portfolio caption: each
+   field saves on blur (or on change, for the type select) and only the changed
+   fields are written, so an edit never clears the video or the link. */
+function AnnouncementRow({
+  item,
+  index,
+  count,
+  dragging,
+  saved,
+  onDragStart,
+  onDragEnd,
+  onDrop,
+  onMove,
+  onDelete,
+  onSave,
+}: {
+  item: Announcement
+  index: number
+  count: number
+  dragging: boolean
+  saved: boolean
+  onDragStart: () => void
+  onDragEnd: () => void
+  onDrop: () => void
+  onMove: (dir: number) => void
+  onDelete: () => void
+  onSave: (patch: AnnouncementPatch, message: string) => void
+}) {
+  const [draft, setDraft] = useState<AnnouncementDraft>(() => toDraft(item))
+  const [seed, setSeed] = useState<Announcement>(item)
+  const [videoInvalid, setVideoInvalid] = useState(false)
+
+  /* Re-seed the inputs when the row's stored copy changes: a save that landed,
+     a reload, or a rejected write (which reloads, snapping the fields back to
+     what Firestore actually holds). */
+  if (item !== seed) {
+    setSeed(item)
+    setDraft(toDraft(item))
+    setVideoInvalid(false)
+  }
+
+  const commit = (key: 'title' | 'date' | 'description' | 'href') => {
+    const next = draft[key]
+    if (next === (item[key] ?? '')) return
+    const label =
+      key === 'title'
+        ? 'Title'
+        : key === 'date'
+          ? 'Date'
+          : key === 'description'
+            ? 'Description'
+            : 'Link'
+    onSave({ [key]: next }, `${label} saved.`)
+  }
+
+  const commitVideo = () => {
+    const trimmed = draft.videoUrl.trim()
+    const videoId = toVideoId(trimmed)
+    if (trimmed && !videoId) {
+      setVideoInvalid(true)
+      return
+    }
+    setVideoInvalid(false)
+    if ((videoId ?? '') === (item.videoId ?? '')) return
+    onSave(
+      { videoId: videoId ?? '' },
+      videoId ? 'Video linked.' : 'Video removed.',
+    )
+  }
+
+  const commitTag = (tag: AnnouncementTag) => {
+    setDraft((d) => ({ ...d, tag }))
+    if (tag === item.tag) return
+    onSave({ tag }, `Type saved.`)
+  }
+
+  return (
+    <li
+      draggable
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+      onDragOver={(e) => e.preventDefault()}
+      onDrop={onDrop}
+      className={`px-4 py-4 transition-opacity ${
+        dragging ? 'opacity-40' : ''
+      } ${saved ? 'bg-gold-soft' : ''}`}
+    >
+      <div className="flex items-start gap-3">
+        <span
+          className="mt-1.5 shrink-0 cursor-grab text-faint active:cursor-grabbing"
+          aria-hidden="true"
+        >
+          <DotsSixVertical size={18} />
+        </span>
+
+        <div className="min-w-0 flex-1">
+          <input
+            value={draft.title}
+            onChange={(e) =>
+              setDraft((d) => ({ ...d, title: e.target.value }))
+            }
+            onBlur={() => commit('title')}
+            onKeyDown={enterToBlur}
+            aria-label="Title"
+            placeholder="Title"
+            className="w-full rounded-lg border border-transparent bg-transparent px-2 py-1.5 font-display text-base font-semibold text-ink outline-none hover:border-line-strong focus:border-gold/70 focus:bg-black"
+          />
+
+          <div className="mt-1 flex flex-wrap items-center gap-3 px-2">
+            <select
+              value={draft.tag}
+              onChange={(e) => commitTag(e.target.value as AnnouncementTag)}
+              aria-label="Type"
+              className="rounded-full border border-line-strong bg-black px-3 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-gold outline-none focus:border-gold/70"
+            >
+              {TAG_OPTIONS.map((t) => (
+                <option key={t} value={t}>
+                  {t}
+                </option>
+              ))}
+            </select>
+            <input
+              value={draft.date}
+              onChange={(e) => setDraft((d) => ({ ...d, date: e.target.value }))}
+              onBlur={() => commit('date')}
+              onKeyDown={enterToBlur}
+              aria-label="Date shown on the card"
+              placeholder="1 Sep 2026"
+              className="w-32 rounded-lg border border-transparent bg-transparent px-2 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-faint outline-none hover:border-line-strong focus:border-gold/70 focus:bg-black focus:text-ink"
+            />
+            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
+              {item.videoId ? 'has video' : 'text only'}
+            </span>
+          </div>
+
+          <textarea
+            rows={2}
+            value={draft.description}
+            onChange={(e) =>
+              setDraft((d) => ({ ...d, description: e.target.value }))
+            }
+            onBlur={() => commit('description')}
+            aria-label="Short description"
+            placeholder="Short description"
+            className="mt-2 w-full resize-y rounded-lg border border-transparent bg-transparent px-2 py-1.5 text-sm leading-relaxed text-ash outline-none hover:border-line-strong focus:border-gold/70 focus:bg-black focus:text-ink"
+          />
+
+          <div className="mt-3 grid gap-3 sm:grid-cols-2">
+            <VideoField
+              value={draft.videoUrl}
+              onChange={(videoUrl) => {
+                setVideoInvalid(false)
+                setDraft((d) => ({ ...d, videoUrl }))
+              }}
+              onCommit={commitVideo}
+              invalid={videoInvalid}
+              className=""
+            />
+            <IconField
+              label="External link (optional)"
+              icon={<LinkSimple size={16} className="text-gold" />}
+              className=""
+            >
+              <input
+                value={draft.href}
+                onChange={(e) =>
+                  setDraft((d) => ({ ...d, href: e.target.value }))
+                }
+                onBlur={() => commit('href')}
+                onKeyDown={enterToBlur}
+                placeholder="Optional, for news without a video"
+                aria-label="External link (optional)"
+                className={bareInput}
+              />
+            </IconField>
+          </div>
+        </div>
+
+        <div className="flex shrink-0 flex-col items-center gap-2 pt-1">
+          {saved && (
+            <span
+              className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.14em] text-gold"
+              role="status"
+            >
+              <Check size={14} />
+              Saved
+            </span>
+          )}
+          <div className="flex flex-col">
+            <button
+              type="button"
+              onClick={() => onMove(-1)}
+              disabled={index === 0}
+              aria-label="Move up"
+              className="text-faint transition-colors hover:text-gold disabled:opacity-30"
+            >
+              <CaretUp size={14} />
+            </button>
+            <button
+              type="button"
+              onClick={() => onMove(1)}
+              disabled={index === count - 1}
+              aria-label="Move down"
+              className="text-faint transition-colors hover:text-gold disabled:opacity-30"
+            >
+              <CaretDown size={14} />
+            </button>
+          </div>
+          <button
+            type="button"
+            onClick={onDelete}
+            aria-label={`Delete ${item.title}`}
+            className="rounded-full border border-line-strong p-2.5 text-ash transition-colors hover:border-gold/60 hover:text-gold"
+          >
+            <Trash size={15} />
+          </button>
+        </div>
+      </div>
+    </li>
   )
 }
 

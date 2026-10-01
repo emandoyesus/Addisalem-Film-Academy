@@ -147,6 +147,29 @@ export async function createAnnouncement(
   return { ...input, id: ref.id, order: 0 }
 }
 
+/* Fields the console can re-edit on an existing post. Only the keys present
+   are written, so a caption edit never clobbers the video or the link. An
+   empty `videoId` / `href` clears that field (Firestore cannot store
+   undefined, so documents hold '' and `announcementFromDoc` maps it back). */
+export type AnnouncementPatch = Partial<Omit<Announcement, 'id'>>
+
+export async function updateAnnouncement(
+  id: string,
+  patch: AnnouncementPatch,
+): Promise<void> {
+  assertConfig()
+  const { db } = await loadFirebase()
+  const { doc, updateDoc } = await import('firebase/firestore')
+  const data: Record<string, string> = {}
+  if (patch.title !== undefined) data.title = patch.title.trim()
+  if (patch.date !== undefined) data.date = patch.date.trim()
+  if (patch.tag !== undefined) data.tag = patch.tag
+  if (patch.description !== undefined) data.description = patch.description.trim()
+  if (patch.videoId !== undefined) data.videoId = patch.videoId
+  if (patch.href !== undefined) data.href = patch.href
+  await updateDoc(doc(db, 'announcements', id), data)
+}
+
 export async function deleteAnnouncement(id: string): Promise<void> {
   assertConfig()
   const { db } = await loadFirebase()

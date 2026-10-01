@@ -202,6 +202,12 @@ export function youtubeEmbed(videoId: string): string {
   return `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`
 }
 
+/** The canonical watch URL for a video ID — what the admin console shows in
+    the announcement link field so the ID can be pasted back in as-is. */
+export function youtubeWatch(videoId: string): string {
+  return `https://www.youtube.com/watch?v=${videoId}`
+}
+
 /* Sample announcements. To publish a new sitcom episode or edit:
    1. Copy an entry below, paste at the TOP of this array (it becomes the featured card).
    2. Set `videoId` to your YouTube video's ID, or `href` to the channel link.
