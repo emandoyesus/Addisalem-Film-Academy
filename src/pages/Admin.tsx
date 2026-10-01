@@ -38,7 +38,6 @@ import { PortfolioPanel } from '../components/PortfolioPanel'
 import {
   toVideoId,
   youtubeThumb,
-  youtubeWatch,
   type Announcement,
   type AnnouncementTag,
 } from '../data/content'
@@ -337,21 +336,15 @@ function AnnouncementsPanel() {
     savedTimer.current = window.setTimeout(() => setSavedId(null), 1600)
   }
 
-  /* Saves one field of a published post in place, the way the portfolio rows
-     re-caption an image: the row keeps its draft until the write resolves, and
-     a failed write reloads the list so the inputs snap back to what Firestore
-     actually holds. */
+  /* Saves the title or the type of a published post in place, the way the
+     portfolio rows re-caption an image: the row keeps its draft until the
+     write resolves, and a failed write reloads the list so the inputs snap
+     back to what Firestore actually holds. */
   const save = (id: string, patch: AnnouncementPatch, message: string) => {
-    /* Firestore rejects undefined, so an empty field is written as '' — that is
-       how a video or link is cleared there. The local copy mirrors what the
-       public feed reads back out ('' becomes "no video" again). */
-    const applied: AnnouncementPatch = { ...patch }
-    if (patch.videoId !== undefined) applied.videoId = patch.videoId || undefined
-    if (patch.href !== undefined) applied.href = patch.href || undefined
     void updateAnnouncement(id, patch)
       .then(() => {
         setItems((prev) =>
-          prev.map((a) => (a.id === id ? { ...a, ...applied } : a)),
+          prev.map((a) => (a.id === id ? { ...a, ...patch } : a)),
         )
         setNotice(message)
         flashSaved(id)
@@ -444,8 +437,8 @@ function AnnouncementsPanel() {
     <div>
       <p className="mb-6 max-w-[60ch] text-sm text-ash">
         Paste a YouTube link to publish it. The newest entry leads the
-        announcement feed on the home page — edit any published post in place
-        below, the changes save as you click away from a field.
+        announcement feed on the home page. Everything is set here at publish
+        time — afterwards only the title and the type can be changed.
       </p>
 
       {notice && (
@@ -534,9 +527,11 @@ function AnnouncementsPanel() {
           Published ({items.length} / {MAX_ANNOUNCEMENTS})
         </h2>
         <p className="mt-2 max-w-[60ch] text-sm text-ash">
-          Every field is editable here — click one, change it, click away and it
-          saves. Re-order with the arrows or by dragging; the first entry is the
-          featured card on the home page.
+          The title and the type stay editable on a published post — click one,
+          change it, click away and it saves. The date, description, video and
+          link are fixed once published: delete the post and publish it again to
+          change those. Re-order with the arrows or by dragging; the first entry
+          is the featured card on the home page.
         </p>
         <ul className="mt-4 divide-y divide-line-strong rounded-2xl border border-line-strong bg-surface">
           {items.length === 0 && (
@@ -566,30 +561,11 @@ function AnnouncementsPanel() {
   )
 }
 
-/* Everything the console writes for one post, in the string form the inputs
-   need. The video lives in Firestore as an ID; the field shows the watch URL
-   so the admin can paste it straight back in. */
-type AnnouncementDraft = {
-  title: string
-  date: string
-  tag: AnnouncementTag
-  description: string
-  videoUrl: string
-  href: string
-}
-
-const toDraft = (a: Announcement): AnnouncementDraft => ({
-  title: a.title,
-  date: a.date,
-  tag: a.tag,
-  description: a.description,
-  videoUrl: a.videoId ? youtubeWatch(a.videoId) : '',
-  href: a.href ?? '',
-})
-
-/* One published announcement, edited in place like a portfolio caption: each
-   field saves on blur (or on change, for the type select) and only the changed
-   fields are written, so an edit never clears the video or the link. */
+/* One published announcement. Only the title and the type stay editable, the
+   way a portfolio caption can be re-captioned in place: the title saves on
+   blur, the type select saves on change, and each edit writes only that field,
+   so the date, description, video and link can never be knocked out by
+   accident. Everything else is shown as published, for reference. */
 function AnnouncementRow({
   item,
   index,
@@ -615,52 +591,33 @@ function AnnouncementRow({
   onDelete: () => void
   onSave: (patch: AnnouncementPatch, message: string) => void
 }) {
-  const [draft, setDraft] = useState<AnnouncementDraft>(() => toDraft(item))
+  const [title, setTitle] = useState(item.title)
+  const [tag, setTag] = useState<AnnouncementTag>(item.tag)
   const [seed, setSeed] = useState<Announcement>(item)
-  const [videoInvalid, setVideoInvalid] = useState(false)
 
   /* Re-seed the inputs when the row's stored copy changes: a save that landed,
      a reload, or a rejected write (which reloads, snapping the fields back to
      what Firestore actually holds). */
   if (item !== seed) {
     setSeed(item)
-    setDraft(toDraft(item))
-    setVideoInvalid(false)
+    setTitle(item.title)
+    setTag(item.tag)
   }
 
-  const commit = (key: 'title' | 'date' | 'description' | 'href') => {
-    const next = draft[key]
-    if (next === (item[key] ?? '')) return
-    const label =
-      key === 'title'
-        ? 'Title'
-        : key === 'date'
-          ? 'Date'
-          : key === 'description'
-            ? 'Description'
-            : 'Link'
-    onSave({ [key]: next }, `${label} saved.`)
-  }
-
-  const commitVideo = () => {
-    const trimmed = draft.videoUrl.trim()
-    const videoId = toVideoId(trimmed)
-    if (trimmed && !videoId) {
-      setVideoInvalid(true)
+  const commitTitle = () => {
+    const next = title.trim()
+    if (!next || next === item.title) {
+      setTitle(item.title)
       return
     }
-    setVideoInvalid(false)
-    if ((videoId ?? '') === (item.videoId ?? '')) return
-    onSave(
-      { videoId: videoId ?? '' },
-      videoId ? 'Video linked.' : 'Video removed.',
-    )
+    setTitle(next)
+    onSave({ title: next }, 'Title saved.')
   }
 
-  const commitTag = (tag: AnnouncementTag) => {
-    setDraft((d) => ({ ...d, tag }))
-    if (tag === item.tag) return
-    onSave({ tag }, `Type saved.`)
+  const commitTag = (next: AnnouncementTag) => {
+    setTag(next)
+    if (next === item.tag) return
+    onSave({ tag: next }, 'Type saved.')
   }
 
   return (
@@ -684,11 +641,9 @@ function AnnouncementRow({
 
         <div className="min-w-0 flex-1">
           <input
-            value={draft.title}
-            onChange={(e) =>
-              setDraft((d) => ({ ...d, title: e.target.value }))
-            }
-            onBlur={() => commit('title')}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            onBlur={commitTitle}
             onKeyDown={enterToBlur}
             aria-label="Title"
             placeholder="Title"
@@ -697,7 +652,7 @@ function AnnouncementRow({
 
           <div className="mt-1 flex flex-wrap items-center gap-3 px-2">
             <select
-              value={draft.tag}
+              value={tag}
               onChange={(e) => commitTag(e.target.value as AnnouncementTag)}
               aria-label="Type"
               className="rounded-full border border-line-strong bg-black px-3 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-gold outline-none focus:border-gold/70"
@@ -708,61 +663,43 @@ function AnnouncementRow({
                 </option>
               ))}
             </select>
-            <input
-              value={draft.date}
-              onChange={(e) => setDraft((d) => ({ ...d, date: e.target.value }))}
-              onBlur={() => commit('date')}
-              onKeyDown={enterToBlur}
-              aria-label="Date shown on the card"
-              placeholder="1 Sep 2026"
-              className="w-32 rounded-lg border border-transparent bg-transparent px-2 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-faint outline-none hover:border-line-strong focus:border-gold/70 focus:bg-black focus:text-ink"
-            />
+            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
+              {item.date}
+            </span>
             <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
               {item.videoId ? 'has video' : 'text only'}
             </span>
           </div>
 
-          <textarea
-            rows={2}
-            value={draft.description}
-            onChange={(e) =>
-              setDraft((d) => ({ ...d, description: e.target.value }))
-            }
-            onBlur={() => commit('description')}
-            aria-label="Short description"
-            placeholder="Short description"
-            className="mt-2 w-full resize-y rounded-lg border border-transparent bg-transparent px-2 py-1.5 text-sm leading-relaxed text-ash outline-none hover:border-line-strong focus:border-gold/70 focus:bg-black focus:text-ink"
-          />
+          {item.description && (
+            <p className="mt-2 px-2 text-sm leading-relaxed text-ash">
+              {item.description}
+            </p>
+          )}
 
-          <div className="mt-3 grid gap-3 sm:grid-cols-2">
-            <VideoField
-              value={draft.videoUrl}
-              onChange={(videoUrl) => {
-                setVideoInvalid(false)
-                setDraft((d) => ({ ...d, videoUrl }))
-              }}
-              onCommit={commitVideo}
-              invalid={videoInvalid}
-              className=""
-            />
-            <IconField
-              label="External link (optional)"
-              icon={<LinkSimple size={16} className="text-gold" />}
-              className=""
-            >
-              <input
-                value={draft.href}
-                onChange={(e) =>
-                  setDraft((d) => ({ ...d, href: e.target.value }))
-                }
-                onBlur={() => commit('href')}
-                onKeyDown={enterToBlur}
-                placeholder="Optional, for news without a video"
-                aria-label="External link (optional)"
-                className={bareInput}
-              />
-            </IconField>
-          </div>
+          {(item.videoId || item.href) && (
+            <div className="mt-3 flex flex-wrap items-center gap-3 px-2">
+              {item.videoId && (
+                <>
+                  <img
+                    src={youtubeThumb(item.videoId)}
+                    alt=""
+                    loading="lazy"
+                    className="h-10 w-[70px] shrink-0 rounded-md border border-line object-cover"
+                  />
+                  <span className="min-w-0 truncate font-mono text-[11px] text-gold">
+                    Video ID: {item.videoId}
+                  </span>
+                </>
+              )}
+              {item.href && (
+                <span className="flex min-w-0 items-center gap-1.5 font-mono text-[11px] text-faint">
+                  <LinkSimple size={12} className="shrink-0 text-gold" />
+                  <span className="truncate">{item.href}</span>
+                </span>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="flex shrink-0 flex-col items-center gap-2 pt-1">
